@@ -38,8 +38,9 @@ var picodb = [
 
 // License Header to add to 'picodb.js' file:
 var license = ['/**',
-' * ' + name + ' @#suffix#@',
+' * @#suffix#@',
 ' *',
+' * @license',
 ' * PicoDB is a tiny in-memory database that stores JSON documents.',
 ' * Copyright (c) 2016 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr/).',
 ' * Released under the MIT license. You may obtain a copy of the License',
@@ -73,10 +74,8 @@ gulp.task('doJS', ['create'], function() {
 // Minify
 gulp.task('minify', ['doJS'], function() {
   return gulp.src(dist + '/' + name.toLowerCase() + '.js')
-    .pipe(uglify())
+    .pipe(uglify({preserveComments: 'license'}))
     .pipe(concat(name.toLowerCase() + '-min' + '.js'))
-    .pipe(header(license))
-    .pipe(replace('@#suffix#@', suffixname + ' v' + release))
     .pipe(gulp.dest(dist));
 });
 

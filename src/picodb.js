@@ -161,19 +161,19 @@
      *
      * @method (arg1, arg2, arg3, arg4)
      * @public
-     * @param {Object}     the filtering object,
+     * @param {Object}     the query object,
      * @param {object}     the items to update,
      * @param {Object}     the optional settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
      * @since 0.0.1
      */
-    var updateMany = function(filter, update, options, callback) {
+    var updateMany = function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 2)
         return;
-      _update.update(this, true, filter, update, options, callback);
+      _update.update(this, true, query, update, options, callback);
     };
 
     /**
@@ -181,19 +181,19 @@
      *
      * @method (arg1, arg2, arg3, arg4)
      * @public
-     * @param {Object}     the filtering object,
+     * @param {Object}     the query object,
      * @param {object}     the items to update,
      * @param {Object}     the optional settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
      * @since 0.0.1
      */
-    var updateOne = function(filter, update, options, callback) {
+    var updateOne = function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 2)
         return;
-      _update.update(this, false, filter, update, options, callback);
+      _update.update(this, false, query, update, options, callback);
     };
 
     /**

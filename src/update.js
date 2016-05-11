@@ -9,7 +9,7 @@
    * @since     0.0.1
    * @version   -
    */
-   /* global _, _event */
+   /* global _, _event, _query */
    /* eslint  max-len: [1, 120, 1], curly: 0 */
   // Initialize the library.
   var _update = {};
@@ -66,7 +66,7 @@
         ;
 
       for (key in update)
-        // Prevent removing inherited properties and  _id!
+        // Prevent removing inherited properties and _id!
         if (update.hasOwnProperty(key) && key !== '_id')
           delete doc[key];
       return doc;
@@ -135,20 +135,20 @@
      * @function (arg1, arg2, arg3, arg4, arg5, arg6)
      * @private
      * @param {Object}     the database object,
-     * @param {Object}     the filtering object,
+     * @param {Object}     the query object,
      * @param {Update}     the 'fields' to be updated,
      * @param {Options}    the settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
      * @since 0.0.1
      */
-    _update: function (db, eventQ, filter, update, options, callback) {
+    _update: function (db, eventQ, query, update, options, callback) {
       var docOut
         , i
         ;
 
-      // Test if filter seems valid:
-      if (_.isArray(filter) || _.isFunction(filter) || !_.isObject(filter)) {
+      // Test if query seems valid:
+      if (_.isArray(query) || _.isFunction(query) || !_.isObject(query)) {
         if (callback)
           callback('filter is not a valid object!');
         return;
@@ -164,7 +164,7 @@
       // Parse the doc db:
       docOut = [];
       for (i = 0; i < db.data.length; i++)
-        if (_query.isMatch(db.data[i], filter)) {
+        if (_query.isMatch(db.data[i], query)) {
           docOut.push(_update._updateThisDoc(db.data[i], update));
           if (!options.many)
             break;
@@ -188,14 +188,14 @@
      * @param {Object}     the context object,
      * @param {Boolean}    true if all the matching documents should be updated,
      *                     false if only the first matching document should be,
-     * @param {Object}     the filtering object,
+     * @param {Object}     the query object,
      * @param {Update}     the 'fields' to be updated,
      * @param {Options}    the optional settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
      * @since 0.0.1
      */
-    update: function(_this, many, filter, update, options, callback) {
+    update: function(_this, many, query, update, options, callback) {
       var db = _this.db
         , eventQ = _this.eventQ
         ;
@@ -216,7 +216,7 @@
 
       // Try to update the document:
       options.many = many;
-      _update._update(db, eventQ, filter, update, options, callback);
+      _update._update(db, eventQ, query, update, options, callback);
 
     }
   };

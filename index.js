@@ -1,1 +1,1 @@
-module.exports = require('./lib/picodb-min');
+module.exports = require('./lib/picodb');
