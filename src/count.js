@@ -80,19 +80,19 @@
       var db = _this.db
         ;
 
-        // Check if there is a callback function:
-        if (callback && !_.isFunction(callback)) {
-          callback = undefined;
-        } else if (!callback && !_.isFunction(options)) {
-          callback = undefined;
-        } else if (!callback && _.isFunction(options)) {
-          callback = options;
-          options = {};
-        }
+      // Check if there is a callback function:
+      if (callback && !_.isFunction(callback)) {
+        callback = undefined;
+      } else if (!callback && !_.isFunction(options)) {
+        callback = undefined;
+      } else if (!callback && _.isFunction(options)) {
+        callback = options;
+        options = {};
+      }
 
-        // Check if options is an object:
-        if (_.isArray(options) || !_.isObject(options))
-          options = {};
+      // Check if options is an object:
+      if (_.isArray(options) || !_.isObject(options))
+        options = {};
 
       // Try to count:
       _count._count(db, query, options, callback);

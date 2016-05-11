@@ -9,8 +9,7 @@
    * @since     0.0.1
    * @version   -
    */
-   /* global _, _event, _query */
-   /* eslint  max-len: [1, 120, 1], curly: 0 */
+
   // Initialize the library.
   var _update = {};
 

@@ -86,6 +86,5 @@ module.exports = function() {
       db.find().toArray([]);
       expect(true).to.be.a.true;
     });
-
   });
 };

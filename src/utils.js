@@ -29,6 +29,7 @@
    *  . isArray           is a given value an array?
    *  . isFunction        is a given variable a function?
    *  . isEmpty           is a given array, string or object empty?
+   *  . contains          returns true if the value is present in the list,
    *  . clone             clones an object (array or object literal),
    *  . keys              retrieves all the names of the object's own enumerable properties,
    *  . extend            extends a given object with in passed-in object(s),
@@ -217,6 +218,20 @@
       // Otherwise, parse all properties.
       for (var key in obj) if (obj.hasOwnProperty(key)) return false;
       return true;
+    },
+
+    /**
+     * Returns true if the value is present in the list.
+     *
+     * @function (arg1)
+     * @public
+     * @param {Array}       the list,
+     * @param {}            the value in the list,
+     * @returns {Boolean}   returns true if the value is present, false otherwise,
+     * @since 0.1
+     */
+    contains: function(list, value) {
+      return list.indexOf(value) === -1 ? false : true;
     },
 
     /**

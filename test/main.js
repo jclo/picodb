@@ -12,8 +12,12 @@ var create    = require('./create.js')
   , count     = require('./count.js')
   , deleteDoc = require('./delete.js')
   , update    = require('./update.js')
+  , query     = require('./query.js')
   , event     = require('./event.js')
   ;
+
+// -- Local constants
+
 
 // -- Local variables
 
@@ -38,6 +42,9 @@ describe('PicoDB', function() {
 
   // Test the methods updateOne & updateMany:
   update();
+
+  // Test query opeators:
+  query();
 
   // Test the methods addEventListener, addOneTimeEventListener and removeEventListener:
   event();
