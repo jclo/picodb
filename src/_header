@@ -1,0 +1,55 @@
+/**
+ * PicoDB is a tiny in-memory database that aims to store documents running
+ * both on the browser and on Node.js.
+ *
+ * PicoDB library is embedded inside a module pattern that exports the name
+ * 'PicoDB' only.
+ *
+ *
+ * @exports  PicoDB
+ * @author   -
+ * @version  @#Release#@
+ */
+// ESLint declarations
+/* global define */
+/* eslint max-len: 0, curly: 0 */
+(function(root, factory) {
+  'use strict';
+
+  /* istanbul ignore next */
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define([''], factory);
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(root);
+  } else {
+    // Browser globals.
+    root.PicoDB = factory(root);
+  }
+}(this, function(root) {
+  'use strict';
+  var PicoDB
+    , previousPicoDB
+    ;
+
+  // Saves the previous value of the PicoDB variable, so that it can be
+  // restored later on, if noConflict is used.
+  previousPicoDB = root.PicoDB;
+
+  // Initializes PicoDB function.
+  /* istanbul ignore next */
+  PicoDB = function() {};
+
+  // Runs PicoDB in noConflict mode, returning the PicoDB variable to its
+  // previous owner. Returns a reference to this PicoDB object.
+  /* istanbul ignore next */
+  PicoDB.noConflict = function() {
+    root.PicoDB = previousPicoDB;
+    return this;
+  };
+
+  // Current version of the library.
+  PicoDB.VERSION = '@#Release#@';

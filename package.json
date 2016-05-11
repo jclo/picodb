@@ -1,0 +1,51 @@
+{
+  "name": "picodb",
+  "version": "0.0.0",
+  "description": "PicoDB is a tiny in-memory database that stores JSON documents",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp",
+    "watch": "gulp watch",
+    "test": "istanbul cover -x ./test/main.js _mocha -- -R spec ./test/main.js",
+    "check-coverage": "istanbul check-coverage --statements 0 --branches 0 --functions 0 --lines 0",
+    "display-coverage": "opener ./coverage/lcov-report/index.html",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jclo/picodb.git"
+  },
+  "keywords": [
+    "mongodb",
+    "in-memory"
+  ],
+  "author": {
+    "name": "jclo",
+    "email": "jclo@mobilabs.fr",
+    "url": "http://www.mobilabs.fr/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jclo/picodb/issues"
+  },
+  "homepage": "https://github.com/jclo/picodb",
+  "devDependencies": {
+    "chai": "3.5.0",
+    "coveralls": "2.11.9",
+    "del": "2.2.0",
+    "ghooks": "1.2.1",
+    "gulp": "3.9.1",
+    "gulp-concat": "2.6.0",
+    "gulp-header": "1.7.1",
+    "gulp-replace": "0.5.4",
+    "gulp-uglify": "1.5.3",
+    "istanbul": "0.4.3",
+    "mocha": "2.4.5",
+    "opener": "1.4.1"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test && npm run check-coverage"
+    }
+  }
+}
