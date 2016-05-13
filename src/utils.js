@@ -30,6 +30,7 @@
    *  . isFunction        is a given variable a function?
    *  . isEmpty           is a given array, string or object empty?
    *  . contains          returns true if the value is present in the list,
+   *  . share             returns true if two arrays have elements in common,
    *  . clone             clones an object (array or object literal),
    *  . keys              retrieves all the names of the object's own enumerable properties,
    *  . extend            extends a given object with in passed-in object(s),
@@ -232,6 +233,30 @@
      */
     contains: function(list, value) {
       return list.indexOf(value) === -1 ? false : true;
+    },
+
+    /**
+     * Returns true if true if a and b have elements in common.
+     *
+     * @function (arg1, arg2)
+     * @public
+     * @param {Array}       array to compare,
+     * @param {Array}       array to compare,
+     * @returns {Boolean}   returns true if elements in common,
+     * @since 0.1
+     */
+    share: function(a, b) {
+      var i
+        ;
+
+      if (!_.isArray(a) || !_.isArray(b))
+        return false;
+
+      for (i = 0; i < a.length; i++) {
+        if (_.contains(b, a[i]))
+          return true;
+      }
+      return false;
     },
 
     /**

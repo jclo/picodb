@@ -14,7 +14,7 @@ var PicoDB = require('../index.js')
 var docs = [
   { a: 1 },
   { a: 1, b: 'bbb', c: 5 },
-  { a: 2, b: 'bbb', c: ['a', 'b', 'c'] }
+  { a: 2, b: 'bbb', c: ['a', 'b', 'c'], d: { e: { f: 'f' }}}
 ];
 
 // -- Local variables
@@ -55,23 +55,29 @@ module.exports = function() {
             expect(docs).to.have.lengthOf(1);
           });
         });
+
+        it('Expects query { d: { e: { f: { $eq: "f" }}}} to return 1 document.', function() {
+          db.find({ d: { e: { f: { $eq: 'f' }}}}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
       });
 
       describe('$gt:', function() {
 
-        it('Expects query { a: { $gt: 0 }} to return 3 documents', function() {
+        it('Expects query { a: { $gt: 0 }} to return 3 documents.', function() {
           db.find({ a: { $gt: 0 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(3);
           });
         });
 
-        it('Expects query { a: { $gt: 1 }} to return 1 document', function() {
+        it('Expects query { a: { $gt: 1 }} to return 1 document.', function() {
           db.find({ a: { $gt: 1 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
           });
         });
 
-        it('Expects query { a: { $gt: 0 }, { c: { $gt: 4 }}} to return 1 document', function() {
+        it('Expects query { a: { $gt: 0 }, { c: { $gt: 4 }}} to return 1 document.', function() {
           db.find({ a: { $gt: 0 }, c: { $gt: 4 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
           });
@@ -80,19 +86,19 @@ module.exports = function() {
 
       describe('$gte:', function() {
 
-        it('Expects query { a: { $gte: 0 }} to return 3 documents', function() {
+        it('Expects query { a: { $gte: 0 }} to return 3 documents.', function() {
           db.find({ a: { $gt: 0 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(3);
           });
         });
 
-        it('Expects query { a: { $gte: 1 }} to return 3 documents', function() {
+        it('Expects query { a: { $gte: 1 }} to return 3 documents.', function() {
           db.find({ a: { $gte: 1 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(3);
           });
         });
 
-        it('Expects query { a: { $gte: 0 }, { c: { $gte: 5 }}} to return 1 document', function() {
+        it('Expects query { a: { $gte: 0 }, { c: { $gte: 5 }}} to return 1 document.', function() {
           db.find({ a: { $gte: 0 }, c: { $gte: 5 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
           });
@@ -107,13 +113,13 @@ module.exports = function() {
           });
         });
 
-        it('Expects query { a: { $lt: 2 }} to return 2 documents', function() {
+        it('Expects query { a: { $lt: 2 }} to return 2 documents.', function() {
           db.find({ a: { $lt: 2 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(2);
           });
         });
 
-        it('Expects query { a: { $lt: 3 }, { c: { $lt: 6 }}} to return 1 document', function() {
+        it('Expects query { a: { $lt: 3 }, { c: { $lt: 6 }}} to return 1 document.', function() {
           db.find({ a: { $lt: 3 }, c: { $lt: 6 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
           });
@@ -122,20 +128,143 @@ module.exports = function() {
 
       describe('$lte:', function() {
 
-        it('Expects query { a: { $lte: 2 }} to return 3 documents', function() {
+        it('Expects query { a: { $lte: 2 }} to return 3 documents.', function() {
           db.find({ a: { $lte: 2 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(3);
           });
         });
 
-        it('Expects query { a: { $lte: 1 }} to return 2 documents', function() {
+        it('Expects query { a: { $lte: 1 }} to return 2 documents.', function() {
           db.find({ a: { $lte: 1 }}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(2);
           });
         });
 
-        it('Expects query { a: { $lte: 2 }, { c: { $lte: 5 }}} to return 1 document', function() {
+        it('Expects query { a: { $lte: 2 }, { c: { $lte: 5 }}} to return 1 document.', function() {
           db.find({ a: { $lte: 2 }, c: { $lte: 5 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+      });
+
+      describe('$ne:', function() {
+
+        it('Expects query { a: { $ne: 1 }} to return 1 document.', function() {
+          db.find({ a: { $ne: 1 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { a: { $ne: 2 }} to return 2 documents.', function() {
+          db.find({ a: { $ne: 2 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { b: { $ne: "bbb" }} to return 1 document.', function() {
+          db.find({ b: { $ne: 'bbb' }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { bc: { $ne: "bbb" }} to return 3 documents.', function() {
+          db.find({ bc: { $ne: 'bbb' }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { d: { e: { f: { $ne: "f" }}}} to return 2 documents.', function() {
+          db.find({ d: { e: { f: { $ne: 'f' }}}}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { c: { $ne: 5 }} to return 2 documents.', function() {
+          db.find({ c: { $ne: 5}}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { a: { $eq: 2 }, d: { e: { f: { $ne: "f" }}}} to return 0 document.', function() {
+          db.find({ a: { $eq: 2 }, d: { e: { f: { $ne: 'f' }}}}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+
+      });
+
+      describe('$in:', function() {
+
+        it('Expects query { b: { $in: ["aaa", "bbb"] }} to return 2 documents.', function() {
+          db.find({ b: { $in: ['aaa', 'bbb'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { a: { $in: [1, 2] }} to return 3 documents.', function() {
+          db.find({ a: { $in: [1, 2] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { c: { $in: ["a", "b", "d"] }} to return 1 document.', function() {
+          db.find({ c: { $in: ['a', 'b', 'd'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { c: { $in: ["d", "e"] }} to return 0 document.', function() {
+          db.find({ c: { $in: ['d', 'e'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+      });
+
+
+      describe('$nin:', function() {
+
+        it('Expects query { b: { $nin: ["ccc", "ddd"] }} to return 3 documents.', function() {
+          db.find({ b: { $nin: ['ccc', 'ddd'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { b: { $nin: ["bbb", "ccc"] }} to return 1 document.', function() {
+          db.find({ b: { $nin: ['bbb', 'ccc'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { c: { $nin: [1, 5] }} to return 2 documents.', function() {
+          db.find({ c: { $nin: [1, 5] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { c: { $nin: [5, "a"] }} to return 1 document.', function() {
+          db.find({ c: { $nin: [5, 'a'] }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+      });
+
+
+      describe('$ne & $nin:', function() {
+
+        it('Expects query { a: { $ne: 3 }, b: { $nin: ["bbb"] }} to return 1 document.', function() {
+          db.find({ a: { $ne: 3 }, b: { $nin: ['bbb'] } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { b: { $nin: ["b"] }, c: { $nin: ["a"] }} to return 2 documents.', function() {
+          db.find({ b: { $nin: ['b'] }, c: { $nin: ['a'] } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { b: { $nin: ["bbb"] }, c: { $nin: ["a"] }} to return 1 document.', function() {
+          db.find({ b: { $nin: ['bbb'] }, c: { $nin: ['a'] } }).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
           });
         });
