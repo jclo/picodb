@@ -38,7 +38,8 @@
      * @since 0.0.1
      */
     _count: function(db, query, options, callback) {
-      var count
+      var sop = _query.isHavingSpecialOperator(query)
+        , count
         , i
         ;
 
@@ -52,7 +53,7 @@
       // Parse the db and count:
       count = 0;
       for (i = 0; i < db.data.length; i++)
-        if (_query.isMatch(db.data[i], query)) {
+        if (_query.isMatch(db.data[i], query, sop)) {
           count += 1;
           //console.log(db.data[i]);
         }

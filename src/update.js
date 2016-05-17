@@ -142,7 +142,8 @@
      * @since 0.0.1
      */
     _update: function (db, eventQ, query, update, options, callback) {
-      var docOut
+      var sop = _query.isHavingSpecialOperator(query)
+        , docOut
         , i
         ;
 
@@ -163,7 +164,7 @@
       // Parse the doc db:
       docOut = [];
       for (i = 0; i < db.data.length; i++)
-        if (_query.isMatch(db.data[i], query)) {
+        if (_query.isMatch(db.data[i], query, sop)) {
           docOut.push(_update._updateThisDoc(db.data[i], update));
           if (!options.many)
             break;

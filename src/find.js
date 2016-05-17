@@ -55,7 +55,7 @@
     _process: function(dbO, callback) {
       var query = dbO.cursor.query
         , db    = dbO.db
-        , not   = _query.isHavingNotOperator(query)
+        , sop   = _query.isHavingSpecialOperator(query)
         , docs
         , i
         ;
@@ -69,7 +69,7 @@
       // Parse the database:
       docs = [];
       for (i = 0; i < db.data.length; i++)
-        if (_query.isMatch(db.data[i], query, not))
+        if (_query.isMatch(db.data[i], query, sop))
           docs.push(db.data[i]);
       callback(null, docs);
 

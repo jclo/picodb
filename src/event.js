@@ -105,6 +105,7 @@
         ;
 
       // is this event a valid one?
+      /* istanbul ignore next */
       if (!eventList[event])
         return;
 

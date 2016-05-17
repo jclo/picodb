@@ -1,5 +1,5 @@
 /* global describe, it */
-/* eslint  max-len: [1, 120, 1] */
+/* eslint  max-len: [1, 125, 1] */
 'use strict';
 
 // -- Node modules
@@ -63,6 +63,7 @@ module.exports = function() {
         });
       });
 
+
       describe('$gt:', function() {
 
         it('Expects query { a: { $gt: 0 }} to return 3 documents.', function() {
@@ -83,6 +84,7 @@ module.exports = function() {
           });
         });
       });
+
 
       describe('$gte:', function() {
 
@@ -105,6 +107,7 @@ module.exports = function() {
         });
       });
 
+
       describe('$lt:', function() {
 
         it('Expects query { a: { $lt: 3 }} to return 3 documents', function() {
@@ -126,6 +129,7 @@ module.exports = function() {
         });
       });
 
+
       describe('$lte:', function() {
 
         it('Expects query { a: { $lte: 2 }} to return 3 documents.', function() {
@@ -146,6 +150,7 @@ module.exports = function() {
           });
         });
       });
+
 
       describe('$ne:', function() {
 
@@ -192,6 +197,7 @@ module.exports = function() {
         });
 
       });
+
 
       describe('$in:', function() {
 
@@ -266,6 +272,131 @@ module.exports = function() {
         it('Expects query { b: { $nin: ["bbb"] }, c: { $nin: ["a"] }} to return 1 document.', function() {
           db.find({ b: { $nin: ['bbb'] }, c: { $nin: ['a'] } }).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
+          });
+        });
+      });
+    });
+
+
+    describe('Element Operators:', function() {
+
+      describe('$exists:', function() {
+        it('Expects query { a: { $exists: true } } to return 3 documents.', function() {
+          db.find({ a: { $exists: true } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { a: { $exists: false } } to return 0 document.', function() {
+          db.find({ a: { $exists: false } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+
+        it('Expects query { b: { $exists: true } } to return 2 documents.', function() {
+          db.find({ b: { $exists: true } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { c: { $eq: 5 }, b: { $exists: true } } to return 1 document.', function() {
+          db.find({ c: { $eq: 5 }, b: { $exists: true } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { b: { $exists: true }, c: { $ne: 5 } } to return 1 document.', function() {
+          db.find({ b: { $exists: true }, c: { $ne: 5 } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { b: { $exists: true }, c: { $exists: false } } to return 0 document.', function() {
+          db.find({ b: { $exists: true }, c: { $exists: false } }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+
+        it('Expects query { b: { $exists: true }, d: { e: { f: { $exists: true }}} } to return 1 document.', function() {
+          db.find({ b: { $exists: true }, d: { e: { f: { $exists: true }}} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+      });
+    });
+
+
+    describe('Logical Operators:', function() {
+
+      describe('$or', function() {
+
+        it('Expects query { $or: [ { a: 1 }, { a: 2 } ] } to return 3 documents.', function() {
+          db.find({ $or: [ { a: 1 }, { a: 2 } ]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { $or: [ { a: { $eq: 1 }}, { c: { $eq: 5 }} ] } to return 2 documents.', function() {
+          db.find({ $or: [ { a: { $eq: 1 } }, { c: { $eq: 5 } } ]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { $or: [ { a: { $eq: 1 }}, { b: { $in: ["bbb"] }}]} to return 3 documents.', function() {
+          db.find({ $or: [ { a: { $eq: 1 }}, { b: { $in: ['bbb'] }}]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { $or: [ { a: { $gt: 1 }}, { b: { $in: ["bbb"] }}]} to return 2 documents.', function() {
+          db.find({ $or: [ { a: { $gt: 1 }}, { b: { $in: ['bbb'] }}]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { $or: [ { a: { $gt: 1 }}, { b: { $nin: ["bbb"] }}]} to return 2 documents.', function() {
+          db.find({ $or: [ { a: { $gt: 1 }}, { b: { $nin: ['bbb'] }}]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { $or: [ { a: { $gt: 1 }}, { d: { e: { f: { $eq: "f" }}} }]} to return 1 document.', function() {
+          db.find({ $or: [ { a: { $gt: 1 }}, { d: { e: { f: { $eq: 'f' }}}}]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+      });
+
+
+      describe('$not', function() {
+
+        it('Expects query { a: { $not: { $eq: 1 }} to return 1 document.', function() {
+          db.find({ a: { $not: { $eq: 1 }} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { a: { $not: { $gt: 1 }} to return 2 documents.', function() {
+          db.find({ a: { $not: { $gt: 1 }} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(2);
+          });
+        });
+
+        it('Expects query { a: { $not: { $gte: 1 }} to return 0 document.', function() {
+          db.find({ a: { $not: { $gte: 1 }} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+
+        it('Expects query { b: { $not: { $in: ["ccc"] }} to return 3 documents.', function() {
+          db.find({ b: { $not: { $in: ['ccc'] }} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it('Expects query { b: { $not: { $nin: ["bbb"] }} to return 3 documents.', function() {
+          db.find({ b: { $not: { $nin: ['bbb'] }} }).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
           });
         });
       });

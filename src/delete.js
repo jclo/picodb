@@ -38,7 +38,8 @@
      * @since 0.0.1
      */
     _delete: function(db, eventQ, filter, options, callback) {
-      var removed
+      var sop = _query.isHavingSpecialOperator(filter)
+        , removed
         , dblength
         , docOut
         , i
@@ -84,7 +85,7 @@
       dblength = db.data.length;
       //for (i = db.data.length - 1; i >= 0; i--) {
       for (i = 0; i < dblength; i++) {
-        if (_query.isMatch(db.data[i], filter)) {
+        if (_query.isMatch(db.data[i], filter, sop)) {
           // Remove the document that matches:
           docOut.push(db.data.splice(i, 1));
           removed += 1;
