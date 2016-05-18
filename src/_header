@@ -1,10 +1,6 @@
 /**
- * PicoDB is a tiny in-memory database that aims to store documents running
- * both on the browser and on Node.js.
- *
  * PicoDB library is embedded inside a module pattern that exports the name
  * 'PicoDB' only.
- *
  *
  * @exports  PicoDB
  * @author   -

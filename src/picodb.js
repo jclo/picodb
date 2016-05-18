@@ -300,7 +300,6 @@
       updateOne: updateOne,
       find: find,
       toArray: toArray,
-
       addEventListener: addEventListener,
       addOneTimeEventListener: addOneTimeEventListener,
       removeEventListener: removeEventListener,
