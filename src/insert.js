@@ -81,8 +81,7 @@
     _insert: function(db, eventQ, docs, options, callback) {
       var arr
         , docOut
-        , o
-        , key
+        , id
         , i
         ;
 
@@ -100,21 +99,17 @@
           if (arr[i]._id) {
             // Do not duplicate doc!
             if (_insert._isNewId(db, arr[i]._id)) {
-              db.data.push(arr[i]);
-              docOut.push(arr[i]);
+              // Do not copy the references. Create new objects!
+              db.data.push(_.extend({}, arr[i]));
+              // Do not pass references to the db. Provide a copy instead!
+              docOut.push(_.extend({}, arr[i]));
               if (!options.many)
                 break;
             }
           } else {
-            // Extending o instead of adding the property '_id' to arr[i],
-            // forces the property _id to be the first item of the object
-            // instead of the last!
-            o = { _id: _.token() };
-            for (key in arr[i])
-              if (arr[i].hasOwnProperty(key))
-                o[key] = arr[i][key];
-            db.data.push(o);
-            docOut.push(o);
+            id = _.token();
+            db.data.push(_.extend({ _id: id }, arr[i]));
+            docOut.push(_.extend({ _id: id }, arr[i]));
             if (!options.many)
               break;
           }

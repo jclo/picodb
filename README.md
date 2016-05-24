@@ -180,7 +180,7 @@ is executed when documents are inserted, updated or deleted.
 PicoDB implements the following methods:
 
 Method | Description |
---------- | :---------- |
+------ | ----------- |
 count | Counts number of matching documents into the db.
 deleteMany | Deletes multiple matching documents into the db.
 deleteOne | Deletes the first matching document into the db.
@@ -204,45 +204,53 @@ off | Alias of removeEventListener.
 
 PicoDB implements the following Comparison Operators:
 
-Operator  | Description |
---------- | :---------- |
-$eq   | Matches values that are equal to a specified value.
-$gt   | Matches values that are greater than a specified value.
-$gte  | Matches values that are greater than or equal to a specified value.
-$lt   | Matches values that are less than a specified value.
-$lte  | Matches values that are less than or equal to a specified value.
-$ne   | Matches all values that are not equal to a specified value.
-$in   | Matches any of the values specified in an array.
-$nin  | Matches none of the values specified in an array.
+Operator | Description |
+-------- | ----------- |
+$eq  | Matches values that are equal to a specified value.
+$gt  | Matches values that are greater than a specified value.
+$gte | Matches values that are greater than or equal to a specified value.
+$lt  | Matches values that are less than a specified value.
+$lte | Matches values that are less than or equal to a specified value.
+$ne  | Matches all values that are not equal to a specified value.
+$in  | Matches any of the values specified in an array.
+$nin | Matches none of the values specified in an array.
 
 
 #### Element Operators
 
-Operator  | Description |
---------- | :---------- |
+Operator | Description |
+-------- | ----------- |
 $exists | Matches documents that have the specified field.
 
 
 #### Logical Operators
 
-Operator  | Description |
---------- | :---------- |
+Operator | Description |
+-------- | ----------- |
 $or | Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
 $not | Inverts the effect of a query expression and returns documents that do not match the query expression.
 
 
 ### Update Operators
 
-Operator  | Description |
---------- | :---------- |
+#### Field
+
+Operator | Description |
+-------- | ----------- |
+$inc | Increments the value of the field by the specified amount.
+$mul | Multiplies the value of the field by the specified amount.
+$rename | Renames a field.
 $set | Sets the value of a field in a document or adds it.
 $unset | Removes the specified field from a document.
+$min | Updates the field if the specified value is less than the existing field value.
+$max | Updates the field if the specified value is greater than the existing field value.
+$currentDate | Sets the value of a field to current date.
 
 
 ### Events
 
-Event  | Description |
---------- | :---------- |
+Operator | Description |
+-------- | ----------- |
 change | Fires when a document is modified with the methods insert, update or delete.
 insert | Fires when a document is inserted into the db.
 update | Fires when one or multiple documents are updated into the db.

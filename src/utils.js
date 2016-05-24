@@ -276,8 +276,10 @@
 
       if (_.isArray(obj)) clone = []; else clone = {};
       for (prop in obj)
-        if (_.isObject(obj[prop]))
+        if (_.isArray(obj[prop]))
           clone[prop] = _.clone(obj[prop]);
+        else if (_.isObject(obj[prop]))
+          clone[prop] = _.extend({}, obj[prop]);
         else
         clone[prop] = obj[prop];
 
@@ -314,14 +316,17 @@
       for (var i = 1, length = arguments.length; i < length; i++) {
         source = arguments[i];
         for (prop in source) {
-          // Check that 'prop' value is not an object.
-          if (_.isObject(arguments[i][prop])) {
-            // It is an object. Apply recursivity.
+          // Check that 'prop' value is an object:
+          if (!_.isArray(arguments[i][prop]) && _.isObject(arguments[i][prop])) {
+            // It is an object. Apply recursivity:
             if (obj[prop] === undefined) { obj[prop] = {}; }
             _.extend(obj[prop], arguments[i][prop]);
           } else {
             if (hasOwnProperty.call(source, prop)) {
-              obj[prop] = source[prop];
+              if (_.isArray(source[prop]))
+                obj[prop] = _.clone(source[prop]);
+              else
+                obj[prop] = source[prop];
             }
           }
         }

@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PicoDB is a tiny in-memory database that stores JSON documents",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,12 @@
   },
   "keywords": [
     "mongodb",
+    "mongodb-like",
     "in-memory",
-    "database"
+    "database",
+    "db",
+    "nosql",
+    "json"
   ],
   "author": {
     "name": "jclo",

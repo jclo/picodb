@@ -15,9 +15,9 @@
 
   /**
    * Private functions:
-   *  . _set                 replaces the 'fields' in the current document or adds new ones,
-   *  . _unset               removes 'fields' from the current document,
-   *  . _replace             replaces the current document by a new one,
+   *  . _apply               applies the requested update to the document,
+   *  . _replace             replaces the document content,
+   *  . _applyTime           updates or adds the time fields to the document,
    *  . _updateThisDoc       updates this document,
    *  . _update              updates one or several documents,
    *
@@ -30,102 +30,190 @@
     /* Private Functions ---------------------------------------------------- */
 
     /**
-     * Replaces the 'fields' in the current document or adds new ones.
+     * Applies the requested update to the document.
      *
-     * @function (arg1, arg2)
+     * Note: this function mutates the argument `obj`.
+     *
+     * @function (arg1, arg2, arg3)
      * @private
-     * @param {Object}     the document to update,
-     * @param {Update}     the 'fields' to be replaced or added,
+     * @param {Object}     the destination document,
+     * @param {Object}     the source document,
+     * @param {String}     the Update Operator,
      * @returns {Object}   the modified document,
+     * @throws {Object}    throws an error if the operator is unknown,
      * @since 0.0.1
      */
-    _set: function(doc, update) {
-      var key
+    _apply: function(obj, source, op) {
+      var prop
         ;
 
-      for (key in update)
-        // Prevent adding inherited properties and overwriting _id!
-        if (update.hasOwnProperty(key) && key !== '_id')
-          doc[key] = update[key];
-      return doc;
+      for (prop in source) {
+        if (!_.isArray(source[prop]) && _.isObject(source[prop])) {
+          if (!obj[prop] && (op === '$rename' || op === '$unset'))
+            break;
+          else if (!obj[prop])
+            obj[prop] = {};
+          _update._apply(obj[prop], source[prop], op);
+        } else {
+          if (hasOwnProperty.call(source, prop)) {
+            if (_.isArray(source[prop]))
+              obj[prop] = _.clone(source[prop]);
+            else
+              switch (op) {
+                case '$inc':
+                  if (typeof obj[prop] === 'number')
+                    obj[prop] += source[prop];
+                  else
+                    obj[prop] = source[prop];
+                  break;
+
+                case '$mul':
+                  if (typeof obj[prop] === 'number')
+                    obj[prop] *= source[prop];
+                  else
+                    obj[prop] = 0;
+                  break;
+
+                case '$rename':
+                  if (obj[prop]) {
+                    obj[source[prop]] = obj[prop];
+                    delete obj[prop];
+                  }
+                  break;
+
+                case '$set':
+                  obj[prop] = source[prop];
+                  break;
+
+                case '$unset':
+                  if (obj[prop])
+                    delete obj[prop];
+                  break;
+
+                case '$min':
+                  if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] < obj[prop]))
+                    obj[prop] = source[prop];
+                  break;
+
+                case '$max':
+                  if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] > obj[prop]))
+                    obj[prop] = source[prop];
+                  break;
+
+                /* istanbul ignore next */
+                default:
+                  throw new Error('_update._apply: the operator "' + op + '" is unknown!');
+              }
+          }
+        }
+      }
+      return obj;
     },
 
     /**
-     * Removes 'fields' from the current document.
+     * Replaces the document content.
+     *
+     * Note: this function mutates the argument `obj`.
      *
      * @function (arg1, arg2)
      * @private
-     * @param {Object}     the document to update,
-     * @param {Update}     the 'fields' to be removed from the document,
+     * @param {Object}     the destination document,
+     * @param {Object}     the source document,
      * @returns {Object}   the modified document,
      * @since 0.0.1
      */
-    _unset: function(doc, update) {
-      var key
-        ;
-
-      for (key in update)
-        // Prevent removing inherited properties and _id!
-        if (update.hasOwnProperty(key) && key !== '_id')
-          delete doc[key];
-      return doc;
+    _replace: function(obj, source) {
+      obj = _.extend({ _id: obj._id }, source);
+      return obj;
     },
 
-    /**
-     * Replaces the current document by a new one.
-     * (but keeping the same '_id')
-     *
-     * @function (arg1, arg2)
-     * @private
-     * @param {Object}     the document to replace,
-     * @param {Update}     the new document,
-     * @returns {Object}   the modified document,
-     * @since 0.0.1
-     */
-    _replace: function(doc, update) {
-      var key
+  /**
+   * Updates or adds the time fields to the document.
+   *
+   * Note: this function mutates the argument `obj`.
+   *
+   * If the type is 'timestamp' sets the timestamp. Otherwise sets the date.
+   * The source document has the following form:
+   * $currentDate: { lastModified: true, cancellation: { date: { $type: 'timestamp' }}
+   *
+   * @function (arg1, arg2)
+   * @private
+   * @param {Object}     the destination document,
+   * @param {Object}     the source document,
+   * @returns {Object}   the modified document,
+   * @since 0.0.1
+   */
+    _applyTime: function(obj, source) {
+      var prop
+        , subprop
         ;
 
-      // We want to keep the property '_id' as the first item in the doc
-      // object. So, we won't replace the old doc by the new one but we add
-      // the item of the new doc to the current doc after having deleted all
-      // items except '_id'.
-
-      // Delete all the properties from the doc. except '_id':
-      for (key in doc)
-        if (key !== '_id')
-          delete doc[key];
-
-      // Update the doc and return :
-      for (key in update)
-        // Prevent adding inherited properties and overwriting _id!
-        if (update.hasOwnProperty(key) && key !== '_id')
-          doc[key] = update[key];
-      return doc;
+      for (prop in source) {
+        subprop = _.keys(source[prop])[0];
+        if (_.isObject(source[prop]) && subprop !== '$type') {
+          if (!obj[prop])
+            obj[prop] = {};
+          _update._applyTime(obj[prop], source[prop]);
+        } else {
+          if (hasOwnProperty.call(source, prop))
+            if (source[prop][subprop] === 'timestamp')
+              obj[prop] = Date.now();
+            else
+              obj[prop] = new Date().toISOString();
+        }
+      }
+      return obj;
     },
 
     /**
      * Updates this document.
      *
+     * Note: this function mutates the argument `doc`.
+     *
      * @function (arg1, arg2)
      * @private
      * @param {Object}     the document to update,
-     * @param {Update}     the 'fields' to be updated and their new values,
+     * @param {Object}     the 'fields' to be updated and their new values,
      * @returns {Object}   the modified document,
+     * @throws {Object}    throws an error if the operator is unknown or not supported,
      * @since 0.0.1
      */
     _updateThisDoc: function(doc, update) {
       var keys = _.keys(update)
         ;
 
-      if (keys[0] === '$set')
-        return _update._set(doc, update['$set']);
+      if (!keys[0].match(/^\$/))
+        return _update._replace(doc, update);
 
-      if (keys[0] === '$unset')
-        return _update._unset(doc, update['$unset']);
+      switch (keys[0]) {
+        case '$inc':
+          return _update._apply(doc, update['$inc'], '$inc');
 
-      return _update._replace(doc, update);
+        case '$mul':
+          return _update._apply(doc, update['$mul'], '$mul');
 
+        case '$rename':
+          return _update._apply(doc, update['$rename'], '$rename');
+
+        case '$set':
+          return _update._apply(doc, update['$set'], '$set');
+
+        case '$unset':
+          return _update._apply(doc, update['$unset'], '$unset');
+
+        case '$min':
+          return _update._apply(doc, update['$min'], '$min');
+
+        case '$max':
+          return _update._apply(doc, update['$max'], '$max');
+
+        case '$currentDate':
+          return _update._applyTime(doc, update['$currentDate']);
+
+        /* istanbul ignore next */
+        default:
+          throw new Error('The Update Operator "' + keys[0] + '" isn\'t supported!');
+      }
     },
 
     /**
@@ -135,7 +223,7 @@
      * @private
      * @param {Object}     the database object,
      * @param {Object}     the query object,
-     * @param {Update}     the 'fields' to be updated,
+     * @param {Object}     the 'fields' to be updated,
      * @param {Options}    the settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
@@ -143,6 +231,7 @@
      */
     _update: function (db, eventQ, query, update, options, callback) {
       var sop = _query.isHavingSpecialOperator(query)
+        , o
         , docOut
         , i
         ;
@@ -165,7 +254,9 @@
       docOut = [];
       for (i = 0; i < db.data.length; i++)
         if (_query.isMatch(db.data[i], query, sop)) {
-          docOut.push(_update._updateThisDoc(db.data[i], update));
+          o = _update._updateThisDoc(db.data[i], update);
+          // Do not copy the references. Clone the object instead!
+          docOut.push(_.extend({}, o));
           if (!options.many)
             break;
         }
@@ -189,7 +280,7 @@
      * @param {Boolean}    true if all the matching documents should be updated,
      *                     false if only the first matching document should be,
      * @param {Object}     the query object,
-     * @param {Update}     the 'fields' to be updated,
+     * @param {Object}     the 'fields' to be updated,
      * @param {Options}    the optional settings,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
