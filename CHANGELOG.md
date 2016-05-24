@@ -3,7 +3,7 @@
 ### 0.2.0 (May 24, 2016)
 
   * Added the Update Operators $inc, $mul, $rename, $min, $max and $currentDate,
-  * ...,
+  * Release 0.2.0.
 
 
 ### 0.1.0 (May 18, 2016)
