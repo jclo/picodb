@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.2.x (May 26, 2016)
+
+  * Added the Update Operators $push and $pop,
+  * ...,
+
+
 ### 0.2.0 (May 24, 2016)
 
   * Added the Update Operators $inc, $mul, $rename, $min, $max and $currentDate,
