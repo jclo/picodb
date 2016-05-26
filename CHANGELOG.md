@@ -1,9 +1,9 @@
 ### HEAD
 
-### 0.2.x (May 26, 2016)
+### 0.3.0 (May 26, 2016)
 
   * Added the Update Operators $push and $pop,
-  * ...,
+  * Release 0.3.0.
 
 
 ### 0.2.0 (May 24, 2016)
