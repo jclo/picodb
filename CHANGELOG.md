@@ -1,9 +1,9 @@
 ### HEAD
 
-### 0.4.0.beta1 (May 27, 2016)
+### 0.4.0 (May 27, 2016)
 
   * Added the Update Operator $pull,
-  * ...,
+  * Release 0.4.0.
 
 
 ### 0.3.0 (May 26, 2016)
