@@ -1,13 +1,13 @@
 {
   "name": "picodb",
-  "version": "0.3.0",
+  "version": "0.4.0beta1",
   "description": "PicoDB is a tiny in-memory database that stores JSON documents",
   "main": "index.js",
   "scripts": {
     "build": "gulp",
     "watch": "gulp watch",
     "test": "istanbul cover -x ./test/main.js _mocha -- -R spec ./test/main.js",
-    "check-coverage": "istanbul check-coverage --statements 99.0 --branches 97.0 --functions 100 --lines 99.0",
+    "check-coverage": "istanbul check-coverage --statements 99.0 --branches 95.0 --functions 100 --lines 99.0",
     "display-coverage": "opener ./coverage/lcov-report/index.html",
     "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },

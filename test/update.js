@@ -679,6 +679,269 @@ module.exports = function() {
         });
 
       });
+
+      describe('$pull:', function() {
+        var db = PicoDB.Create()
+          , doc
+          ;
+
+        it('Expects { a: 1 }, { $pull: { quantity: "b", metrics: { orders: 2, ratings: { values: "cd" }, type: "b" }}} to return 1 document.', function(done) {
+          db.insertOne({ a: 1, quantity: ['a', 'b', 'c'], metrics: { orders: [1, 2], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 1 }, { $pull: { quantity: 'b', metrics: { orders: 2, ratings: { values: 'gh' }, type: 'b' }}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 2 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects the first element to be equal to "a"', function() {
+          expect(doc.quantity[0]).to.be.equal('a');
+        });
+
+        it('Expects the second element to be equal to "c"', function() {
+          expect(doc.quantity[1]).to.be.equal('c');
+        });
+
+        it('Expects this document to own the property "orders" that is an array with 1 element.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(1);
+        });
+
+        it('Expects the first element to be equal to "1"', function() {
+          expect(doc.metrics.orders[0]).to.be.equal(1);
+        });
+
+        it('Expects this document to own the property "values" that is an array with 3 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array').that.have.lengthOf(3);
+        });
+
+        it('Expects the first element to be equal to "ab"', function() {
+          expect(doc.metrics.ratings.values[0]).to.be.equal('ab');
+        });
+
+        it('Expects the second element to be equal to "cd"', function() {
+          expect(doc.metrics.ratings.values[1]).to.be.equal('cd');
+        });
+
+        it('Expects the third element to be equal to "ef"', function() {
+          expect(doc.metrics.ratings.values[2]).to.be.equal('ef');
+        });
+
+        it('Expects this document to own the property "type" that is a string.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.type').that.is.a('string');
+        });
+
+        it('Expects this string to be equal to "aaa"', function() {
+          expect(doc.metrics.ratings.type).to.be.equal('aaa');
+        });
+
+
+        it('Expects { a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 }}}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 2, quantity: [{ a: 1, b: 2, c: 3 }, { a: 1, b: 3 }], metrics: { orders: 3, ratings: { values: [{ a: 1, b: 2 }, { a: 1, b: 1}], type: [{ a: 2 }, 'aaa'] }}}, function() {
+            db.updateOne({ a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 }}}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 1 element.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(1);
+        });
+
+        it('Expects the first element to be an object with the property a that is equal to 1.', function() {
+          expect(doc.quantity[0]).to.be.an('object').that.have.property('a').that.is.equal(1);
+        });
+
+        it('Expects the second element to be an object with the property b that is equal to 3.', function() {
+          expect(doc.quantity[0]).to.be.an('object').that.have.property('b').that.is.equal(3);
+        });
+
+        it('Expects this document to own the property "orders" that is equal to 3.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.equal(3);
+        });
+
+        it('Expects this document to own the property "values" that is an array with 1 element.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array').that.have.lengthOf(1);
+        });
+
+        it('Expects the first element to be an object with the property a that is equal to 1.', function() {
+          expect(doc.metrics.ratings.values[0]).to.be.an('object').that.have.property('a').that.is.equal(1);
+        });
+
+        it('Expects the first element to be an object with the property b that is equal to 2.', function() {
+          expect(doc.metrics.ratings.values[0]).to.be.an('object').that.have.property('b').that.is.equal(2);
+        });
+
+        it('Expects { a: 3 }, { $pull: { quantity: { $eq: 5 }, metrics: { orders: { $gt: 1 }, ratings: { values: { $gte: 4 }, type: { $eq: "aaa" }}}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 3, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 3 }, { $pull: { quantity: { $eq: 5 }, metrics: { orders: { $eq: 3 }, ratings: { values: { $gt: 4 }, type: { $eq: 'aaa' }}}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 4 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(4);
+        });
+
+        it('Expects the fourth element of the array to be equal to 4.', function() {
+          expect(doc.quantity[3]).to.be.equal(4);
+        });
+
+        it('Expects this document to own the property "orders" that is an array with 2 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects this document to own the property "values" that is an array with 4 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array').that.have.lengthOf(4);
+        });
+
+        it('Expects this document to own the property "type" that is an string with the value equal to "aaa".', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.type').that.is.an('string').that.is.equal('aaa');
+        });
+
+        it('Expects { a: 4 }, { $pull: { quantity: { $gt: 5 }, metrics: { orders: { $gte: 2 }, ratings: { values: { $gte: 6 }, type: { $gt: "ccc"} }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 4, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 4 }, { $pull: { quantity: { $gt: 5 }, metrics: { orders: { $gte: 2 }, ratings: { values: { $gte: 6 }, type: { $gt: 'ccc'} }}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 5 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(5);
+        });
+
+        it('Expects this document to own the property "orders" that is an array with 1 element.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(1);
+        });
+
+        it('Expects the first element of the array to be equal to 1.', function() {
+          expect(doc.metrics.orders[0]).to.be.equal(1);
+        });
+
+        it('Expects this document to own the property "values" that is an array with 5 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array').that.have.lengthOf(5);
+        });
+
+        it('Expects this document to own the property "type" that is a string with the value "aaa".', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.type').that.is.a('string').that.is.equal('aaa');
+        });
+
+        it('Expects { a: 5 }, { $pull: { quantity: { $lt: 3 }, metrics: { orders: { $lt: 0 }, ratings: { values: { $lte: 3 }, type: { $lte: "ccc"}  }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 5, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 5 }, { $pull: { quantity: { $lt: 3 }, metrics: { orders: { $lt: 0 }, ratings: { values: { $lte: 3 }, type: { $lte: 'ccc'} }}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 3 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(3);
+        });
+
+        it('Expects the first element of the array to be equal to 3.', function() {
+          expect(doc.quantity[0]).to.be.equal(3);
+        });
+
+        it('Expects this document to own the property "orders" that is an array with 2 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects this document to own the property "values" that is an array with 2 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects the first element of the array to be equal to 3.', function() {
+          expect(doc.quantity[0]).to.be.equal(3);
+        });
+
+        it('Expects this document to own the property "type" that is a string with the value "aaa".', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.type').that.is.a('string').that.is.equal('aaa');
+        });
+
+        it('Expects { a: 6 }, { $pull: { quantity: { $ne: 3 }, metrics: { orders: { $ne: 0 }, ratings: { values: { $lte: 3 }, type: { $ne: "ccc" } }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 6, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 6 }, { $pull: { quantity: { $ne: 3 }, metrics: { orders: { $ne: 0 }, ratings: { values: { $lte: 3 }, type: { $ne: 'ccc' } }}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 1 element.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(1);
+        });
+
+        it('Expects the first element of the array to be equal to 3.', function() {
+          expect(doc.quantity[0]).to.be.equal(3);
+        });
+
+        it('Expects this document to own the property "type" that is a string with the value "aaa".', function() {
+          expect(doc).to.have.deep.property('metrics.ratings.type').that.is.a('string').that.is.equal('aaa');
+        });
+
+        it('Expects { a: 7 }, { $pull: { quantity: { $in: ["a", "b", "c"] }, metrics: { orders: { $in: [0] }, ratings: { values: { $in: 3 } }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 7, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 7 }, { $pull: { quantity: { $in: ['a', 'b', 'c'] }, metrics: { orders: { $in: [0] }, ratings: { values: { $in: 3 } }}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 2 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects the first element of the array to be equal to "d".', function() {
+          expect(doc.quantity[0]).to.be.equal('d');
+        });
+
+        it('Expects this document to own the property "orders" that is an array with 2 elements.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(2);
+        });
+
+        it('Expects { a: 8 }, { $pull: { quantity: { $nin: ["a", "b", "c"] }, metrics: { orders: { $nin: [0] }, ratings: { values: { $nin: "aaa" } }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 8, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
+            db.updateOne({ a: 8 }, { $pull: { quantity: { $nin: ['a', 'b', 'c'] }, metrics: { orders: { $nin: [0] }, ratings: { values: { $nin: 'aaa' } }}}}, function(err, docs) {
+              doc = docs[0];
+              expect(docs).to.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+
+        it('Expects this document to own the property "quantity" that is an array with 3 elements.', function() {
+          expect(doc).to.have.property('quantity').that.is.an('array').that.have.lengthOf(3);
+        });
+
+        it('Expects the first element of the array to be equal to "a".', function() {
+          expect(doc.quantity[0]).to.be.equal('a');
+        });
+
+        it('Expects the third element of the array to be equal to "c".', function() {
+          expect(doc.quantity[2]).to.be.equal('c');
+        });
+
+        it('Expects this document to own the property "orders" that is an empty array.', function() {
+          expect(doc).to.have.deep.property('metrics.orders').that.is.an('array').that.have.lengthOf(0);
+        });
+      });
     });
   });
 

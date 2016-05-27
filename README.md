@@ -271,6 +271,8 @@ $push        | Adds an item to an array.
 
 ##### Array Update Operator Modifiers
 
+`$push` operator can be used with the following modifiers:
+
 ```
 Operator     | Description
 ```
@@ -278,6 +280,24 @@ Operator     | Description
 $each        | Modifies the $push and operator to append multiple items for array updates.
 $slice       | Modifies the $push operator to limit the size of updated arrays.
 $position    | Modifies the $push operator to specify the position in the array to add elements.
+```
+
+##### Array Update Comparison Operators
+
+`pull` operator can be used with the following comparison operators:
+
+```
+Operator     | Description
+```
+```
+$eq          | Matches values that are equal to a specified value.
+$gt          | Matches values that are greater than a specified value.
+$gte         | Matches values that are greater than or equal to a specified value.
+$lt          | Matches values that are less than a specified value.
+$lte         | Matches values that are less than or equal to a specified value.
+$ne          | Matches all values that are not equal to a specified value.
+$in          | Matches any of the values specified in an array.
+$nin         | Matches none of the values specified in an array.
 ```
 
 
