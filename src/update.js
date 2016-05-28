@@ -112,38 +112,33 @@
                   break;
 
                 case '$gt':
-                  if (_.isArray(obj[prop]))
-                    for (i = obj[prop].length - 1; i >= 0; i--)
-                      if (obj[prop][i] > source[prop]['$gt'])
-                        obj[prop].splice(i, 1);
+                  for (i = obj[prop].length - 1; i >= 0; i--)
+                    if (obj[prop][i] > source[prop]['$gt'])
+                      obj[prop].splice(i, 1);
                   break;
 
                 case '$gte':
-                  if (_.isArray(obj[prop]))
-                    for (i = obj[prop].length - 1; i >= 0; i--)
-                      if (obj[prop][i] >= source[prop]['$gte'])
-                        obj[prop].splice(i, 1);
+                  for (i = obj[prop].length - 1; i >= 0; i--)
+                    if (obj[prop][i] >= source[prop]['$gte'])
+                      obj[prop].splice(i, 1);
                   break;
 
                 case '$lt':
-                  if (_.isArray(obj[prop]))
-                    for (i = obj[prop].length - 1; i >= 0; i--)
-                      if (obj[prop][i] < source[prop]['$lt'])
-                        obj[prop].splice(i, 1);
+                  for (i = obj[prop].length - 1; i >= 0; i--)
+                    if (obj[prop][i] < source[prop]['$lt'])
+                      obj[prop].splice(i, 1);
                   break;
 
                 case '$lte':
-                  if (_.isArray(obj[prop]))
-                    for (i = obj[prop].length - 1; i >= 0; i--)
-                      if (obj[prop][i] <= source[prop]['$lte'])
-                        obj[prop].splice(i, 1);
+                  for (i = obj[prop].length - 1; i >= 0; i--)
+                    if (obj[prop][i] <= source[prop]['$lte'])
+                      obj[prop].splice(i, 1);
                   break;
 
                 case '$ne':
-                  if (_.isArray(obj[prop]))
-                    for (i = obj[prop].length - 1; i >= 0; i--)
-                      if (obj[prop][i] !== source[prop]['$ne'])
-                        obj[prop].splice(i, 1);
+                  for (i = obj[prop].length - 1; i >= 0; i--)
+                    if (obj[prop][i] !== source[prop]['$ne'])
+                      obj[prop].splice(i, 1);
                   break;
 
                 case '$in':
@@ -158,7 +153,7 @@
                   break;
 
                 case '$nin':
-                  if (!_.isArray(obj[prop]) || !_.isArray(source[prop]['$nin']))
+                  if (!_.isArray(source[prop]['$nin']))
                     break;
 
                   arr = [];
@@ -204,7 +199,7 @@
 
       for (prop in source) {
         subprop = _.keys(source[prop]);
-        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && !_.contains(subprop, '$each')) {
+        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /*!_.contains(subprop, '$each')*/ !subprop[0].match(/^\$/)) {
           if (!obj[prop])
             obj[prop] = {};
           _update._push(obj[prop], source[prop]);
@@ -272,6 +267,8 @@
      */
     _apply: function(obj, source, op) {
       var prop
+        , i
+        , j
         ;
 
       for (prop in source) {
@@ -339,6 +336,14 @@
                     obj[prop].pop();
                   else if (source[prop] === -1)
                     obj[prop].shift();
+                break;
+
+              case '$pullAll':
+                if (_.isArray(obj[prop]) && _.isArray(source[prop]))
+                  for (i = 0; i < source[prop].length; i++)
+                    for (j = obj[prop].length - 1; j >= 0; j--)
+                      if (obj[prop][j] === source[prop][i])
+                        obj[prop].splice(j, 1);
                 break;
 
               /* istanbul ignore next */
@@ -456,6 +461,9 @@
         // Array Operators:
         case '$pop':
           return _update._apply(doc, update['$pop'], '$pop');
+
+        case '$pullAll':
+          return _update._apply(doc, update['$pullAll'], '$pullAll');
 
         case '$pull':
           return _update._pull(doc, update['$pull'], '$pull');

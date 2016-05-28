@@ -1,5 +1,12 @@
 ### HEAD
 
+### 0.4.x (May 27, 2016)
+
+  * Added the Update Operator $pullAll,
+  * Increased the test coverage,
+  * ...,
+
+
 ### 0.4.0 (May 27, 2016)
 
   * Added the Update Operator $pull,

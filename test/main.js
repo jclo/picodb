@@ -43,7 +43,7 @@ describe('PicoDB', function() {
   // Test the methods updateOne & updateMany:
   update();
 
-  // Test query opeators:
+  // Test the query operators:
   query();
 
   // Test the methods addEventListener, addOneTimeEventListener and removeEventListener:
