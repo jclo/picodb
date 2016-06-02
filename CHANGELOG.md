@@ -1,9 +1,10 @@
 ### HEAD
 
-### 0.4.x (May 27, 2016)
+### 0.4.x (June 2, 2016)
 
   * Added the Update Operator $pullAll,
   * Increased the test coverage,
+  * Added the usage of multiple query operators in the same condition (ex: { $gt: 1, $lt: 5 }),
   * ...,
 
 

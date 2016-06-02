@@ -34,6 +34,9 @@ describe('PicoDB', function() {
   // Test the methods find and toArray:
   find();
 
+  // Test the query operators:
+  query();
+
   // Test the method count:
   count();
 
@@ -42,9 +45,6 @@ describe('PicoDB', function() {
 
   // Test the methods updateOne & updateMany:
   update();
-
-  // Test the query operators:
-  query();
 
   // Test the methods addEventListener, addOneTimeEventListener and removeEventListener:
   event();

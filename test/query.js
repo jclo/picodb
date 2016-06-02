@@ -255,6 +255,28 @@ module.exports = function() {
       });
 
 
+      describe('$gt & $lt:', function() {
+
+        it ('Expects query {a: { $gt: 1, $lt: 3 }} to return 1 document.', function() {
+          db.find({ a: { $gt: 1, $lt: 3 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it ('Expects query {a: { $gte: 1, $lte: 2 }} to return 3 documents.', function() {
+          db.find({ a: { $gte: 1, $lte: 2 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(3);
+          });
+        });
+
+        it ('Expects query {a: { $gt: 1, $lt: 2 }} to return 0 document.', function() {
+          db.find({ a: { $gt: 1, $lt: 2 }}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
+          });
+        });
+      });
+
+
       describe('$ne & $nin:', function() {
 
         it('Expects query { a: { $ne: 3 }, b: { $nin: ["bbb"] }} to return 1 document.', function() {
@@ -360,9 +382,15 @@ module.exports = function() {
           });
         });
 
-        it('Expects query { $or: [ { a: { $gt: 1 }}, { d: { e: { f: { $eq: "f" }}} }]} to return 1 document.', function() {
-          db.find({ $or: [ { a: { $gt: 1 }}, { d: { e: { f: { $eq: 'f' }}}}]}).toArray(function(err, docs) {
+        it('Expects query { $or: [ { a: { $gt: 3 }}, { d: { e: { f: { $eq: "f" }}} }]} to return 1 document.', function() {
+          db.find({ $or: [ { a: { $gt: 3 }}, { d: { e: { f: { $eq: 'f' }}}}]}).toArray(function(err, docs) {
             expect(docs).to.have.lengthOf(1);
+          });
+        });
+
+        it('Expects query { $or: [ { a: 3 }, { d: { e: { f: { $eq: "g" }}}}]} to return 0 document.', function() {
+          db.find({ $or: [ { a: 3 }, { d: { e: { f: { $eq: 'g' }}}}]}).toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(0);
           });
         });
       });

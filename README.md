@@ -266,6 +266,8 @@ Operator     | Description
 ```
 ```
 $pop         | Removes the first or last item of an array.
+$pullAll     | Removes all matching values from an array.
+$pull        | Removes all the array elements that match a specified query.
 $push        | Adds an item to an array.
 ```
 
