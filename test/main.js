@@ -9,10 +9,11 @@
 var create    = require('./create.js')
   , insert    = require('./insert.js')
   , find      = require('./find.js')
+  , query     = require('./query.js')
+  , geo       = require('./geo.js')
   , count     = require('./count.js')
   , deleteDoc = require('./delete.js')
   , update    = require('./update.js')
-  , query     = require('./query.js')
   , event     = require('./event.js')
   ;
 
@@ -36,6 +37,7 @@ describe('PicoDB', function() {
 
   // Test the query operators:
   query();
+  geo();
 
   // Test the method count:
   count();

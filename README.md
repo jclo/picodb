@@ -239,10 +239,38 @@ $or      | Joins query clauses with a logical OR returns all documents that matc
 $not     | Inverts the effect of a query expression and returns documents that do not match the query expression.
 ```
 
+#### Geospatial Operators
+
+```
+Operator | Description
+```
+```
+$geoWithin     | Selects geometries within a bounding GeoJSON geometry.
+$geoIntersects | Selects geometries that intersect with a GeoJSON geometry.
+```
+
+`$geoWithin` and `$geoIntersects` GeoJSON geometries could only by `Polygon` and `Multipolygon`.
+
+`geoWithin` only work with `Point` geometry.
+
+`geoIntersects` work with `LineString` and `Polygon` geometries.
+
+
+##### Shape Operators
+
+`$geoWithin` could be used with the legacy shape operators:
+
+```
+$box           | Specifies a rectangle to return documents that are within the rectangle.
+$polygon       | Specifies a rectangle to return documents that are within the polygon.
+$center        | Specifies a circle to return documents that are within the circle.
+$centerSphere  | Specifies a earth-like sphere to return documents that are within the sphere.
+```
+
 
 ### Update Operators
 
-#### Fields Operators
+#### Field Operators
 
 ```
 Operator     | Description

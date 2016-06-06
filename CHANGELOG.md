@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.5.x (June 6, 2016)
+
+  * Added the GeoSpatial Query Operators $geoWithin and $geoIntersects,
+  * ...,
+
+
 ### 0.5.0 (June 2, 2016)
 
   * Added the Update Operator $pullAll,

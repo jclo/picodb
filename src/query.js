@@ -163,8 +163,17 @@
         // --
 
         // Geospatial Operators:
-        case 'geoWithin':
-          return true;
+        case '$geoWithin':
+          return _geo.query(obj, { $geoWithin: source });
+
+        case '$geoIntersects':
+          return _geo.query(obj, { $geoIntersects: source });
+
+        case '$near':
+          return _geo.query(obj, { $near: source });
+
+        case '$nearSphere':
+          return _geo.query(obj, { $nearSphere: source });
 
         // Array Operators:
         // --
@@ -178,7 +187,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_query._isConditionTrue: this must never occur!');
+          throw new Error('_query._isConditionTrue: the operator "' + op + '" is unknown!');
       }
     },
 
