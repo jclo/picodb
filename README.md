@@ -249,11 +249,11 @@ $geoWithin     | Selects geometries within a bounding GeoJSON geometry.
 $geoIntersects | Selects geometries that intersect with a GeoJSON geometry.
 ```
 
-`$geoWithin` and `$geoIntersects` GeoJSON geometries could only by `Polygon` and `Multipolygon`.
+`$geoWithin` and `$geoIntersects` GeoJSON geometries could only by `Polygon` and `MultiPolygon`.
 
-`geoWithin` only work with `Point` geometry.
+`geoWithin` supports `Point`, `LineString`, `MultiPoint`, `MultiLineString` and `Polygon` geometries.
 
-`geoIntersects` work with `LineString` and `Polygon` geometries.
+`geoIntersects` supports `LineString` and `Polygon` geometries.
 
 
 ##### Shape Operators

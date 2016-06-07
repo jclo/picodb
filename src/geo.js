@@ -108,38 +108,97 @@
     },
 
     /**
-     * Checks if the GeoJSON object is inside a Multipolygon or Polygon.
+     * Checks if the GeoJSON geometry is inside a Multipolygon or Polygon.
      * @function (arg1, arg2)
      * @private
-     * @param {Object}     the GeoJSON object,
+     * @param {Array}      the GeoJSON geometry,
      * @param {Object}     the GeoSpatial $geoWithin/$geometry query,
      * @returns {Boolean}  returns true if the point is inside the Multipolygon/polygon, false otherwise,
      @ @throws {Object}    throws an error if the type isn't 'Multipolygon' or 'Polygon',
      * @since 0.0.1
      */
-    _isPointInPolygonOrMultipolygon: function(obj, source) {
-      var i
+    _isGeometryInsideGeoObject: function(obj, source) {
+      var breakloop
+        , i
         , j
+        , k
+        , l
         ;
 
       switch (source.type) {
 
-        case 'Multipolygon':
-          for (i = 0; i < source.coordinates.length; i++)
-            for (j = 0; j < source.coordinates[i].length; j++)
-              if (_geo._isPointInPolygon(obj.coordinates, source.coordinates[i][j]))
-                return true;
-          return false;
+        // The point is considered as inside a Multipolygon if it inside of
+        // one ring of one polygon.
+        case 'MultiPolygon':
+          for (i = 0; i < obj.length; i++) {
+            for (j = 0; j < obj[i].length; j++) {
+              for (k = 0; k < source.coordinates.length; k++) {
+                breakloop = false;
+                for (l = 0; l < source.coordinates[k].length; l++) {
+                  if (_geo._isPointInPolygon(obj[i][j], source.coordinates[k][l])) {
+                    breakloop = true;
+                    break;
+                  }
+                }
+                if (breakloop)
+                  break;
+              }
+              if (!breakloop)
+                return false;
+            }
+          }
+          return true;
 
+        // The point is considered as inside a Polygon if it inside of
+        // one ring of the polygon.
         case 'Polygon':
-          for (i = 0; i < source.coordinates.length; i++)
-            if (_geo._isPointInPolygon(obj.coordinates, source.coordinates[i]))
-              return true;
-          return false;
+          for (i = 0; i < obj.length; i++) {
+            for (j = 0; j < obj[i].length; j++) {
+              breakloop = false;
+              for (k = 0; k < source.coordinates.length; k++) {
+                if (_geo._isPointInPolygon(obj[i][j], source.coordinates[k])) {
+                  breakloop = true;
+                  break;
+                }
+              }
+              if (!breakloop)
+                return false;
+            }
+          }
+          return true;
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._within: the GeoSpatial $geoWihin operator with a $geometry.type"' + source.type + '" is unknown!');
+          throw new Error('_geo._within: the GeoSpatial $geoWihin operator with a $geometry.type "' + source.type + '" is unknown!');
+      }
+    },
+
+    /**
+     * Embeds Point, LineString and Polygon coordinates inside a 'Polygon' like coordinate array.
+     *
+     * @function (arg1)
+     * @private
+     * @param {Object}     the GeoJSON object,
+     * @returns {Array}    returns the embbedded coordinates,
+     * @since 0.0.1
+     */
+    _toPolygonCoordinates: function(obj) {
+
+      switch (obj.type) {
+        case 'Point':
+          return [[obj.coordinates]];
+        case 'LineString':
+          return [obj.coordinates];
+        case 'Polygon':
+          return obj.coordinates;
+        case 'MultiPoint':
+          return [obj.coordinates];
+        case 'MultiLineString':
+          return obj.coordinates;
+
+        /* istanbul ignore next */
+        default:
+          throw new Error('_geo._toPolygonCoordinates: the GeoJSON type "' + obj.type + '" is not supported!');
       }
     },
 
@@ -170,7 +229,7 @@
         coordinates: c
       };
 
-      return _geo._isPointInPolygonOrMultipolygon(obj, p);
+      return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), p);
     },
 
     /**
@@ -193,7 +252,7 @@
         coordinates: [polygon, [polygon[0][0], polygon[0][1]]]
       };
 
-      return _geo._isPointInPolygonOrMultipolygon(obj, p);
+      return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), p);
     },
 
     /**
@@ -247,23 +306,19 @@
       switch (obj.type) {
 
         case 'Point':
-          return _geo._isPointInPolygonOrMultipolygon(obj, source);
+          return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
-        /* istanbul ignore next */
         case 'LineString':
-          return false;
+          return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
-        /* istanbul ignore next */
         case 'Polygon':
-          return false;
+          return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
-        /* istanbul ignore next */
         case 'MultiPoint':
-          return false;
+          return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
-        /* istanbul ignore next */
         case 'MultiLineString':
-          return false;
+          return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
         /* istanbul ignore next */
         case 'MultiPolygon':
@@ -431,7 +486,7 @@
         case 'Polygon':
           return _geo._interPolygon(obj, source);
 
-        // Multipoint can't intersect a polygon.
+        // MultiPoint can't intersect a polygon.
         /* istanbul ignore next */
         case 'MultiPoint':
           return false;

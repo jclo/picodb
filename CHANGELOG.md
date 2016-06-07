@@ -1,8 +1,9 @@
 ### HEAD
 
-### 0.5.x (June 6, 2016)
+### 0.5.x (June 7, 2016)
 
   * Added the GeoSpatial Query Operators $geoWithin and $geoIntersects,
+  * Extended $geoWithin/$geometry with LineString, MultiPoint, MultiLineString and Polygon geometries,
   * ...,
 
 
