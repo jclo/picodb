@@ -25,6 +25,130 @@
     /* Private Functions ---------------------------------------------------- */
 
     /**
+     * Returns the distance between two points on Earth using the law of haversines.
+     *
+     * `haversine` formula to calculate the great-circle distance between
+     * two points:
+     *
+     *   a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
+     *   c = 2 ⋅ atan2( √a, √(1−a) )
+     *   d = R ⋅ c
+     *
+     *   where	φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the destination point,
+     * @param {Object}     the source point,
+     * @returns {Boolean}  returns the distance between the two points in meters,
+     * @since 0.0.1
+     */
+    _lawOfHaversines: function(obj, source) {
+      var λ1 = source.coordinates[0]
+        , λ2 = obj.coordinates[0]
+        , Δλ = (λ2 - λ1) * (Math.PI / 180)
+        , φ1 = source.coordinates[1] * (Math.PI / 180)
+        , φ2 = obj.coordinates[1] * (Math.PI / 180)
+        , Δφ = (φ2 - φ1)
+        , R  = 6371e3
+        , a
+        , c
+        ;
+
+      a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+          Math.cos(φ1) * Math.cos(φ2) *
+          Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+
+      c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+      return R * c;
+    },
+
+    /**
+     * Returns the distance between two points on Earth using the law of cosines.
+     *
+     * Formula:
+     *   d = acos( sin φ1 ⋅ sin φ2 + cos φ1 ⋅ cos φ2 ⋅ cos Δλ ) ⋅ R
+     *
+     * Nota:
+     * This formula is slightly faster than the law of haversines while offering
+     * a similar accuracy on distances greater than a few dozen meters.
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the destination point,
+     * @param {Object}     the source point,
+     * @returns {Boolean}  returns the distance between the two points in meters,
+     * @since 0.0.1
+     */
+    _lawOfCosines: function(obj, source) {
+      var λ1 = source.coordinates[0]
+        , λ2 = obj.coordinates[0]
+        , Δλ = (λ2 - λ1) * (Math.PI / 180)
+        , φ1 = source.coordinates[1] * (Math.PI / 180)
+        , φ2 = obj.coordinates[1] * (Math.PI / 180)
+        , R  = 6371e3
+        ;
+
+      return Math.acos(Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * R;
+    },
+
+    /**
+     * Returns the distance between two points on Earth using the Equirectangular projection.
+     *
+     * Formula:
+     *   y = Δφ
+     *   d = R ⋅ √x² + y²
+     *
+     * Nota:
+     * This formula is faster than the law of cosines and the law of the haversines
+     * but is less accurante on distances greater than a few hundred kilometers.
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the destination point,
+     * @param {Object}     the source point,
+     * @returns {Boolean}  returns the distance between the two points in meters,
+     * @since 0.0.1
+     */
+    _equirectangularProjection: function(obj, source) {
+      var λ1 = source.coordinates[0] * (Math.PI / 180)
+        , λ2 = obj.coordinates[0] * (Math.PI / 180)
+        , φ1 = source.coordinates[1] * (Math.PI / 180)
+        , φ2 = obj.coordinates[1] * (Math.PI / 180)
+        , R  = 6371e3
+        , x
+        , y
+        ;
+
+      x = (λ2 - λ1) * Math.cos((φ1 + φ2) / 2);
+      y = φ2 - φ1;
+      return Math.sqrt(x * x + y * y) * R;
+    },
+
+    /**
+     * Returns the distance between two points on Earth.
+     *
+     * Nota:
+     * This function can rely on three algorithms to compute the distance from
+     * two points on Earth: the law of haversines, the law of cosines and
+     * the Equirectangular projection. The law of cosines is the currently used.
+     *
+     * These alogithms are taken from here:
+     *   . http://www.movable-type.co.uk/scripts/latlong.html
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the destination point,
+     * @param {Object}     the source point,
+     * @returns {Boolean}  returns the distance between the two points in meters,
+     * @since 0.0.1
+     */
+    _getDistanceOnEarth: function(obj, source) {
+      return _geo._lawOfCosines(obj, source);
+    },
+
+    /**
      * Checks if the point is inside the polygon.
      *
      * The algorithm, determining the inclusion of a point P in a 2D planar polygon,
@@ -34,6 +158,13 @@
      * 'crossing number' is even; otherwise, when it is odd, the point is inside.
      * This method is sometimes referred to as the 'even-odd' test.
      * See here: http://geomalgorithms.com/a03-_inclusion.html#wn_PinPolygon()
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the coordinates of the point,
+     * @param {Object}     the coordinates of the polygon,
+     * @returns {Boolean}  returns true if the point is inside the polygon, false otherwise,
+     * @since 0.0.1
      */
     _isPointInPolygon2: /* istanbul ignore next */ function(point, polygon) {
       var intersections
@@ -335,47 +466,6 @@
     },
 
     /**
-     * Checks if the GeoJSON object matches the $geoWithin query.
-     *
-     * @function (arg1, arg2)
-     * @private
-     * @param {Object}     the GeoJSON object,
-     * @param {Object}     the GeoSpatial $geoWithin query,
-     * @returns {Boolean}  returns true if the query is successful, false otherwise,
-     * @throws {Object}    throws an error if the GeoSpatial operator isn't recognized,
-     * @since 0.0.1
-     */
-    _geoWithin: function(obj, source) {
-      var op = _.keys(source)[0]
-        ;
-
-      if (!_.isObject(source))
-        return false;
-
-      switch (op) {
-
-        case '$geometry':
-          return _geo._within(obj, source.$geometry);
-
-        case '$box':
-          return _geo._box(obj, source.$box);
-
-        case '$polygon':
-          return _geo._polygon(obj, source.$polygon);
-
-        case '$center':
-          return _geo._center(obj, source.$center);
-
-        case '$centerSphere':
-          return _geo._centerSphere(obj, source.$centerSphere);
-
-        /* istanbul ignore next */
-        default:
-          throw new Error('_geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
-      }
-    },
-
-    /**
      * Checks if the GeoJSON type LineString intersects the $geoIntersects polygon.
      *
      * @function (arg1, arg2)
@@ -513,6 +603,103 @@
     },
 
     /**
+     * Checks if the GeoJSON Point matches the condition of distance from the central point.
+     *
+     * @function (arg1, arg2, arg3, arg4)
+     * @private
+     * @param {Object}     the GeoJSON Point,
+     * @param {Object}     the GeoSpatial $near query,
+     * @param {Number}     the minimal distance from the central point in meters,
+     * @param {Number}     the maximal distance from the central point in meters,
+     * @returns {Boolean}  returns true if the query is successful, false otherwise,
+     * @since 0.0.1
+     */
+    _isPointNear: function(obj, source, max, min) {
+      var d
+        ;
+
+      // Always true is max and min are not defined!
+      if (max === undefined && min === undefined)
+        return true;
+
+      // Always false if max is lower then min!
+      if (max < min)
+        return false;
+
+      // Compute the earth distance:
+      d = _geo._getDistanceOnEarth(obj, source);
+
+      // Return true if min <= d <= max (if min or max is undefined, the
+      // associated condition is true).
+      return (!min || d >= min ? true : false) && (!max || d <= max ? true : false) ? true : false;
+
+    },
+
+    /**
+     * Checks if the GeoJSON object matches the $near query.
+     *
+     * @function (arg1, arg2, arg3, arg4)
+     * @private
+     * @param {Object}     the GeoJSON object,
+     * @param {Object}     the GeoSpatial $near query,
+     * @param {Number}     the minimal distance from the central point in meters,
+     * @param {Number}     the maximal distance from the central point in meters,
+     * @returns {Boolean}  returns true if the query is successful, false otherwise,
+     * @since 0.0.1
+     */
+    _geoNear: function(obj, source, max, min) {
+
+      switch (obj.type) {
+        case 'Point':
+          return _geo._isPointNear(obj, source, max, min);
+
+        default:
+          return false;
+      }
+    },
+
+    /**
+     * Checks if the GeoJSON object matches the $geoWithin query.
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the GeoJSON object,
+     * @param {Object}     the GeoSpatial $geoWithin query,
+     * @returns {Boolean}  returns true if the query is successful, false otherwise,
+     * @throws {Object}    throws an error if the GeoSpatial operator isn't recognized,
+     * @since 0.0.1
+     */
+    _geoWithin: function(obj, source) {
+      var op = _.keys(source)[0]
+        ;
+
+      if (!_.isObject(source))
+        return false;
+
+      switch (op) {
+
+        case '$geometry':
+          return _geo._within(obj, source.$geometry);
+
+        case '$box':
+          return _geo._box(obj, source.$box);
+
+        case '$polygon':
+          return _geo._polygon(obj, source.$polygon);
+
+        case '$center':
+          return _geo._center(obj, source.$center);
+
+        case '$centerSphere':
+          return _geo._centerSphere(obj, source.$centerSphere);
+
+        /* istanbul ignore next */
+        default:
+          throw new Error('_geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
+      }
+    },
+
+    /**
      * Checks if the GeoJSON object matches the $geoIntersects query.
      *
      * @function (arg1, arg2)
@@ -540,6 +727,31 @@
     },
 
     /**
+     * Checks if the GeoJSON object matches the $near query.
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the GeoJSON object,
+     * @param {Object}     the GeoSpatial query,
+     * @returns {Boolean}  returns true if the query is successful, false otherwise,
+     * @since 0.0.1
+     */
+    _near: function(obj, source) {
+
+      if (!source.hasOwnProperty(('$geometry')))
+        return false;
+
+      switch (source.$geometry.type) {
+
+        case 'Point':
+          return _geo._geoNear(obj, source.$geometry, source.$maxDistance, source.$minDistance);
+
+        default:
+          return false;
+      }
+    },
+
+    /**
      * Decodes the GeoSpatial query.
      *
      * @function (arg1, arg2)
@@ -563,9 +775,8 @@
           case '$geoIntersects':
             return _geo._geoIntersects(obj, source[prop]);
 
-          /* istanbul ignore next */
           case '$near':
-            return false;
+            return _geo._near(obj, source[prop]);
 
           /* istanbul ignore next */
           case '$nearSphere':

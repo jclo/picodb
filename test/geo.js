@@ -589,6 +589,77 @@ module.exports = function() {
           });
         });
       });
+
+      describe('$near:', function() {
+        var db = PicoDB.Create()
+          //, _geo = eval(fs.readFileSync('./src/geo.js').toString())
+          , _geo = db._export('_geo')
+          ;
+
+        describe('Test of private functions:', function() {
+
+          describe('law of haversines:', function() {
+            it('Expects the distance between the airports of SF and LA to be below 600 km.', function() {
+              expect(_geo._lawOfHaversines(sfo.loc, lax.loc)).to.be.below(600000);
+            });
+          });
+
+          describe('law of cosines:', function() {
+            it('Expects the distance between the airports of SF and LA to be below 600 km.', function() {
+              expect(_geo._lawOfCosines(sfo.loc, lax.loc)).to.be.below(600000);
+            });
+          });
+
+          describe('equirectangular projection:', function() {
+            it('Expects the distance between the airports of SF and LA to be below 600 km.', function() {
+              expect(_geo._equirectangularProjection(sfo.loc, lax.loc)).to.be.below(600000);
+            });
+          });
+
+        });
+
+        describe('Test of proximity:', function() {
+
+          it('Expects $near with no $maxDistance to return 5 documents.', function(done) {
+            db.insertMany([jfk, lax, sfo, san, phx, cai], function() {
+              db.find({ loc: { $near: { $geometry: jfk.loc }}}).toArray(function(err, doc) {
+                expect(doc).to.have.lengthOf(5);
+                done();
+              });
+            });
+          });
+
+          it('Expects $near with $maxDistance 100 km to return 1 document.', function() {
+            db.find({ loc: { $near: { $geometry: jfk.loc, $maxDistance: 100000 }}}).toArray(function(err, doc) {
+              expect(doc).to.have.lengthOf(1);
+            });
+          });
+
+          it('Expects $near with $maxDistance 100 km and $minDistance 10 km to return 0 document.', function() {
+            db.find({ loc: { $near: { $geometry: jfk.loc, $maxDistance: 100000, $minDistance: 10000 }}}).toArray(function(err, doc) {
+              expect(doc).to.have.lengthOf(0);
+            });
+          });
+
+          it('Expects $near with $maxDistance lower than $minDistance to return 0 document.', function() {
+            db.find({ loc: { $near: { $geometry: jfk.loc, $maxDistance: 10, $minDistance: 10000 }}}).toArray(function(err, doc) {
+              expect(doc).to.have.lengthOf(0);
+            });
+          });
+
+          it('Expects $near with a $geometry other than "Point" to return 0 document.', function() {
+            db.find({ loc: { $near: { $geometry: cai.loc }}}).toArray(function(err, doc) {
+              expect(doc).to.have.lengthOf(0);
+            });
+          });
+
+          it('Expects $near without $geometry operator to return 0 document.', function() {
+            db.find({ loc: { $near: {} }}).toArray(function(err, doc) {
+              expect(doc).to.have.lengthOf(0);
+            });
+          });
+        });
+      });
     });
   });
 };

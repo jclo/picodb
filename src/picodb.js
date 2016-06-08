@@ -56,6 +56,23 @@
     this.db;              // the database container,
 
     /**
+     * Exports the reference to an internal library.
+     *
+     * Nota:
+     * This function is private but accessible from outside! It is required for
+     * testing internal libraries.
+     *
+     * @method (arg1)
+     * @private
+     * @param {String}    the name of the internal library,
+     * @returns {Object}  the reference to the library,
+     * since 0.1
+     */
+    var _export = function(name) {
+      return eval(name);
+    };
+
+    /**
      * Counts the documents into the db that match.
      *
      * @method (arg1, arg2, arg3)
@@ -291,6 +308,7 @@
 
     // Return the object:
     return {
+      _export: _export,
       count: count,
       deleteMany: deleteMany,
       deleteOne: deleteOne,

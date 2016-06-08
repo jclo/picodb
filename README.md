@@ -247,6 +247,7 @@ Operator | Description
 ```
 $geoWithin     | Selects geometries within a bounding GeoJSON geometry.
 $geoIntersects | Selects geometries that intersect with a GeoJSON geometry.
+$near          | Selects geometries that are inside limits on the Earth sphere.
 ```
 
 `$geoWithin` and `$geoIntersects` GeoJSON geometries could only by `Polygon` and `MultiPolygon`.
@@ -256,7 +257,7 @@ $geoIntersects | Selects geometries that intersect with a GeoJSON geometry.
 `geoIntersects` supports `LineString` and `Polygon` geometries.
 
 
-##### Shape Operators
+##### Geometry Specifiers
 
 `$geoWithin` could be used with the legacy shape operators:
 
@@ -266,6 +267,15 @@ $polygon       | Specifies a rectangle to return documents that are within the p
 $center        | Specifies a circle to return documents that are within the circle.
 $centerSphere  | Specifies a earth-like sphere to return documents that are within the sphere.
 ```
+
+`$near` could be used with the following operators:
+
+```
+$minDistance   | Specifies a minimum distance to limit the results of queries.
+$maxDistance   | Specifies a maximum distance to limit the results of queries
+```
+
+`$minDistance` and `$maxDistance` specify the distance in meters.
 
 
 ### Update Operators
