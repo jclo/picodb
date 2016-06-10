@@ -219,18 +219,20 @@
      * @method (arg1)
      * @public
      * @param {Object}     the query object,
+     * @param {Object}     the projection object,
      * @returns {Object}   returns this,
      * @since 0.0.1
      */
-    var find = function(query) {
+    var find = function(query, projection) {
       query = query || {};
+      projection = projection || {};
 
       // Return silently if the database isn't initialized:
       if (!this.db)
         return this;
 
       // Searches documents that match the query:
-      _find.find(this, query);
+      _find.find(this, query, projection);
       return this;
     };
 

@@ -27,6 +27,7 @@ var picodb = [
   './src/utils.js',
   './src/event.js',
   './src/geo.js',
+  './src/project.js',
   './src/query.js',
   './src/count.js',
   './src/delete.js',

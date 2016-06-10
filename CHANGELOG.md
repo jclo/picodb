@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.6.x (June 10, 2016)
+
+  * Added a basic projection (without operators),
+  * ...,
+
+
 ### 0.6.0 (June 9, 2016)
 
   * Added the GeoSpatial Query Operators $geoWithin and $geoIntersects,

@@ -33,7 +33,7 @@ When a document is inserted into the database, it gets an unique id that is a st
 
 On Node.js:
 ```javascript
-PicoDB = require('picodb');
+var PicoDB = require('picodb');
 
 var db = PicoDB.Create();
 ```
@@ -143,6 +143,34 @@ db.find({ a: 1 }).toArray(function(err, docs) {
 });
 ```
 dumps the documents that contain the field `a` with the value `1`.
+
+
+#### Select the fields to extract
+
+PicoDB allows selecting the fields to extract from the database.
+
+The following instruction:
+```javascript
+db.find({}, {c: 1, d: 1}).toArray(function(err, docs) {
+  // docs is an array of documents that match the query.
+});
+```
+
+dumps all the documents but extracts only the fields `_id`, `c` and `d`. The field `_id` is extracted by default. You can reject it by adding `_id: 0` to the expression:
+```javascript
+db.find({}, {_id: 0, c: 1, d: 1}).toArray(function(err, docs) {
+  // docs is an array of documents that match the query.
+});
+```
+
+Instead of defining the fields to extract, you can set the fields to exclude. This instruction:
+```javascript
+db.find({}, {c: 0, d: 0}).toArray(function(err, docs) {
+  // docs is an array of documents that match the query.
+});
+```
+
+dumps all the documents with all the fields except `c` and `d`.
 
 
 ### Query Operators

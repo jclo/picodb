@@ -38,7 +38,11 @@
      */
     _initCursor: function() {
       return {
-        query: {}
+        query: {},
+        projection: {
+          type: null,
+          value: null
+        }
       };
     },
 
@@ -53,9 +57,10 @@
      * @since 0.0.1
      */
     _process: function(dbO, callback) {
-      var query = dbO.cursor.query
-        , db    = dbO.db
-        , sop   = _query.isHavingSpecialOperator(query)
+      var query      = dbO.cursor.query
+        , projection = dbO.cursor.projection
+        , db         = dbO.db
+        , sop        = _query.isHavingSpecialOperator(query)
         , docs
         , i
         ;
@@ -70,7 +75,7 @@
       docs = [];
       for (i = 0; i < db.data.length; i++)
         if (_query.isMatch(db.data[i], query, sop))
-          docs.push(db.data[i]);
+          _project.add(docs, db.data[i], projection);
       callback(null, docs);
 
     },
@@ -84,17 +89,26 @@
      * @public
      * @param {Object}     the context object,
      * @param {Object}     the query object,
+     * @param {Object}     the projection object,
      * @param {Function}   the function to call at completion,
      * @returns {}         -,
      * @since 0.0.1
      */
-    find: function(_this, query) {
+    find: function(_this, query, projection) {
       if (!_this.cursor)
         _this.cursor = _find._initCursor();
 
-      // Save the find query:
-      _this.cursor.query = query;
+      // Save the query and the projection:
+      _this.cursor.query = !_.isArray(query) && _.isObject(query)
+        ? query
+        : {};
 
+      if (!_.isArray(projection) && _.isObject(projection)) {
+        _this.cursor.projection.type = _project.isProjectionTypeInclude(projection);
+        _this.cursor.projection.value = _project.setProjection(projection, _this.cursor.projection.type);
+      } else {
+        _this.cursor.projection.value = {};
+      }
     },
 
     /**
