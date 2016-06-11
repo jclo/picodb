@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.7.0alpha1",
+  "version": "0.7.0",
   "description": "PicoDB is a tiny in-memory database that stores JSON documents",
   "main": "index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "chai": "3.5.0",
     "coveralls": "2.11.9",
     "del": "2.2.0",
-    "ghooks": "1.2.1",
+    "ghooks": "1.2.3",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.0",
     "gulp-header": "1.8.2",

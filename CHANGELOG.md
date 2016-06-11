@@ -1,9 +1,9 @@
 ### HEAD
 
-### 0.6.x (June 10, 2016)
+### 0.7.0 (June 11, 2016)
 
   * Added a basic projection (without operators),
-  * ...,
+  * Release 0.7.0.
 
 
 ### 0.6.0 (June 9, 2016)
