@@ -1,4 +1,5 @@
 .DS_Store
+_trash
+_docs
 node_modules
 coverage
-_trash

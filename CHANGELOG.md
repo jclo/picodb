@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.7.1 (June 20, 2016)
+
+  * Removed unused files,
+  * Release 0.7.1.
+
+
 ### 0.7.0 (June 11, 2016)
 
   * Added a basic projection (without operators),

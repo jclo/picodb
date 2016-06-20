@@ -270,7 +270,7 @@ $not     | Inverts the effect of a query expression and returns documents that d
 #### Geospatial Operators
 
 ```
-Operator | Description
+Operator       | Description
 ```
 ```
 $geoWithin     | Selects geometries within a bounding GeoJSON geometry.
