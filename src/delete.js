@@ -83,14 +83,14 @@
       removed = 0;
       docOut = [];
       dblength = db.data.length;
-      //for (i = db.data.length - 1; i >= 0; i--) {
+      // for (i = db.data.length - 1; i >= 0; i--) {
       for (i = 0; i < dblength; i++) {
         if (_query.isMatch(db.data[i], filter, sop)) {
           // Remove the document that matches:
           docOut.push(db.data.splice(i, 1));
           removed += 1;
           // Readjust db length after one item has been removed & reposition i:
-          i--;
+          i -= 1;
           dblength -= 1;
           if (!options.many)
             // Remove one document only!

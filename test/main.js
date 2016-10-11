@@ -1,6 +1,8 @@
 // ESLint declarations
 /* global describe */
 /* eslint max-len: [1, 100], curly: 0 */
+/* eslint one-var: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -25,7 +27,6 @@ var create    = require('./create.js')
 
 // -- Main
 describe('PicoDB', function() {
-
   // Test constructor:
   create();
 
@@ -50,5 +51,4 @@ describe('PicoDB', function() {
 
   // Test the methods addEventListener, addOneTimeEventListener and removeEventListener:
   event();
-
 });

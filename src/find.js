@@ -77,7 +77,6 @@
         if (_query.isMatch(db.data[i], query, sop))
           _project.add(docs, db.data[i], projection);
       callback(null, docs);
-
     },
 
     /* Public Functions ----------------------------------------------------- */
@@ -122,7 +121,6 @@
      * @since 0.0.1
      */
     toArray: function(_this, callback) {
-
       // If callback isn't a function, return silently:
       if (!_.isFunction(callback))
         return;

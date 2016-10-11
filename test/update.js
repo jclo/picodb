@@ -1,5 +1,7 @@
 /* global describe, it */
-/* eslint  max-len: [1, 250, 1] */
+/* eslint  max-len: [1, 300, 1] */
+/* eslint one-var: 0, new-cap: 0, no-unused-expressions: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -13,8 +15,8 @@ var PicoDB = require('../index.js')
 // -- Local constants
 var docs = [
   { a: 1 },
-  { a: 2, name: { first: 'John', last: 'Doe' }},
-  { a: 3, quantity: 5, metrics: { orders: 1, ratings: { value: 0.5, type: 'aaa'}}},
+  { a: 2, name: { first: 'John', last: 'Doe' } },
+  { a: 3, quantity: 5, metrics: { orders: 1, ratings: { value: 0.5, type: 'aaa' } } },
   { a: 4, lastModified: null, cancellation: { date: null } }
 ];
 
@@ -23,9 +25,7 @@ var docs = [
 
 // -- Main
 module.exports = function() {
-
   describe('The method updateOne:', function() {
-
     describe('General:', function() {
       var db = PicoDB.Create();
 
@@ -35,8 +35,8 @@ module.exports = function() {
 
       it('Expects the method with unmatched filter not to update any document.', function(done) {
         db.insertMany(docs, function() {
-          db.updateOne({ x: 5 }, { y: 2 }, function(err, docs) {
-            expect(docs).to.have.lengthOf(0);
+          db.updateOne({ x: 5 }, { y: 2 }, function(err, doc) {
+            expect(doc).to.have.lengthOf(0);
             done();
           });
         });
@@ -102,22 +102,22 @@ module.exports = function() {
 
       it('Expects {}, { b: 1 } to return 1 document.', function() {
         db.insertMany(docs, function() {
-          db.updateOne({}, { b: 1 }, function(err, docs) {
-            newdocs = docs[0];
-            expect(docs).to.have.lengthOf(1);
+          db.updateOne({}, { b: 1 }, function(err, doc) {
+            newdocs = doc[0];
+            expect(doc).to.have.lengthOf(1);
           });
         });
       });
 
-      it ('Expects this document to own the property "_id".', function() {
+      it('Expects this document to own the property "_id".', function() {
         expect(newdocs).to.have.ownProperty('_id');
       });
 
-      it ('Expects this document to own the property "b".', function() {
+      it('Expects this document to own the property "b".', function() {
         expect(newdocs).to.have.ownProperty('b');
       });
 
-      it ('Expects this document to have only these two properties.', function() {
+      it('Expects this document to have only these two properties.', function() {
         expect(Object.keys(newdocs).length).to.be.equal(2);
       });
     });
@@ -130,9 +130,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $inc: { quantity: 1, metrics: { orders: 1, ratings: { value: 0.5, type: "zzz", newobj: { newfield: "123" }}}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $inc: { quantity: 1, metrics: { orders: 1, ratings: { value: 0.5, type: 'zzz', newobj: { newfield: 123 }}}} }, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $inc: { quantity: 1, metrics: { orders: 1, ratings: { value: 0.5, type: 'zzz', newobj: { newfield: 123 } } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -166,9 +166,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $mul: { quantity: 2, metrics: { orders: 3, ratings: { value: 2, type: "zzz", newfield: "123" }}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $mul: { quantity: 2, metrics: { orders: 3, ratings: { value: 2, type: 'zzz', newfield: 123 }}} }, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $mul: { quantity: 2, metrics: { orders: 3, ratings: { value: 2, type: 'zzz', newfield: 123 } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -202,9 +202,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $rename: { quantity: "quantities", metrics: "metricS" }} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $rename: { quantity: 'quantities', metrics: 'metricS', xxx: 'zzz' } }, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $rename: { quantity: 'quantities', metrics: 'metricS', xxx: 'zzz' } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -247,7 +247,7 @@ module.exports = function() {
         });
 
         it('Expects renaming a non existing field not to throw any error.', function(done) {
-          db.updateOne({ a: 3}, { $rename: { metrics: { ratings: { valuess: 'valor' }}}}, function() {
+          db.updateOne({ a: 3 }, { $rename: { metrics: { ratings: { valuess: 'valor' } } } }, function() {
             expect(true).to.be.true;
             done();
           });
@@ -261,9 +261,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $set: { quantity: 100, metrics: { orders: 200, ratings: { value: 300, type: "bbb", newfield: "new", newfield2: ["a", "b", "c"] }}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $set: { quantity: 100, metrics: { orders: 200, ratings: { value: 300, type: 'bbb', newfield: 'new', newfield2: ['a', 'b', 'c'] }}}}, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $set: { quantity: 100, metrics: { orders: 200, ratings: { value: 300, type: 'bbb', newfield: 'new', newfield2: ['a', 'b', 'c'] } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -304,7 +304,6 @@ module.exports = function() {
         it('Expects the third element of this array is equal to "c"', function() {
           expect(newdocs.metrics.ratings.newfield2[2]).to.be.equal('c');
         });
-
       });
 
       describe('$unset:', function() {
@@ -314,9 +313,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $unset: { quantity: true, metrics: { ratings: { value: false, type: true }}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $unset: { quantity: true, metrics: { ratings: { type: true }}}}, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $unset: { quantity: true, metrics: { ratings: { type: true } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -343,7 +342,7 @@ module.exports = function() {
         });
 
         it('Expects deleting a non existing field not to throw any error.', function(done) {
-          db.updateOne({ a: 3}, { $unset: { metrics: { ratings: { values: true, othervalues: { others: true }}}}}, function() {
+          db.updateOne({ a: 3 }, { $unset: { metrics: { ratings: { values: true, othervalues: { others: true } } } } }, function() {
             expect(true).to.be.true;
             done();
           });
@@ -357,9 +356,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $min: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: "aaa", newfield: 555 }}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $min: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: 'aaa', newfield: 555 }}}}, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $min: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: 'aaa', newfield: 555 } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -393,9 +392,9 @@ module.exports = function() {
 
         it('Expects { a: 3 }, { $max: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: "aaa", newfield: 555 }}}} to return 1 document.', function(done) {
           db.insertMany(docs, function() {
-            db.updateOne({ a: 3 }, { $max: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: 'aaa', newfield: 555 }}}}, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+            db.updateOne({ a: 3 }, { $max: { quantity: 6, metrics: { orders: 0, ratings: { value: 0.6, type: 'aaa', newfield: 555 } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -428,10 +427,10 @@ module.exports = function() {
           ;
 
         it('Expects { a: 4 }, { $currentDate: { lastModified: true, cancellation: { date: { $type: "timestamp" } }}} to return 1 document.', function(done) {
-          db.insertMany({ a: 1, lastModified: null, cancellation: { date: null }}, function() {
-            db.updateOne({ a: 1 }, { $currentDate: { lastModified: true, cancellation: { date: { $type: 'timestamp' }}, cancel2: { date: { $type: 'date' }}}}, function(err, docs) {
-              newdocs = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertMany({ a: 1, lastModified: null, cancellation: { date: null } }, function() {
+            db.updateOne({ a: 1 }, { $currentDate: { lastModified: true, cancellation: { date: { $type: 'timestamp' } }, cancel2: { date: { $type: 'date' } } } }, function(err, doc) {
+              newdocs = doc[0];
+              expect(doc).to.have.lengthOf(1);
               done();
             });
           });
@@ -448,28 +447,26 @@ module.exports = function() {
         it('Expects this document to own the property "cancel2.date" that is equal to a string.', function() {
           expect(newdocs).to.have.deep.property('cancel2.date').that.is.a('string');
         });
-
       });
     });
 
     describe('Array Operators:', function() {
-
       describe('$pop:', function() {
         var db = PicoDB.Create()
           , doc
           ;
 
-        it ('Expects { a: 3} { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 3, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa', newfield: [0] }}}, function() {
-            db.updateOne({ a: 3}, { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+        it('Expects { a: 3} { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 }}}} to return 1 document.', function(done) {
+          db.insertOne({ a: 3, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa', newfield: [0] } } }, function() {
+            db.updateOne({ a: 3 }, { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
         });
 
-        it ('Expects this document to own the property "quantity" that is an array.', function() {
+        it('Expects this document to own the property "quantity" that is an array.', function() {
           expect(doc).to.have.property('quantity').that.is.an('array');
         });
 
@@ -485,7 +482,7 @@ module.exports = function() {
           expect(doc.quantity[1]).is.equal('b');
         });
 
-        it ('Expects this document to own the property "metrics.orders" that is an array.', function() {
+        it('Expects this document to own the property "metrics.orders" that is an array.', function() {
           expect(doc).to.have.deep.property('metrics.orders').that.is.an('array');
         });
 
@@ -497,7 +494,7 @@ module.exports = function() {
           expect(doc.metrics.orders[0]).is.equal('x');
         });
 
-        it ('Expects this document to own the property "metrics.ratings.values" that is an array.', function() {
+        it('Expects this document to own the property "metrics.ratings.values" that is an array.', function() {
           expect(doc).to.have.deep.property('metrics.ratings.values').that.is.an('array');
         });
 
@@ -524,10 +521,10 @@ module.exports = function() {
           ;
 
         it('Expects { a: 1 }, { $pullAll: { quantity: ["a", "b", "c"], metrics: { orders: [5, 7], ratings: { values: [0, "a"] }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 1, quantity: ['a', 'b', 'c', 'd', 'e', 'b', 'c', 'a', 'f'], metrics: { orders: [4, 5, 6], ratings: { values: [7, 8, 9], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 1 }, { $pullAll: { quantity: ['a', 'b', 'c'], metrics: { orders: [5, 7], ratings: { values: [0, 'a'], type: 'bbb' }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 1, quantity: ['a', 'b', 'c', 'd', 'e', 'b', 'c', 'a', 'f'], metrics: { orders: [4, 5, 6], ratings: { values: [7, 8, 9], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 1 }, { $pullAll: { quantity: ['a', 'b', 'c'], metrics: { orders: [5, 7], ratings: { values: [0, 'a'], type: 'bbb' } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -568,7 +565,6 @@ module.exports = function() {
         it('Expects this document to own the property "type" that is an string with the value equal to "aaa".', function() {
           expect(doc).to.have.deep.property('metrics.ratings.type').that.is.an('string').that.is.equal('aaa');
         });
-
       });
 
       describe('$pull:', function() {
@@ -577,10 +573,10 @@ module.exports = function() {
           ;
 
         it('Expects { a: 1 }, { $pull: { extra: { field: "x" }, quantity: "b", metrics: { orders: 2, ratings: { values: "cd" }, type: "b" }}} to return 1 document.', function(done) {
-          db.insertOne({ a: 1, quantity: ['a', 'b', 'c'], metrics: { orders: [1, 2], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 1 }, { $pull: { extra: { field: 'x' }, quantity: 'b', metrics: { orders: 2, ratings: { values: 'gh' }, type: 'b' }}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 1, quantity: ['a', 'b', 'c'], metrics: { orders: [1, 2], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 1 }, { $pull: { extra: { field: 'x' }, quantity: 'b', metrics: { orders: 2, ratings: { values: 'gh' }, type: 'b' } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -636,10 +632,10 @@ module.exports = function() {
 
 
         it('Expects { a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 }}}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 2, quantity: [{ a: 1, b: 2, c: 3 }, { a: 1, b: 3 }], metrics: { orders: 3, ratings: { values: [{ a: 1, b: 2 }, { a: 1, b: 1}], type: [{ a: 2 }, 'aaa'] }}}, function() {
-            db.updateOne({ a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 }}}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 2, quantity: [{ a: 1, b: 2, c: 3 }, { a: 1, b: 3 }], metrics: { orders: 3, ratings: { values: [{ a: 1, b: 2 }, { a: 1, b: 1 }], type: [{ a: 2 }, 'aaa'] } } }, function() {
+            db.updateOne({ a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -674,10 +670,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 3 }, { $pull: { quantity: { $eq: 5 }, metrics: { orders: { $gt: 1 }, ratings: { values: { $gte: 4 }, type: { $eq: "aaa" }}}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 3, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 3 }, { $pull: { quantity: { $eq: 5 }, metrics: { orders: { $eq: 3 }, ratings: { values: { $gt: 4 }, type: { $eq: 'aaa' }}}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 3, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 3 }, { $pull: { quantity: { $eq: 5 }, metrics: { orders: { $eq: 3 }, ratings: { values: { $gt: 4 }, type: { $eq: 'aaa' } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -704,10 +700,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 4 }, { $pull: { quantity: { $gt: 5 }, metrics: { orders: { $gte: 2 }, ratings: { values: { $gte: 6 }, type: { $gt: "ccc"} }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 4, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 4 }, { $pull: { quantity: { $gt: 5 }, metrics: { orders: { $gte: 2 }, ratings: { values: { $gte: 6 }, type: { $gt: 'ccc'} }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 4, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 4 }, { $pull: { quantity: { $gt: 5 }, metrics: { orders: { $gte: 2 }, ratings: { values: { $gte: 6 }, type: { $gt: 'ccc' } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -734,10 +730,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 5 }, { $pull: { quantity: { $lt: 3 }, metrics: { orders: { $lt: 0 }, ratings: { values: { $lte: 3 }, type: { $lte: "ccc"}  }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 5, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 5 }, { $pull: { quantity: { $lt: 3 }, metrics: { orders: { $lt: 0 }, ratings: { values: { $lte: 3 }, type: { $lte: 'ccc'} }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 5, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 5 }, { $pull: { quantity: { $lt: 3 }, metrics: { orders: { $lt: 0 }, ratings: { values: { $lte: 3 }, type: { $lte: 'ccc' } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -768,10 +764,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 6 }, { $pull: { quantity: { $ne: 3 }, metrics: { orders: { $ne: 0 }, ratings: { values: { $lte: 3 }, type: { $ne: "ccc" } }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 6, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 6 }, { $pull: { quantity: { $ne: 3 }, metrics: { orders: { $ne: 0 }, ratings: { values: { $lte: 3 }, type: { $ne: 'ccc' } }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 6, quantity: [1, 2, 3, 4, 5], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 6 }, { $pull: { quantity: { $ne: 3 }, metrics: { orders: { $ne: 0 }, ratings: { values: { $lte: 3 }, type: { $ne: 'ccc' } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -790,10 +786,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 7 }, { $pull: { quantity: { $in: ["a", "b", "c"] }, metrics: { orders: { $in: [0] }, ratings: { values: { $in: 3 } }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 7, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 7 }, { $pull: { quantity: { $in: ['a', 'b', 'c'] }, metrics: { orders: { $in: [0] }, ratings: { values: { $in: 3 } }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 7, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 7 }, { $pull: { quantity: { $in: ['a', 'b', 'c'] }, metrics: { orders: { $in: [0] }, ratings: { values: { $in: 3 } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -812,10 +808,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 8 }, { $pull: { quantity: { $nin: ["a", "b", "c"] }, metrics: { orders: { $nin: [0] }, ratings: { values: { $nin: "aaa" } }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 8, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 8 }, { $pull: { quantity: { $nin: ['a', 'b', 'c'] }, metrics: { orders: { $nin: [0] }, ratings: { values: { $nin: 'aaa' } }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 8, quantity: ['a', 'b', 'c', 'd', 'e'], metrics: { orders: [1, 2], ratings: { values: [1, 2, 3, 4, 5], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 8 }, { $pull: { quantity: { $nin: ['a', 'b', 'c'] }, metrics: { orders: { $nin: [0] }, ratings: { values: { $nin: 'aaa' } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -844,10 +840,10 @@ module.exports = function() {
           ;
 
         it('Expects { a: 3 }, { $push: { quantity: { $each: ["x", "y", "z"], $position: 1 }, metrics: { orders: { $each: [1, 2 ]}, values: { $each: ["x", "y", "z"], $slice: -3 }}, , type: { $each: ["zzz"]}} to return 1 document.', function(done) {
-          db.insertOne({ a: 3, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 3 }, { $push: { quantity: { $each: ['x', 'y', 'z'], $position: 1 }, metrics: { orders: { $each: [1, 2 ]}, ratings: { values: { $each: ['x', 'y', 'z'], $slice: -3 }, type: { $position: 3 }}, type: { $each: ['zzz']}}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 3, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 3 }, { $push: { quantity: { $each: ['x', 'y', 'z'], $position: 1 }, metrics: { orders: { $each: [1, 2] }, ratings: { values: { $each: ['x', 'y', 'z'], $slice: -3 }, type: { $position: 3 } }, type: { $each: ['zzz'] } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -934,10 +930,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 5 }, { $push: { quantity: "x", metrics: { orders: [1, 2 ], ratings: { values: 1 }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 5, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 5 }, { $push: { quantity: 'x', metrics: { orders: [1, 2 ], ratings: { values: 1 }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 5, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 5 }, { $push: { quantity: 'x', metrics: { orders: [1, 2], ratings: { values: 1 } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -984,10 +980,10 @@ module.exports = function() {
         });
 
         it('Expects { a: 7 }, { { a: 7 }, { $push: { quantity: { $each: ["x"], $slice: 0 }, metrics: { orders: { $each: ["z"], $slice: 1 }}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 7, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 7 }, { $push: { quantity: { $each: ['x'], $slice: 0 }, metrics: { orders: { $each: ['z'], $slice: 1 }}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 7, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 7 }, { $push: { quantity: { $each: ['x'], $slice: 0 }, metrics: { orders: { $each: ['z'], $slice: 1 } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -1002,10 +998,10 @@ module.exports = function() {
         });
 
         it('Expects { { a: 7 }, { $push: { quantities: { $each: ["x"] }, metrics: { orders: { ratings: { newvalues: { $each: ["x", "y"] }}}}}} to return 1 document.', function(done) {
-          db.insertOne({ a: 7, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' }}}, function() {
-            db.updateOne({ a: 7 }, { $push: { quantities: { $each: ['x'] }, metrics: { orders: { ratings: { newvalues: { $each: ['x', 'y'] }}}}}}, function(err, docs) {
-              doc = docs[0];
-              expect(docs).to.have.lengthOf(1);
+          db.insertOne({ a: 7, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa' } } }, function() {
+            db.updateOne({ a: 7 }, { $push: { quantities: { $each: ['x'] }, metrics: { orders: { ratings: { newvalues: { $each: ['x', 'y'] } } } } } }, function(err, docu) {
+              doc = docu[0];
+              expect(docu).to.have.lengthOf(1);
               done();
             });
           });
@@ -1018,9 +1014,7 @@ module.exports = function() {
         it('Expects this document to own the property "newvalues" that is an array with 2 elements.', function() {
           expect(doc).to.have.deep.property('metrics.orders.ratings.newvalues').that.is.an('array').that.have.lengthOf(2);
         });
-
       });
-
     });
   });
 
@@ -1031,9 +1025,9 @@ module.exports = function() {
       db.updateMany({});
     });
 
-    it ('Expects { a: { $gte: 1 }} { a: 1 } to return 4 documents', function(done) {
+    it('Expects { a: { $gte: 1 }} { a: 1 } to return 4 documents', function(done) {
       db.insertMany(docs, function() {
-        db.updateMany({ a: { $gte: 1 }}, { a: 1 }, function(err, doc) {
+        db.updateMany({ a: { $gte: 1 } }, { a: 1 }, function(err, doc) {
           expect(doc).to.have.lengthOf(4);
           done();
         });

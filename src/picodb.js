@@ -32,11 +32,11 @@
    *  . one                       alias on addOneTimeEventListener,
    *  . off                       alias on removeEventListener,
    */
+  /* eslint-disable no-unused-expressions, no-eval */
 
   /* Private Functions ------------------------------------------------------ */
 
   var _init = function(_this) {
-
     // Attach schema:
     _this.db = _insert._schema();
     // Attach event Queue:
@@ -328,3 +328,4 @@
       off: removeEventListener
     };
   };
+  /* eslint-enable no-unused-expressions, no-eval */

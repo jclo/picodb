@@ -1,4 +1,7 @@
 /* eslint-env node */
+/* eslint one-var: 0 */
+/* eslint strict: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -7,7 +10,7 @@ var del       = require('del')
   , header    = require('gulp-header')
   , concat    = require('gulp-concat')
   , replace   = require('gulp-replace')
-  , uglify       = require('gulp-uglify')
+  , uglify    = require('gulp-uglify')
   ;
 
 // -- Local declarations
@@ -24,7 +27,7 @@ var dist       = './lib'
 // List of JS files to merge For PicoDB.
 var picodb = [
   './src/_header',
-  './src/utils.js',
+  './src/overslash.js',
   './src/event.js',
   './src/geo.js',
   './src/project.js',
@@ -76,13 +79,13 @@ gulp.task('doJS', ['create'], function() {
 // Minify
 gulp.task('minify', ['doJS'], function() {
   return gulp.src(dist + '/' + name.toLowerCase() + '.js')
-    .pipe(uglify({preserveComments: 'license'}))
-    .pipe(concat(name.toLowerCase() + '-min' + '.js'))
+    .pipe(uglify({ preserveComments: 'license' }))
+    .pipe(concat(name.toLowerCase() + '-min.js'))
     .pipe(gulp.dest(dist));
 });
 
 // Rebuild if a file was modified:
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch(watch, ['minify']);
 });
 

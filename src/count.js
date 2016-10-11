@@ -55,7 +55,7 @@
       for (i = 0; i < db.data.length; i++)
         if (_query.isMatch(db.data[i], query, sop)) {
           count += 1;
-          //console.log(db.data[i]);
+          // console.log(db.data[i]);
         }
       if (callback)
         callback(null, count);
@@ -97,6 +97,5 @@
 
       // Try to count:
       _count._count(db, query, options, callback);
-
     }
   };

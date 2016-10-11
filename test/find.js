@@ -1,5 +1,7 @@
 /* global describe, it */
 /* eslint  max-len: [1, 120, 1] */
+/* eslint one-var: 0, new-cap: 0, no-unused-expressions: 0, array-callback-return: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -15,7 +17,6 @@ var PicoDB = require('../index.js')
 
 // -- Main
 module.exports = function() {
-
   describe('The method find:', function() {
     var db = PicoDB.Create()
       , doc
@@ -24,9 +25,9 @@ module.exports = function() {
     doc = [
       { a: 1 },
       { a: 1, b: 1 },
-      { a: 1, b: 1, c: { d: 1 }},
-      { a: 1, b: 1, c: { d: 1, e: ['A', 'B', 'C'] }},
-      { a: { b: { c: { d: { e: 1 }}}}}
+      { a: 1, b: 1, c: { d: 1 } },
+      { a: 1, b: 1, c: { d: 1, e: ['A', 'B', 'C'] } },
+      { a: { b: { c: { d: { e: 1 } } } } }
     ];
 
     it('Expects the method with an undefined database to not throw any error.', function() {
@@ -50,7 +51,7 @@ module.exports = function() {
     });
 
     it('Expects the method with query { c: { d: 1, e: ["A", "B", "C"] }} to return 1 document.', function(done) {
-      db.find({ c: { d: 1, e: ['A', 'B', 'C'] }}).toArray(function(err, docs) {
+      db.find({ c: { d: 1, e: ['A', 'B', 'C'] } }).toArray(function(err, docs) {
         expect(docs).to.have.lengthOf(1);
         done();
       });
@@ -95,7 +96,6 @@ module.exports = function() {
     });
 
     describe('projection:', function() {
-
       describe('include:', function() {
         var doc4
           , doc44
@@ -104,8 +104,8 @@ module.exports = function() {
           ;
 
         it('Expects the projection { a: 1, b: 1, c: { e: 1 }} to return 5 documents.', function() {
-          db.find({}, { a: 1, b: 1, c: { d: 0, e: 1 }}).toArray(function(err, doc) {
-            doc4 = doc[3];
+          db.find({}, { a: 1, b: 1, c: { d: 0, e: 1 } }).toArray(function(err, docs) {
+            doc4 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -135,8 +135,8 @@ module.exports = function() {
         });
 
         it('Expects the projection { aaa: 1, bbb: { ccc: 1 } } to return 5 documents.', function() {
-          db.find({}, { aaa: 1, bbb: { ccc: 1 }}).toArray(function(err, doc) {
-            doc44 = doc[3];
+          db.find({}, { aaa: 1, bbb: { ccc: 1 } }).toArray(function(err, docs) {
+            doc44 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -150,8 +150,8 @@ module.exports = function() {
         });
 
         it('Expects the projection { _id: 0, a: 1, b: 1, c: { e: 1 }} to return 5 documents.', function() {
-          db.find({}, { _id: 0, a: 1, b: 1, c: { d: 0, e: 1 }}).toArray(function(err, doc) {
-            doc444 = doc[3];
+          db.find({}, { _id: 0, a: 1, b: 1, c: { d: 0, e: 1 } }).toArray(function(err, docs) {
+            doc444 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -181,8 +181,8 @@ module.exports = function() {
         });
 
         it('Expects the projection { c: { e: 1 }} to return 5 documents.', function() {
-          db.find({}, { c: { e: 1 }}).toArray(function(err, doc) {
-            doc4444 = doc[3];
+          db.find({}, { c: { e: 1 } }).toArray(function(err, docs) {
+            doc4444 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -203,8 +203,8 @@ module.exports = function() {
           ;
 
         it('Expects the projection { b: 0, c: 0 } to return 5 documents.', function() {
-          db.find({}, { b: 0, c: 0 }).toArray(function(err, doc) {
-            doc4 = doc[3];
+          db.find({}, { b: 0, c: 0 }).toArray(function(err, docs) {
+            doc4 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -226,8 +226,8 @@ module.exports = function() {
         });
 
         it('Expects the projection { b: 0, c: { d: 0 } } to return 5 documents.', function() {
-          db.find({}, { b: 0, c: { d: 0 } }).toArray(function(err, doc) {
-            doc44 = doc[3];
+          db.find({}, { b: 0, c: { d: 0 } }).toArray(function(err, docs) {
+            doc44 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });
         });
@@ -257,8 +257,8 @@ module.exports = function() {
         });
 
         it('Expects the projection "cuicui" to return 5 documents.', function() {
-          db.find({}, 'cuicui').toArray(function(err, doc) {
-            expect(doc).to.have.lengthOf(5);
+          db.find({}, 'cuicui').toArray(function(err, docs) {
+            expect(docs).to.have.lengthOf(5);
           });
         });
       });

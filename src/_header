@@ -9,6 +9,7 @@
 // ESLint declarations
 /* global define */
 /* eslint max-len: 0, curly: 0 */
+/* eslint one-var: 0, vars-on-top: 0, no-underscore-dangle: 0, dot-notation: 0, no-param-reassign: 0 */
 (function(root, factory) {
   'use strict';
 
@@ -27,6 +28,7 @@
   }
 }(this, function(root) {
   'use strict';
+
   var PicoDB
     , previousPicoDB
     ;

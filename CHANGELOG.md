@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.8.0 (October 11, 2016)
+
+  * Updated the module to comply with Airbnb's ESLint rules,
+  * ...,
+
+
 ### 0.7.1 (June 20, 2016)
 
   * Removed unused files,

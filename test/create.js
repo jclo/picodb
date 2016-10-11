@@ -1,5 +1,7 @@
 /* global describe, it */
 /* eslint  max-len: [1, 80, 1] */
+/* eslint new-cap: 0, no-unused-expressions: 0 */
+
 'use strict';
 
 // -- Node modules

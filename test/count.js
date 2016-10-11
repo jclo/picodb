@@ -1,5 +1,7 @@
 /* global describe, it */
-/* eslint  max-len: [1, 120, 1] */
+/* eslint max-len: [1, 120, 1] */
+/* eslint one-var: 0, new-cap: 0, no-unused-expressions: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -15,7 +17,6 @@ var PicoDB = require('../index.js')
 
 // -- Main
 module.exports = function() {
-
   describe('The method count:', function() {
     var db = PicoDB.Create()
       , doc
@@ -24,9 +25,9 @@ module.exports = function() {
     doc = [
       { a: 1 },
       { a: 1, b: 1 },
-      { a: 1, b: 1, c: { d: 1 }},
-      { a: 1, b: 1, c: { d: 1, e: ['A', 'B', 'C'] }},
-      { a: { b: { c: { d: { e: 1 }}}}}
+      { a: 1, b: 1, c: { d: 1 } },
+      { a: 1, b: 1, c: { d: 1, e: ['A', 'B', 'C'] } },
+      { a: { b: { c: { d: { e: 1 } } } } }
     ];
 
     it('Expects the method with an undefined database not to throw any error.', function() {
@@ -78,14 +79,14 @@ module.exports = function() {
     });
 
     it('Expects the filter { a: { b: { c: { d: { e: 1 }}}} } to return count = 1.', function(done) {
-      db.count({ a: { b: { c: { d: { e: 1 }}}} }, function(err, count) {
+      db.count({ a: { b: { c: { d: { e: 1 } } } } }, function(err, count) {
         expect(count).to.be.equal(1);
         done();
       });
     });
 
     it('Expects the filter { a: { b: { c: { d: { e: 2 }}}} } to return count = 0.', function(done) {
-      db.count({ a: { b: { c: { d: { e: 2 }}}} }, function(err, count) {
+      db.count({ a: { b: { c: { d: { e: 2 } } } } }, function(err, count) {
         expect(count).to.be.equal(0);
         done();
       });

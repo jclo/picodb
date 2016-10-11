@@ -9,7 +9,7 @@
    * @since     0.0.1
    * @version   -
    */
-
+  /* eslint-disable no-mixed-operators, no-plusplus, no-unneeded-ternary */
   // Initialize the library.
   var _geo = {};
 
@@ -34,7 +34,7 @@
      *   c = 2 ⋅ atan2( √a, √(1−a) )
      *   d = R ⋅ c
      *
-     *   where	φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
+     *   where φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
      *
      * @function (arg1, arg2)
      * @private
@@ -314,7 +314,6 @@
      * @since 0.0.1
      */
     _toPolygonCoordinates: function(obj) {
-
       switch (obj.type) {
         case 'Point':
           return [[obj.coordinates]];
@@ -433,7 +432,6 @@
      * @since 0.0.1
      */
     _within: function(obj, source) {
-
       switch (obj.type) {
 
         case 'Point':
@@ -527,7 +525,6 @@
 
       for (i = 0; i < obj.coordinates.length; i++) {
         for (j = 0; j < obj.coordinates[i].length; j++) {
-
           for (k = 0; k < source.coordinates.length; k++) {
             breakloop = false;
             if (_geo._isPointInPolygon(obj.coordinates[i][j], source.coordinates[k])) {
@@ -560,7 +557,6 @@
      * @since 0.0.1
      */
     _intersects: function(obj, source) {
-
       switch (obj.type) {
 
         // Point can't intersect a polygon.
@@ -632,7 +628,6 @@
       // Return true if min <= d <= max (if min or max is undefined, the
       // associated condition is true).
       return (!min || d >= min ? true : false) && (!max || d <= max ? true : false) ? true : false;
-
     },
 
     /**
@@ -648,7 +643,6 @@
      * @since 0.0.1
      */
     _geoNear: function(obj, source, max, min) {
-
       switch (obj.type) {
         case 'Point':
           return _geo._isPointNear(obj, source, max, min);
@@ -711,8 +705,8 @@
      * @since 0.0.1
      */
     _geoIntersects: function(obj, source) {
-
-      if (!source.hasOwnProperty(('$geometry')))
+      // if (!source.hasOwnProperty(('$geometry')))
+      if (!{}.hasOwnProperty.call(source, '$geometry'))
         return false;
 
       switch (source.$geometry.type) {
@@ -737,8 +731,8 @@
      * @since 0.0.1
      */
     _near: function(obj, source) {
-
-      if (!source.hasOwnProperty(('$geometry')))
+      // if (!source.hasOwnProperty(('$geometry')))
+      if (!{}.hasOwnProperty.call(source, '$geometry'))
         return false;
 
       switch (source.$geometry.type) {
@@ -763,30 +757,34 @@
      * @since 0.0.1
      */
     _query: function(obj, source) {
-      var prop
+      var status
         ;
 
-      for (prop in source) {
+      _.forPropIn(source, function(prop) {
         switch (prop) {
-
           case '$geoWithin':
-            return _geo._geoWithin(obj, source[prop]);
+            status = _geo._geoWithin(obj, source[prop]);
+            break;
 
           case '$geoIntersects':
-            return _geo._geoIntersects(obj, source[prop]);
+            status = _geo._geoIntersects(obj, source[prop]);
+            break;
 
           case '$near':
-            return _geo._near(obj, source[prop]);
+            status = _geo._near(obj, source[prop]);
+            break;
 
           /* istanbul ignore next */
           case '$nearSphere':
-            return false;
+            status = false;
+            break;
 
           /* istanbul ignore next */
           default:
             throw new Error('_geo._query: the Geo Operator "' + prop + '" is unknown!');
         }
-      }
+      });
+      return status;
     },
 
 
@@ -807,3 +805,4 @@
     }
 
   };
+  /* eslint-enable no-mixed-operators, no-plusplus, no-unneeded-ternary */

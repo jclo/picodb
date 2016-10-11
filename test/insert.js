@@ -1,5 +1,7 @@
 /* global describe, it */
 /* eslint  max-len: [1, 110, 1] */
+/* eslint one-var: 0, new-cap: 0, no-unused-expressions: 0 */
+
 'use strict';
 
 // -- Node modules
@@ -15,14 +17,13 @@ var PicoDB = require('../index.js')
 
 // -- Main
 module.exports = function() {
-
   describe('The method insertOne:', function() {
     var db = PicoDB.Create()
       , doc
       ;
 
     it('Expects the method to return null for the error.', function(done) {
-      db.insertOne({a: 1}, function(err, payload) {
+      db.insertOne({ a: 1 }, function(err, payload) {
         doc = payload;
         expect(err).to.be.null;
         done();
@@ -50,31 +51,31 @@ module.exports = function() {
     });
 
     it('Expects the method not to insert more than one document without _id.', function(done) {
-      db.insertOne([{c: 1}, {c: 2}], function(err, payload) {
+      db.insertOne([{ c: 1 }, { c: 2 }], function(err, payload) {
         expect(payload.length).to.be.equal(1);
         done();
       });
     });
 
     it('Expects the method not to insert more than one document with _id.', function(done) {
-      db.insertOne([{_id: 1, c: 1}, {_id: 2, c: 2}], function(err, payload) {
+      db.insertOne([{ _id: 1, c: 1 }, { _id: 2, c: 2 }], function(err, payload) {
         expect(payload.length).to.be.equal(1);
         done();
       });
     });
 
     it('Expects the method not to insert doc with the same _id twice.', function(done) {
-      db.insertOne({d: 1}, function(err, payload) {
-        db.insertOne(payload, function(err, payload) {
-          expect(payload.length).to.be.equal(0);
+      db.insertOne({ d: 1 }, function(err, payload) {
+        db.insertOne(payload, function(error, payload2) {
+          expect(payload2.length).to.be.equal(0);
           done();
         });
       });
     });
 
     it('Expects the method not to insert a false document item.', function(done) {
-      db.insertOne(['string'], function(err, doc) {
-        expect(doc).to.have.lengthOf(0);
+      db.insertOne(['string'], function(err, docs) {
+        expect(docs).to.have.lengthOf(0);
       });
       done();
     });
@@ -90,22 +91,19 @@ module.exports = function() {
     });
 
     it('Expects the method without callback not to throw any error.', function() {
-      db.insertOne({d: 1}, {});
+      db.insertOne({ d: 1 }, {});
       expect(true).to.be.true;
     });
 
     it('Expects the method with a wrong callback not to throw any error.', function() {
-      db.insertOne({d: 1}, {}, []);
+      db.insertOne({ d: 1 }, {}, []);
       expect(true).to.be.true;
     });
 
     it('Expects the method with a wrong argument options not to throw any error.', function() {
-      db.insertOne({d: 1}, function() {}, function() {});
+      db.insertOne({ d: 1 }, function() {}, function() {});
       expect(true).to.be.true;
     });
-
-
-
   });
 
   describe('The method insertMany:', function() {
@@ -113,21 +111,21 @@ module.exports = function() {
       ;
 
     it('Expects the method to insert more than one document.', function(done) {
-      db.insertMany([{c: 1}, {c: 2}], function(err, payload) {
+      db.insertMany([{ c: 1 }, { c: 2 }], function(err, payload) {
         expect(payload.length).to.be.equal(2);
         done();
       });
     });
 
     it('Expects the method not to insert more than once documents with the same id.', function(done) {
-      db.insertMany([{_id: 1, c: 1}, {_id: 1, c: 2}], function(err, payload) {
+      db.insertMany([{ _id: 1, c: 1 }, { _id: 1, c: 2 }], function(err, payload) {
         expect(payload.length).to.be.equal(1);
         done();
       });
     });
 
     it('Expects the method not to insert false document items.', function(done) {
-      db.insertMany([{c: 1}, {c: 2}, 'string'], function(err, payload) {
+      db.insertMany([{ c: 1 }, { c: 2 }, 'string'], function(err, payload) {
         expect(payload.length).to.be.equal(2);
         done();
       });

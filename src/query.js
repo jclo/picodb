@@ -39,10 +39,10 @@
      *                     false,
      * @since 0.0.1
      */
+    /* eslint-disable no-loop-func */
     _isHavingNotOperator: function(query) {
       var op = ['$ne', '$nin', '$not']
         , qar
-        , key
         , not
         , re
         , x
@@ -54,27 +54,30 @@
       if (_.contains(_.keys(query), '$or')) {
         qar = query['$or'];
         for (i = 0; i < qar.length; i++) {
-          for (key in qar[i]) {
+          _.forPropIn(qar[i], function(key) {
             for (j = 0; j < op.length; j++) {
               re = new RegExp('"\\' + op[j] + '":');
               x = JSON.stringify(qar[i]).match(re);
-              if (x)
+              if (x) {
                 not.push(key);
+              }
             }
-          }
+          });
         }
       } else {
-        for (key in query) {
+        _.forPropIn(query, function(key) {
           for (j = 0; j < op.length; j++) {
             re = new RegExp('"\\' + op[j] + '":');
             x = JSON.stringify(query[key]).match(re);
-            if (x)
+            if (x) {
               not.push(key);
+            }
           }
-        }
+        });
       }
       return not.length !== 0 ? not : false;
     },
+    /* eslint-enable no-loop-func */
 
     /**
      * Returns the query array if $or operator.
@@ -119,45 +122,44 @@
      * @since 0.0.1
      */
     _isConditionTrue: function(obj, source, op) {
-
       switch (op) {
 
         // Comparison Operators:
         case '$eq':
-          return obj === source ? true : false;
+          return obj === source;
 
         case '$gt':
-          return obj > source ? true : false;
+          return obj > source;
 
         case '$gte':
-          return obj >= source ? true : false;
+          return obj >= source;
 
         case '$lt':
-          return obj < source ? true : false;
+          return obj < source;
 
         case '$lte':
-          return obj <= source ? true : false;
+          return obj <= source;
 
         case '$ne':
-          return obj !== source ? true : false;
+          return obj !== source;
 
         case '$in':
           return _.isArray(obj)
-            ? _.share(source, obj)
+            ? !_.isEmpty(_.share(source, obj))
             : _.contains(source, obj);
 
         case '$nin':
           return _.isArray(obj)
-            ? !_.share(source, obj)
+            ? _.isEmpty(_.share(source, obj))
             : !_.contains(source, obj);
 
         // Logical Operators:
         case '$not':
-          return _query._areConditionsTrue(obj, source) ? false : true;
+          return !_query._areConditionsTrue(obj, source);
 
         // Element Operators:
         case '$exists':
-          return source ? true : false;
+          return source;
 
         // Evaluation Operators:
         // --
@@ -201,17 +203,18 @@
      * @returns {Boolean}       returns true if it matches, false otherwise,
      * @since 0.0.1
      */
-    _areConditionsTrue: function (obj, source) {
+    /* eslint-disable no-restricted-syntax */
+    _areConditionsTrue: function(obj, source) {
       var prop
         ;
 
       // Without an Operator:
-      if (!_.isArray(source) && !_.isObject(source))
+      if (!_.isArray(source) && !_.isObject(source)) {
         if (obj === source)
           return true;
-        else
-          return false;
 
+        return false;
+      }
 
       // With an Operator:
       for (prop in source) {
@@ -220,6 +223,7 @@
       }
       return true;
     },
+    /* eslint-enable no-restricted-syntax */
 
     /**
      * Checks if the document matches the query.
@@ -249,6 +253,7 @@
      * @returns {Boolean} returns true if the conditions are met,
      * @since 0.0.1
      */
+    /* eslint-disable no-shadow, no-restricted-syntax, no-continue */
     _query: function(obj, source, op) {
       var level = 0
         , rootKey
@@ -262,40 +267,43 @@
           ;
 
         for (prop in source) {
-          if (level === 0)
+          if (level === 0) {
             rootKey = prop;
+          }
 
-          if (!obj[prop])
-            if (!op.not || !_.contains(op.not, rootKey))
+          if (!obj[prop]) {
+            if (!op.not || !_.contains(op.not, rootKey)) {
               return false;
-            else if (op.or)
+            } else if (op.or) {
               return true;
-            else
-              continue;
+            }
+            continue;
+          }
 
           if (_.isObject(source[prop]) && !_.keys(source[prop])[0].match(/^\$/)) {
             level += 1;
             if (!parse(obj[prop], source[prop])) {
               level -= 1;
-              if (!op.or)
+              if (!op.or) {
                 return false;
-            } else if (op.or)
-              return true;
-
-          } else {
-            if (!_query._areConditionsTrue(obj[prop], source[prop])) {
-              if (!op.or)
-                return false;
+              }
             } else if (op.or) {
               return true;
             }
+          } else if (!_query._areConditionsTrue(obj[prop], source[prop])) {
+            if (!op.or) {
+              return false;
+            }
+          } else if (op.or) {
+            return true;
           }
         }
-        return !op.or ? true : false;
+        return !op.or;
       }
 
       return parse(obj, source);
     },
+    /* eslint-enable no-shadow, no-restricted-syntax, no-continue */
 
 
     /* Public Functions ----------------------------------------------------- */

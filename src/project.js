@@ -46,24 +46,20 @@
      * @since 0.0.1
      */
     _include: function(obj, source, data) {
-      var prop
-        ;
-
-      for (prop in source) {
-        if (!obj[prop])
-          continue;
-
-        if (_.isObject(source[prop])) {
-          data[prop] = {};
-          _project._include(obj[prop], source[prop], data[prop]);
-        } else {
-          if (source[prop] === 1)
-            if (_.isObject(obj[prop]))
+      _.forPropIn(source, function(prop) {
+        if (obj[prop]) {
+          if (_.isObject(source[prop])) {
+            data[prop] = {};
+            _project._include(obj[prop], source[prop], data[prop]);
+          } else if (source[prop] === 1) {
+            if (_.isObject(obj[prop])) {
               data[prop] = _.clone(obj[prop]);
-            else if (obj[prop])
+            } else if (obj[prop]) {
               data[prop] = obj[prop];
+            }
+          }
         }
-      }
+      });
       return data;
     },
 
@@ -83,24 +79,37 @@
      * @since 0.0.1
      */
     _exclude: function(obj, source, data) {
-      var prop
-        ;
+      // var prop
+      //   ;
 
-      for (prop in obj) {
-
-        if (source[prop] === undefined) {
-          if (_.isObject(obj[prop]))
-            data[prop] = _.clone(obj[prop]);
-          else
-            data[prop] = obj[prop];
-          continue;
+      // for (prop in obj) {
+      //
+      //   if (source[prop] === undefined) {
+      //     if (_.isObject(obj[prop]))
+      //       data[prop] = _.clone(obj[prop]);
+      //     else
+      //       data[prop] = obj[prop];
+      //     continue;
+      //   }
+      //
+      //   if (_.isObject(source[prop])) {
+      //     data[prop] = {};
+      //     _project._exclude(obj[prop], source[prop], data[prop]);
+      //   }
+      // }
+      // return data;
+      _.forPropIn(obj, function(prop) {
+        if (source[prop] !== undefined) {
+          if (_.isObject(source[prop])) {
+            data[prop] = {};
+            _project._exclude(obj[prop], source[prop], data[prop]);
+          }
+        } else if (_.isObject(obj[prop])) {
+          data[prop] = _.clone(obj[prop]);
+        } else {
+          data[prop] = obj[prop];
         }
-
-        if (_.isObject(source[prop])) {
-          data[prop] = {};
-          _project._exclude(obj[prop], source[prop], data[prop]);
-        }
-      }
+      });
       return data;
     },
 
@@ -128,7 +137,7 @@
       if (projection['_id'] !== undefined)
         return projection;
 
-      return _.extend({_id: 1}, projection);
+      return _.extend({ _id: 1 }, projection);
     },
 
     /**
@@ -151,19 +160,23 @@
      * @returns {Boolean}  true if it is an include projection, false otherwise,
      * @since 0.0.1
      */
+    /* eslint-disable no-restricted-syntax */
     isProjectionTypeInclude: function(projection) {
       var prop
         ;
 
       for (prop in projection) {
         if (_.isObject(projection[prop])) {
-          if (_project.isProjectionTypeInclude(projection[prop]))
+          if (_project.isProjectionTypeInclude(projection[prop])) {
             return true;
-        } else if (projection[prop])
+          }
+        } else if (projection[prop]) {
           return true;
+        }
       }
       return false;
     },
+    /* eslint-enable no-restricted-syntax */
 
    /**
     * Adds elements of the document to doc in accordance with projection.
@@ -179,7 +192,6 @@
     * @since 0.0.1
     */
     add: function(doc, data, projection) {
-
       // If projection is empty means no filtering of the output!
       if (_.isEmpty(projection.value))
         doc.push(_.clone(data));

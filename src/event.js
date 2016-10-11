@@ -46,10 +46,10 @@
      * @since 0.1
      */
     _isValidEvent: function(event, type, listener) {
-      if (event.hasOwnProperty(type) && typeof listener === 'function')
+      // if (event.hasOwnProperty(type) && typeof listener === 'function')
+      if ({}.hasOwnProperty.call(event, type) && typeof listener === 'function')
         return true;
-      else
-        return false;
+      return false;
     },
 
 
@@ -118,7 +118,6 @@
         eventList[event].listenersOnce[i](payload);
       // Remove the event handlers:
       eventList[event].listenersOnce.splice(0, eventList[event].listenersOnce.length);
-
     },
 
     /**
@@ -133,14 +132,12 @@
      * @since 0.1
      */
     addEventListener: function(eventList, type, listener) {
-
       // Is type an event and listener a function?
       if (!_event._isValidEvent(eventList, type, listener))
         return;
 
       // Save the listener:
       eventList[type].listeners.push(listener);
-
     },
 
     /**
@@ -155,14 +152,12 @@
      * @since 0.1
      */
     addOneTimeEventListener: function(eventList, type, listener) {
-
       // Is type an event and listener a function?
       if (!_event._isValidEvent(eventList, type, listener))
         return;
 
       // Save the listener:
       eventList[type].listenersOnce.push(listener);
-
     },
 
     /**

@@ -26,6 +26,7 @@
    * Public functions:
    *  . update               updates one or several documents,
    */
+  /* eslint-disable no-restricted-syntax, no-continue */
   _update = {
 
 
@@ -55,122 +56,118 @@
         ;
 
       for (prop in source) {
-        //subprop = _.keys(source[prop]);
+        // subprop = _.keys(source[prop]);
         if (_.isObject(source[prop]) && !_.isArray(obj[prop])) {
-          if (!obj[prop])
+          if (obj[prop]) {
+            _update._pull(obj[prop], source[prop]);
+          }
+        } else if (hasOwnProperty.call(source, prop)) {
+          // If it doesn't exist or it isn't an array, go next:
+          if (!obj[prop] || !_.isArray(obj[prop]))
             continue;
-          _update._pull(obj[prop], source[prop]);
-        } else {
-          if (hasOwnProperty.call(source, prop)) {
 
-            // If it doesn't exist or it isn't an array, go next:
-            if (!obj[prop] || !_.isArray(obj[prop]))
-              continue;
+          // Boolean, Number or String, remove value:
+          // (source be equivalent to: orders: 'y')
+          if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
+            index = obj[prop].indexOf(source[prop]);
+            if (index > -1)
+              obj[prop].splice(index, 1);
+            continue;
+          }
 
-            // Boolean, Number or String, remove value:
-            //(source be equivalent to: orders: 'y')
-            if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
-              index = obj[prop].indexOf(source[prop]);
-              if (index > -1)
-                obj[prop].splice(index, 1);
-              continue;
+          // Object on Array, remove matching objects from array:
+          // source be equivalent to: quantity: { a: 1, b: 2 })
+          if (_.isObject(source[prop]) && !_.keys(source[prop])[0].match(/^\$/)) {
+            // Parse objects:
+            for (i = obj[prop].length - 1; i >= 0; i--) {
+              if (!_.isObject(obj[prop][i]))
+                break;
+
+              // Do they match?
+              match = true;
+              for (key in source[prop]) {
+                if (obj[prop][i][key] !== source[prop][key]) {
+                  match = false;
+                  break;
+                }
+              }
+              if (match)
+                obj[prop].splice(i, 1);
             }
+            continue;
+          }
 
-            // Object on Array, remove matching objects from array:
-            // source be equivalent to: quantity: { a: 1, b: 2 })
-            if (_.isObject(source[prop]) && !_.keys(source[prop])[0].match(/^\$/)) {
+          // Object, execute condition:
+          // (source be equivalent to: ratings: { values: { $nin: ['cd'] })
+          if (_.isObject(source[prop])) {
+            op = _.keys(source[prop])[0];
+            switch (op) {
 
-              // Parse objects:
-              for (i = obj[prop].length - 1; i >= 0; i--) {
-                if (!_.isObject(obj[prop][i]))
+              case '$eq':
+                index = obj[prop].indexOf(source[prop]['$eq']);
+                if (index > -1)
+                  obj[prop].splice(index, 1);
+                break;
+
+              case '$gt':
+                for (i = obj[prop].length - 1; i >= 0; i--)
+                  if (obj[prop][i] > source[prop]['$gt'])
+                    obj[prop].splice(i, 1);
+                break;
+
+              case '$gte':
+                for (i = obj[prop].length - 1; i >= 0; i--)
+                  if (obj[prop][i] >= source[prop]['$gte'])
+                    obj[prop].splice(i, 1);
+                break;
+
+              case '$lt':
+                for (i = obj[prop].length - 1; i >= 0; i--)
+                  if (obj[prop][i] < source[prop]['$lt'])
+                    obj[prop].splice(i, 1);
+                break;
+
+              case '$lte':
+                for (i = obj[prop].length - 1; i >= 0; i--)
+                  if (obj[prop][i] <= source[prop]['$lte'])
+                    obj[prop].splice(i, 1);
+                break;
+
+              case '$ne':
+                for (i = obj[prop].length - 1; i >= 0; i--)
+                  if (obj[prop][i] !== source[prop]['$ne'])
+                    obj[prop].splice(i, 1);
+                break;
+
+              case '$in':
+                if (!_.isArray(source[prop]['$in']))
                   break;
 
-                // Do they match?
-                match = true;
-                for (key in source[prop]) {
-                  if (obj[prop][i][key] !== source[prop][key]) {
-                    match = false;
-                    break;
-                  }
-                }
-                if (match)
-                  obj[prop].splice(i, 1);
-              }
-              continue;
-            }
-
-            // Object, execute condition:
-            // (source be equivalent to: ratings: { values: { $nin: ['cd'] })
-            if (_.isObject(source[prop])) {
-              op = _.keys(source[prop])[0];
-              switch (op) {
-
-                case '$eq':
-                  index = obj[prop].indexOf(source[prop]['$eq']);
+                for (i = 0; i < source[prop]['$in'].length; i++) {
+                  index = obj[prop].indexOf(source[prop]['$in'][i]);
                   if (index > -1)
                     obj[prop].splice(index, 1);
+                }
+                break;
+
+              case '$nin':
+                if (!_.isArray(source[prop]['$nin']))
                   break;
 
-                case '$gt':
-                  for (i = obj[prop].length - 1; i >= 0; i--)
-                    if (obj[prop][i] > source[prop]['$gt'])
-                      obj[prop].splice(i, 1);
-                  break;
+                arr = [];
+                for (i = 0; i < source[prop]['$nin'].length; i++) {
+                  index = obj[prop].indexOf(source[prop]['$nin'][i]);
+                  if (index > -1)
+                    arr.push(source[prop]['$nin'][i]);
+                }
+                obj[prop] = _.clone(arr);
+                break;
 
-                case '$gte':
-                  for (i = obj[prop].length - 1; i >= 0; i--)
-                    if (obj[prop][i] >= source[prop]['$gte'])
-                      obj[prop].splice(i, 1);
-                  break;
-
-                case '$lt':
-                  for (i = obj[prop].length - 1; i >= 0; i--)
-                    if (obj[prop][i] < source[prop]['$lt'])
-                      obj[prop].splice(i, 1);
-                  break;
-
-                case '$lte':
-                  for (i = obj[prop].length - 1; i >= 0; i--)
-                    if (obj[prop][i] <= source[prop]['$lte'])
-                      obj[prop].splice(i, 1);
-                  break;
-
-                case '$ne':
-                  for (i = obj[prop].length - 1; i >= 0; i--)
-                    if (obj[prop][i] !== source[prop]['$ne'])
-                      obj[prop].splice(i, 1);
-                  break;
-
-                case '$in':
-                  if (!_.isArray(source[prop]['$in']))
-                    break;
-
-                  for (i = 0; i < source[prop]['$in'].length; i++) {
-                    index = obj[prop].indexOf(source[prop]['$in'][i]);
-                    if (index > -1)
-                      obj[prop].splice(index, 1);
-                  }
-                  break;
-
-                case '$nin':
-                  if (!_.isArray(source[prop]['$nin']))
-                    break;
-
-                  arr = [];
-                  for (i = 0; i < source[prop]['$nin'].length; i++) {
-                    index = obj[prop].indexOf(source[prop]['$nin'][i]);
-                    if (index > -1)
-                      arr.push(source[prop]['$nin'][i]);
-                  }
-                  obj[prop] = _.clone(arr);
-                  break;
-
-                /* istanbul ignore next */
-                default:
-                  throw new Error('_update._pull: the operator "' + op + '" is not supported!');
-              }
-              continue;
+              /* istanbul ignore next */
+              default:
+                throw new Error('_update._pull: the operator "' + op + '" is not supported!');
             }
+            continue;
           }
         }
       }
@@ -198,53 +195,53 @@
         ;
 
       for (prop in source) {
+        if (!{}.hasOwnProperty.call(source, prop))
+          continue;
+
         subprop = _.keys(source[prop]);
-        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /*!_.contains(subprop, '$each')*/ !subprop[0].match(/^\$/)) {
+        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each')*/ !subprop[0].match(/^\$/)) {
           if (!obj[prop])
             obj[prop] = {};
           _update._push(obj[prop], source[prop]);
-        } else {
-          if (hasOwnProperty.call(source, prop)) {
-            if (!obj[prop])
-              obj[prop] = [];
+        } else if (hasOwnProperty.call(source, prop)) {
+          if (!obj[prop])
+            obj[prop] = [];
 
-            // Boolean, Number or String:
-            if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
-              obj[prop].push(source[prop]);
-              continue;
-            }
+          // Boolean, Number or String:
+          if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
+            obj[prop].push(source[prop]);
+            continue;
+          }
 
-            // Array:
-            if (_.isArray(source[prop])) {
-              obj[prop].push(_.clone(source[prop]));
-              continue;
-            }
+          // Array:
+          if (_.isArray(source[prop])) {
+            obj[prop].push(_.clone(source[prop]));
+            continue;
+          }
 
-            // Object with Update Operator Modifiers: $each, $sort, $position
-            if (_.isObject(source[prop]) && _.isArray(source[prop]['$each'])) {
+          // Object with Update Operator Modifiers: $each, $sort, $position
+          if (_.isObject(source[prop]) && _.isArray(source[prop]['$each'])) {
+            // Position in the array to insert elements:
+            position = source[prop]['$position'];
+            if (position === undefined || typeof position !== 'number' || position < 0)
+              position = obj[prop].length;
 
-              // Position in the array to insert elements:
-              position = source[prop]['$position'];
-              if (position === undefined || typeof position !== 'number' || position < 0)
-                position = obj[prop].length;
+            // Slice:
+            slice = source[prop]['$slice'];
+            if (slice === undefined || typeof position !== 'number')
+              slice = null;
 
-              // Slice:
-              slice = source[prop]['$slice'];
-              if (slice === undefined || typeof position !== 'number')
-                slice = null;
+            // Update the array from position:
+            for (i = source[prop]['$each'].length - 1; i >= 0; i--)
+              obj[prop].splice(position, 0, source[prop]['$each'][i]);
 
-              // Update the array from position:
-              for (i = source[prop]['$each'].length - 1; i >= 0; i--)
-                obj[prop].splice(position, 0, source[prop]['$each'][i]);
-
-              // Slice the array
-              if (slice > 0)
-                obj[prop].splice(slice, obj[prop].length - slice);
-              else if (slice === 0)
-                obj[prop].length = 0;
-              else if (slice < 0)
-                obj[prop].splice(0, obj[prop].length + slice);
-            }
+            // Slice the array
+            if (slice > 0)
+              obj[prop].splice(slice, obj[prop].length - slice);
+            else if (slice === 0)
+              obj[prop].length = 0;
+            else if (slice < 0)
+              obj[prop].splice(0, obj[prop].length + slice);
           }
         }
       }
@@ -278,78 +275,76 @@
           else if (!obj[prop])
             obj[prop] = {};
           _update._apply(obj[prop], source[prop], op);
-        } else {
-          if (hasOwnProperty.call(source, prop)) {
-            //if (_.isArray(source[prop]))
-              //obj[prop] = _.clone(source[prop]);
-            //else
-            switch (op) {
+        } else if (hasOwnProperty.call(source, prop)) {
+          // if (_.isArray(source[prop]))
+            // obj[prop] = _.clone(source[prop]);
+          // else
+          switch (op) {
 
-              // Field Operators:
-              case '$inc':
-                if (typeof obj[prop] === 'number')
-                  obj[prop] += source[prop];
-                else
-                  obj[prop] = source[prop];
-                break;
+            // Field Operators:
+            case '$inc':
+              if (typeof obj[prop] === 'number')
+                obj[prop] += source[prop];
+              else
+                obj[prop] = source[prop];
+              break;
 
-              case '$mul':
-                if (typeof obj[prop] === 'number')
-                  obj[prop] *= source[prop];
-                else
-                  obj[prop] = 0;
-                break;
+            case '$mul':
+              if (typeof obj[prop] === 'number')
+                obj[prop] *= source[prop];
+              else
+                obj[prop] = 0;
+              break;
 
-              case '$rename':
-                if (obj[prop]) {
-                  obj[source[prop]] = obj[prop];
-                  delete obj[prop];
-                }
-                break;
+            case '$rename':
+              if (obj[prop]) {
+                obj[source[prop]] = obj[prop];
+                delete obj[prop];
+              }
+              break;
 
-              case '$set':
-                if (_.isArray(source[prop]))
-                  obj[prop] = _.clone(source[prop]);
-                else
-                  obj[prop] = source[prop];
-                break;
+            case '$set':
+              if (_.isArray(source[prop]))
+                obj[prop] = _.clone(source[prop]);
+              else
+                obj[prop] = source[prop];
+              break;
 
-              case '$unset':
-                if (obj[prop])
-                  delete obj[prop];
-                break;
+            case '$unset':
+              if (obj[prop])
+                delete obj[prop];
+              break;
 
-              case '$min':
-                if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] < obj[prop]))
-                  obj[prop] = source[prop];
-                break;
+            case '$min':
+              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] < obj[prop]))
+                obj[prop] = source[prop];
+              break;
 
-              case '$max':
-                if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] > obj[prop]))
-                  obj[prop] = source[prop];
-                break;
+            case '$max':
+              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] > obj[prop]))
+                obj[prop] = source[prop];
+              break;
 
-              // Array Operators:
-              case '$pop':
-                if (_.isArray(obj[prop]))
-                  if (source[prop] === 1)
-                    obj[prop].pop();
-                  else if (source[prop] === -1)
-                    obj[prop].shift();
-                break;
+            // Array Operators:
+            case '$pop':
+              if (_.isArray(obj[prop]))
+                if (source[prop] === 1)
+                  obj[prop].pop();
+                else if (source[prop] === -1)
+                  obj[prop].shift();
+              break;
 
-              case '$pullAll':
-                if (_.isArray(obj[prop]) && _.isArray(source[prop]))
-                  for (i = 0; i < source[prop].length; i++)
-                    for (j = obj[prop].length - 1; j >= 0; j--)
-                      if (obj[prop][j] === source[prop][i])
-                        obj[prop].splice(j, 1);
-                break;
+            case '$pullAll':
+              if (_.isArray(obj[prop]) && _.isArray(source[prop]))
+                for (i = 0; i < source[prop].length; i++)
+                  for (j = obj[prop].length - 1; j >= 0; j--)
+                    if (obj[prop][j] === source[prop][i])
+                      obj[prop].splice(j, 1);
+              break;
 
-              /* istanbul ignore next */
-              default:
-                throw new Error('_update._apply: the operator "' + op + '" is unknown!');
-            }
+            /* istanbul ignore next */
+            default:
+              throw new Error('_update._apply: the operator "' + op + '" is unknown!');
           }
         }
       }
@@ -395,17 +390,18 @@
         ;
 
       for (prop in source) {
-        subprop = _.keys(source[prop])[0];
-        if (_.isObject(source[prop]) && subprop !== '$type') {
-          if (!obj[prop])
-            obj[prop] = {};
-          _update._applyTime(obj[prop], source[prop]);
-        } else {
-          if (hasOwnProperty.call(source, prop))
+        if ({}.hasOwnProperty.call(source, prop)) {
+          subprop = _.keys(source[prop])[0];
+          if (_.isObject(source[prop]) && subprop !== '$type') {
+            if (!obj[prop])
+              obj[prop] = {};
+            _update._applyTime(obj[prop], source[prop]);
+          } else if (hasOwnProperty.call(source, prop)) {
             if (source[prop][subprop] === 'timestamp')
               obj[prop] = Date.now();
             else
               obj[prop] = new Date().toISOString();
+          }
         }
       }
       return obj;
@@ -490,7 +486,7 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    _update: function (db, eventQ, query, update, options, callback) {
+    _update: function(db, eventQ, query, update, options, callback) {
       var sop = _query.isHavingSpecialOperator(query)
         , o
         , docOut
@@ -569,6 +565,6 @@
       // Try to update the document:
       options.many = many;
       _update._update(db, eventQ, query, update, options, callback);
-
     }
   };
+  /* eslint-enable no-restricted-syntax, no-continue */
