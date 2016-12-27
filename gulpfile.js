@@ -43,15 +43,15 @@ var picodb = [
 
 // License Header to add to 'picodb.js' file:
 var license = ['/**',
-' * @#suffix#@',
-' *',
-' * @license',
-' * PicoDB is a tiny in-memory database that stores JSON documents.',
-' * Copyright (c) 2016 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr/).',
-' * Released under the MIT license. You may obtain a copy of the License',
-' * at: http://www.opensource.org/licenses/mit-license.php).',
-' */',
-''].join('\n');
+  ' * @#suffix#@',
+  ' *',
+  ' * @license',
+  ' * PicoDB is a tiny in-memory database that stores JSON documents.',
+  ' * Copyright (c) 2016 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr/).',
+  ' * Released under the MIT license. You may obtain a copy of the License',
+  ' * at: http://www.opensource.org/licenses/mit-license.php).',
+  ' */',
+  ''].join('\n');
 
 // -- Gulp Tasks
 

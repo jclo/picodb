@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.8.0",
+  "version": "0.8.1beta1",
   "description": "PicoDB is a tiny in-memory database that stores JSON documents",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "test": "istanbul cover -x ./test/main.js _mocha -- -R spec ./test/main.js",
     "check-coverage": "istanbul check-coverage --statements 99.0 --branches 98.0 --functions 100 --lines 99.0",
     "display-coverage": "opener ./coverage/lcov-report/index.html",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls"
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "precommit": "npm run test && npm run check-coverage"
   },
   "repository": {
     "type": "git",
@@ -36,24 +37,19 @@
   "homepage": "https://github.com/jclo/picodb",
   "devDependencies": {
     "chai": "3.5.0",
-    "coveralls": "2.11.14",
+    "coveralls": "2.11.15",
     "del": "2.2.2",
-    "eslint": "3.7.1",
-    "eslint-config-airbnb-base": "8.0.0",
-    "eslint-plugin-import": "1.16.0",
-    "ghooks": "1.3.2",
+    "eslint": "3.12.2",
+    "eslint-config-airbnb-base": "11.0.0",
+    "eslint-plugin-import": "2.2.0",
     "gulp": "3.9.1",
-    "gulp-concat": "2.6.0",
+    "gulp-concat": "2.6.1",
     "gulp-header": "1.8.8",
     "gulp-replace": "0.5.4",
     "gulp-uglify": "2.0.0",
+    "husky": "0.12.0",
     "istanbul": "0.4.5",
-    "mocha": "3.1.0",
+    "mocha": "3.2.0",
     "opener": "1.4.2"
-  },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run test && npm run check-coverage"
-    }
   }
 }
