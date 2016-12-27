@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.8.1beta1",
+  "version": "0.8.1",
   "description": "PicoDB is a tiny in-memory database that stores JSON documents",
   "main": "index.js",
   "scripts": {
