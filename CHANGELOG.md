@@ -3,7 +3,7 @@
 ### 0.8.2 (January 12, 2017)
 
   * Fixed a regression for the method 'update' when a doc. is replaced by a new one (no operator),
-  * ...,
+  * Release 0.8.2.
 
 
 ### 0.8.1 (December 27, 2016)
