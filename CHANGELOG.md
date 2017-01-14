@@ -3,7 +3,7 @@
 ### 0.8.3 (January 14, 2017)
 
   * Fixed a mismatch between the version number of the library and the package,
-  * ...,
+  * Release 0.8.3.
 
 
 ### 0.8.2 (January 12, 2017)
