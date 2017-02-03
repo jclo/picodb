@@ -1,9 +1,9 @@
 ### HEAD
 
-### 0.8.x (February 3, 2017)
+### 0.8.4 (February 3, 2017)
 
   * Updated the dependencies and the product description,
-  * ...,
+  * Release 0.8.4.
 
 
 ### 0.8.3 (January 14, 2017)
