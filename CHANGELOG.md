@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.8.x (February 3, 2017)
+
+  * Updated the dependencies and the product description,
+  * ...,
+
+
 ### 0.8.3 (January 14, 2017)
 
   * Fixed a mismatch between the version number of the library and the package,
