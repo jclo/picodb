@@ -3,7 +3,7 @@
 ### 0.8.5 (April 28, 2017)
 
   * Updated the dependencies,
-  * ...,
+  * Release 0.8.5.
 
 
 ### 0.8.4 (February 3, 2017)
