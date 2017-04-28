@@ -103,7 +103,7 @@
       _event.fire(eventQ, 'delete', docOut);
       if (callback)
         callback(null, removed);
-      return;
+      // return;
     },
 
 

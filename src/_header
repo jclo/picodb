@@ -4,7 +4,7 @@
  *
  * @exports  PicoDB
  * @author   -
- * @version  @#Release#@
+ * @version  {{lib:version}}
  */
 // ESLint declarations
 /* global define */
@@ -50,4 +50,4 @@
   };
 
   // Current version of the library.
-  PicoDB.VERSION = '@#Release#@';
+  PicoDB.VERSION = '{{lib:version}}';

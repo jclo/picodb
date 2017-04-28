@@ -20,7 +20,6 @@ var name     = require('./package.json').name
 
 // -- Global variables
 var dist       = './lib'
-  , suffixname = 'PicoDB'
   , watch      = 'src/**/*.js'
   ;
 
@@ -43,7 +42,7 @@ var picodb = [
 
 // License Header to add to 'picodb.js' file:
 var license = ['/**',
-  ' * @#suffix#@',
+  ' * PicoDB v{{lib:version}}',
   ' *',
   ' * @license',
   ' * PicoDB is a tiny in-memory database that stores JSON documents.',
@@ -71,8 +70,8 @@ gulp.task('doJS', ['create'], function() {
   return gulp.src(picodb)
     .pipe(concat(name.toLowerCase() + '.js'))
     .pipe(header(license))
-    .pipe(replace('@#suffix#@', suffixname + ' v' + release))
-    .pipe(replace('@#Release#@', release))
+    // .pipe(replace('@#suffix#@', suffixname + ' v' + release))
+    .pipe(replace('{{lib:version}}', release))
     .pipe(gulp.dest(dist));
 });
 
