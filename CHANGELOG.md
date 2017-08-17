@@ -4,7 +4,7 @@
 
   * Reworked the build to make it more modular,
   * Modified the test files to comply with ES6 standard,
-  * ...,
+  * Release.
 
 
 ### 0.8.5 (April 28, 2017)
