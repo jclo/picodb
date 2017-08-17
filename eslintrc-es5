@@ -1,0 +1,31 @@
+{
+  /**
+   * Set JavaScript language options
+   */
+  "parserOptions": {
+    "sourceType": "script",
+  },
+  /**
+   * Set Environnement
+   */
+  "env": {
+  },
+  /**
+   * Set globals
+   */
+  "globals": {
+  },
+  /**
+   * Set rules
+   */
+  "extends": "airbnb-base/legacy",
+  // Overwritten airbnb's rules:
+  "rules": {
+    strict: ["error", "global"],
+    func-names: ["error", "never"],
+    space-before-function-paren: ["error", "never"],
+    no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
+    "no-multi-spaces": [2, { exceptions: { "VariableDeclarator": true } }],
+    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }]
+  }
+}

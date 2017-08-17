@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _update = {};
-
   /**
    * Private functions:
    *  . _pull                processes the $pull operator,
@@ -26,7 +23,7 @@
    * Public functions:
    *  . update               updates one or several documents,
    */
-  /* eslint-disable no-restricted-syntax, no-continue */
+  /* eslint-disable dot-notation, no-param-reassign, no-restricted-syntax, no-continue */
   _update = {
 
 
@@ -262,6 +259,7 @@
      * @throws {Object}    throws an error if the operator is unknown,
      * @since 0.0.1
      */
+
     _apply: function(obj, source, op) {
       var prop
         , i
@@ -379,22 +377,22 @@
       return _.extend(obj, source);
     },
 
-  /**
-   * Updates or adds the time fields to the document.
-   *
-   * Note: this function mutates the argument `obj`.
-   *
-   * If the type is 'timestamp' sets the timestamp. Otherwise sets the date.
-   * The source document has the following form:
-   * $currentDate: { lastModified: true, cancellation: { date: { $type: 'timestamp' }}
-   *
-   * @function (arg1, arg2)
-   * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @returns {Object}   the modified document,
-   * @since 0.0.1
-   */
+    /**
+     * Updates or adds the time fields to the document.
+     *
+     * Note: this function mutates the argument `obj`.
+     *
+     * If the type is 'timestamp' sets the timestamp. Otherwise sets the date.
+     * The source document has the following form:
+     * $currentDate: { lastModified: true, cancellation: { date: { $type: 'timestamp' }}
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the destination document,
+     * @param {Object}     the source document,
+     * @returns {Object}   the modified document,
+     * @since 0.0.1
+     */
     _applyTime: function(obj, source) {
       var prop
         , subprop
@@ -576,5 +574,4 @@
       options.many = many;
       _update._update(db, eventQ, query, update, options, callback);
     }
-  };
-  /* eslint-enable no-restricted-syntax, no-continue */
+  }; /* eslint-enable dot-notation, no-param-reassign, no-restricted-syntax, no-continue */

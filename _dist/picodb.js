@@ -1,3 +1,12 @@
+/** ****************************************************************************
+ * PicoDB v0.9.0
+ *
+ * A tiny in-memory database (MongoDB like) that stores JSON documents.
+ * (you can download it from npm or github repositories)
+ * Copyright (c) 2017 John Doe <john@doe.com> (http://www.doe.com).
+ * Released under the MIT license. You may obtain a copy of the License
+ * at: http://www.opensource.org/licenses/mit-license.php).
+ * ****************************************************************************/
 // ESLint declarations
 /* global define */
 /* eslint strict: ["error", "function"], one-var: 0, no-underscore-dangle: 0, curly: 0
@@ -54,7 +63,7 @@
   };
 
   // Current version of the library:
-  PicoDB.VERSION = '{{lib:version}}';
+  PicoDB.VERSION = '0.9.0';
   /* eslint-enable no-param-reassign */
 
   /**

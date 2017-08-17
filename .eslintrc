@@ -1,11 +1,1 @@
-{
-  "extends": "airbnb-base/legacy",
-  // Overwritten airbnb's rules:
-  "rules": {
-    func-names: ["error", "never"],
-    space-before-function-paren: ["error", "never"],
-    no-multi-spaces: ["error", { exceptions: { "VariableDeclarator": true } }],
-    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }],
-    no-plusplus: ["error", { "allowForLoopAfterthoughts": true }]
-  }
-}
+eslintrc-es5

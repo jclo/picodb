@@ -1,4 +1,3 @@
-  // Just return a value to define the module export.
-  // This returns the library name.
+  // Return the library name:
   return PicoDB;
 }));

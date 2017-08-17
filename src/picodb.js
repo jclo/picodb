@@ -32,11 +32,11 @@
    *  . one                       alias on addOneTimeEventListener,
    *  . off                       alias on removeEventListener,
    */
-  /* eslint-disable no-unused-expressions, no-eval */
+  /* eslint-disable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */
 
   /* Private Functions ------------------------------------------------------ */
 
-  var _init = function(_this) {
+  _init = function(_this) {
     // Attach schema:
     _this.db = _insert._schema();
     // Attach event Queue:
@@ -66,7 +66,7 @@
      * @private
      * @param {String}    the name of the internal library,
      * @returns {Object}  the reference to the library,
-     * since 0.1
+     * @since 0.0.1
      */
     var _export = function(name) {
       return eval(name);
@@ -262,7 +262,7 @@
      * @param {String}    the type of event,
      * @param {function}  the event listener,
      * @returns {}        -,
-     * since 0.1
+     * @since 0.0.1
      */
     var addEventListener = function(type, listener) {
       // Initialize the db if it isn't:
@@ -280,7 +280,7 @@
      * @param {String}    the type of event,
      * @param {function}  the event listener,
      * @returns {}        -,
-     * since 0.1
+     * @since 0.0.1
      */
     var addOneTimeEventListener = function(type, listener) {
       // Initialize the db if it isn't:
@@ -298,7 +298,7 @@
      * @param {String}    the type of event,
      * @param {function}  the event listener,
      * @returns {}        -,
-     * since 0.1
+     * @since 0.0.1
      */
     var removeEventListener = function(type, listener) {
       // Initialize the db if it isn't:
@@ -328,4 +328,4 @@
       off: removeEventListener
     };
   };
-  /* eslint-enable no-unused-expressions, no-eval */
+  /* eslint-disable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */

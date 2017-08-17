@@ -1,5 +1,8 @@
 .DS_Store
-_trash
+__trash
 _docs
 node_modules
 coverage
+.nyc_output
+.eslintrc
+_PicoDB-*

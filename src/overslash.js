@@ -10,9 +10,6 @@
    */
   /* eslint-disable no-void, no-plusplus, no-param-reassign, no-restricted-syntax, no-prototype-builtins */
 
-  // initialize library:
-  var _ = {};
-
   /**
    * Functions:
    *
@@ -41,9 +38,6 @@
    *
    * Operations on Arrays (optional):
    *  . contains          returns true if the array contains the passed-in value,
-   *  . flatten           flattens a nested array (the nesting can be to any depth),
-   *  . max               returns the maximum value in the array,
-   *  . min               returns the minimum value in the array,
    *  . share             returns the list of the elements the passed-in arrays have in common,
    *
    * Operations on functions (optional):
@@ -51,7 +45,6 @@
    *
    * Utility (optional):
    *  . token             returns a unique string pattern in base 36 ([0-9a-z]),
-   *  . makeid            returns a unique string pattern with a predefined length,
    */
   /* istanbul ignore next */
   _ = {
@@ -363,88 +356,6 @@
     },
 
     /**
-     * Flattens a nested array (the nesting can be to any depth).
-     *
-     * @function (arg1, [arg2])
-     * @public
-     * @param {Array}       the input object,
-     * @param {Boolean}     the flattened level, false deep, true only first level,
-     * @returns {Array}     returns the flattened array or void(0),
-     * @since 0.0.0
-     */
-    flatten: function(obj, shallow) {
-      var o = []
-        , idx = 0
-        , i
-        ;
-
-      if (!_.isArray(obj)) return void 0;
-      if (shallow) return [].concat.apply([], obj);
-
-      for (i = 0; i < obj.length; i++) {
-        if (_.isArray(obj[i])) {
-          o = o.concat(_.flatten(obj[i]));
-          idx = o.length;
-        } else {
-          o[idx++] = obj[i];
-        }
-      }
-      return o;
-    },
-
-    /**
-     * Returns the maximum value in the array.
-     *
-     * @function (arg1)
-     * @public
-     * @param {Array}       the input object,
-     * @returns {Number}    returns the max value or void(0),
-     * @since 0.0.0
-     */
-    max: function(obj) {
-      var max = null
-        , o
-        , i
-        ;
-
-      if (!_.isArray(obj)) return void 0;
-
-      o = _.flatten(obj);
-      for (i = 0; i < o.length; i++) {
-        if (max === null || max < o[i]) {
-          max = typeof o[i] === 'number' ? o[i] : max;
-        }
-      }
-      return max !== null ? max : void 0;
-    },
-
-    /**
-     * Returns the minimum value in the array.
-     *
-     * @function (arg1)
-     * @public
-     * @param {Array}       the input object,
-     * @returns {Number}    returns the min value or void(0),
-     * @since 0.0.0
-     */
-    min: function(obj) {
-      var min = null
-        , o
-        , i
-        ;
-
-      if (!_.isArray(obj)) return void 0;
-
-      o = _.flatten(obj);
-      for (i = 0; i < o.length; i++) {
-        if (min === null || min > o[i]) {
-          min = typeof o[i] === 'number' ? o[i] : min;
-        }
-      }
-      return min !== null ? min : void 0;
-    },
-
-    /**
      * Returns the list of the elements the passed-in arrays have in common.
      *
      * @function (arg)
@@ -501,31 +412,6 @@
      */
     token: function() {
       return Math.random().toString(36).substr(2);
-    },
-
-    /**
-     * Returns a unique string pattern with a predefined length.
-     *
-     * @function ([arg1])
-     * @public
-     * @param {Number}      the length of the string. Default is 16 chars,
-     * @returns {String}    returns a random string from the charset defined in c,
-     * @since 0.0.0
-     */
-    makeid: function(l) {
-      var ll = _.isNumber(l) ? l : 16
-        , c  = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'
-        , id = ''
-        , i
-        ;
-
-      for (i = 0; i < ll; i++) {
-        id += c.charAt(Math.floor(Math.random() * c.length));
-      }
-      return id;
-    },
-
-    nop: /* istanbul ignore next */ function() {}
-
+    }
   };
   /* eslint-enable no-void, no-plusplus, no-param-reassign, no-restricted-syntax, no-prototype-builtins */

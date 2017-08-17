@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _insert = {};
-
   /**
    * Private functions:
    *  . _schema              returns the db model,
@@ -137,6 +134,7 @@
      * @returns {}            -,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     insert: function(_this, many, docs, options, callback) {
       var db     = _this.db
         , eventQ = _this.eventQ
@@ -161,5 +159,5 @@
       if (_.isArray(docs) || _.isObject(docs))
         _insert._insert(db, eventQ, docs, options, callback);
     }
-
+      /* eslint-enable no-param-reassign */
   };

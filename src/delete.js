@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _delete = {};
-
   /**
    * Private functions:
    *  . _delete              deletes the document(s) into the database that contain the filter object,
@@ -37,6 +34,7 @@
      * @return {}         -,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     _delete: function(db, eventQ, filter, options, callback) {
       var sop = _query.isHavingSpecialOperator(filter)
         , removed
@@ -104,7 +102,7 @@
       if (callback)
         callback(null, removed);
       // return;
-    },
+    }, /* eslint-enable no-param-reassign */
 
 
     /* Public Functions ----------------------------------------------------- */
@@ -123,6 +121,7 @@
      * @return {}         -,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     delete: function(_this, many, filter, options, callback) {
       var db = _this.db
         , eventQ = _this.eventQ
@@ -144,5 +143,5 @@
 
       options.many = many;
       _delete._delete(db, eventQ, filter, options, callback);
-    }
+    } /* eslint-enable no-param-reassign */
   };

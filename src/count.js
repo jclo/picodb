@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _count = {};
-
   /**
    * Private functions:
    *  . _count               counts the number of documents,
@@ -77,6 +74,7 @@
      * @returns {}         -,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     count: function(_this, query, options, callback) {
       var db = _this.db
         ;
@@ -97,5 +95,5 @@
 
       // Try to count:
       _count._count(db, query, options, callback);
-    }
+    } /* eslint-enable no-param-reassign */
   };

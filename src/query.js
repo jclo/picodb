@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _query = {};
-
   /**
    * Private functions:
    *  . _isHavingNotOperator      returns object keys of the not ($ne, $nin) operators if any,
@@ -39,7 +36,7 @@
      *                     false,
      * @since 0.0.1
      */
-    /* eslint-disable no-loop-func */
+    /* eslint-disable no-loop-func, dot-notation */
     _isHavingNotOperator: function(query) {
       var op = ['$ne', '$nin', '$not']
         , qar
@@ -77,7 +74,7 @@
       }
       return not.length !== 0 ? not : false;
     },
-    /* eslint-enable no-loop-func */
+    /* eslint-enable no-loop-func, dot-notation */
 
     /**
      * Returns the query array if $or operator.
@@ -89,9 +86,10 @@
      * @returns {Array}    returns the query array or false,
      * @since 0.0.1
      */
+    /* eslint-disable dot-notation */
     _isHavingOrOperator: function(query) {
       return (!query['$or'] || !_.isArray(query['$or'])) ? false : query['$or'];
-    },
+    }, /* eslint-enable dot-notation */
 
     /**
      * Returns special operators or false.
@@ -333,6 +331,7 @@
      * @returns {Boolean}  returns true if the object matches, false otherwise,
      * @since 0.0.1
      */
+    /* eslint-disable dot-notation */
     isMatch: function(doc, query, sop) {
       var i
         ;
@@ -347,5 +346,5 @@
           return true;
 
       return false;
-    }
+    } /* eslint-enable dot-notation */
   };

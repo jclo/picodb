@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _event = {};
-
   /**
    * Private functions:
    *  . _isValidEvent             checks if the event and the event handler are valid,
@@ -43,7 +40,7 @@
      * @param {Function}  the event handler,
      * @returns {Boolean} returns true if the event and the handler are valid,
      *                    otherwise false,
-     * @since 0.1
+     * @since 0.0.1
      */
     _isValidEvent: function(event, type, listener) {
       // if (event.hasOwnProperty(type) && typeof listener === 'function')
@@ -62,7 +59,7 @@
      * @public
      * @param {}          -,
      * @returns {Object}  returns the event list,
-     * @since 0.1
+     * @since 0.0.1
      */
     setEventListenerList: function() {
       return {
@@ -98,7 +95,7 @@
      * @param {String}    the name of the event,
      * @param {Object}    the payload,
      * @returns {}        -,
-     * @since 0.1
+     * @since 0.0.1
      */
     fire: function(eventList, event, payload) {
       var i
@@ -129,7 +126,7 @@
      * @param {String}    the type of event,
      * @param {Function}  the event handler,
      * @returns {}        -,
-     * @since 0.1
+     * @since 0.0.1
      */
     addEventListener: function(eventList, type, listener) {
       // Is type an event and listener a function?
@@ -149,7 +146,7 @@
      * @param {String}    the type of event,
      * @param {Function}  the event handler,
      * @returns {}        -,
-     * @since 0.1
+     * @since 0.0.1
      */
     addOneTimeEventListener: function(eventList, type, listener) {
       // Is type an event and listener a function?
@@ -169,7 +166,7 @@
      * @param {String}    the type of event,
      * @param {Function}  the event handler,
      * @returns {}        -,
-     * @since 0.1
+     * @since 0.0.1
      */
     removeEventListener: function(eventList, type, listener) {
       var index

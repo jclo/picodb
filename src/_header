@@ -1,15 +1,8 @@
-/**
- * PicoDB library is embedded inside a module pattern that exports the name
- * 'PicoDB' only.
- *
- * @exports  PicoDB
- * @author   -
- * @version  {{lib:version}}
- */
 // ESLint declarations
 /* global define */
-/* eslint max-len: 0, curly: 0 */
-/* eslint one-var: 0, vars-on-top: 0, no-underscore-dangle: 0, dot-notation: 0, no-param-reassign: 0 */
+/* eslint strict: ["error", "function"], one-var: 0, no-underscore-dangle: 0, curly: 0
+  max-len: 0*/
+/* eslint-disable no-param-reassign */
 (function(root, factory) {
   'use strict';
 
@@ -26,20 +19,31 @@
     // Browser globals.
     root.PicoDB = factory(root);
   }
-}(this, function(root) {
+}({{lib:parent}}, function(root) {
   'use strict';
 
   var PicoDB
     , previousPicoDB
+    , _
+    , _event
+    , _geo
+    , _project
+    , _query
+    , _count
+    , _delete
+    , _find
+    , _insert
+    , _update
+    , _init
     ;
 
   // Saves the previous value of the PicoDB variable, so that it can be
   // restored later on, if noConflict is used.
   previousPicoDB = root.PicoDB;
 
-  // Initializes PicoDB function.
+  // Initializes PicoDB:
   /* istanbul ignore next */
-  PicoDB = function() {};
+  PicoDB = {};
 
   // Runs PicoDB in noConflict mode, returning the PicoDB variable to its
   // previous owner. Returns a reference to this PicoDB object.
@@ -49,5 +53,6 @@
     return this;
   };
 
-  // Current version of the library.
+  // Current version of the library:
   PicoDB.VERSION = '{{lib:version}}';
+  /* eslint-enable no-param-reassign */

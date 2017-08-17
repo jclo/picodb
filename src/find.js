@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _find = {};
-
   /**
    * Private functions:
    *  . _initCursor          initializes the Cursor object,
@@ -93,6 +90,7 @@
      * @returns {}         -,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     find: function(_this, query, projection) {
       if (!_this.cursor)
         _this.cursor = _find._initCursor();
@@ -108,7 +106,7 @@
       } else {
         _this.cursor.projection.value = {};
       }
-    },
+    }, /* eslint-enable no-param-reassign */
 
     /**
      * Returns the found documents.

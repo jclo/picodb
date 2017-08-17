@@ -10,8 +10,6 @@
    * @version   -
    */
   /* eslint-disable no-mixed-operators, no-plusplus, no-unneeded-ternary */
-  // Initialize the library.
-  var _geo = {};
 
   /**
    * Private functions:

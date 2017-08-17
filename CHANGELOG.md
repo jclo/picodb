@@ -1,5 +1,12 @@
 ### HEAD
 
+### 0.9.0 (August 17, 2017)
+
+  * Reworked the build to make it more modular,
+  * Modified the test files to comply with ES6 standard,
+  * ...,
+
+
 ### 0.8.5 (April 28, 2017)
 
   * Updated the dependencies,

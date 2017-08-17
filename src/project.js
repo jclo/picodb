@@ -10,9 +10,6 @@
    * @version   -
    */
 
-  // Initialize the library.
-  var _project = {};
-
   /**
    * Private functions:
    *
@@ -45,6 +42,7 @@
      * @returns {Object}   the excerpt of the selected document,
      * @since 0.0.1
      */
+    /* eslint-disable no-param-reassign */
     _include: function(obj, source, data) {
       _.forPropIn(source, function(prop) {
         if (obj[prop]) {
@@ -61,7 +59,7 @@
         }
       });
       return data;
-    },
+    }, /* eslint-enable no-param-reassign */
 
     /**
      * Returns an excerpt of the selected document based on an exclude projection.
@@ -78,6 +76,7 @@
      * @returns {Object}   the excerpt of the selected document,
      * @since 0.0.1
      */
+     /* eslint-disable no-param-reassign */
     _exclude: function(obj, source, data) {
       // var prop
       //   ;
@@ -111,7 +110,7 @@
         }
       });
       return data;
-    },
+    }, /* eslint-enable no-param-reassign */
 
 
     /* Public Functions ----------------------------------------------------- */
@@ -134,7 +133,7 @@
       if (!type)
         return projection;
 
-      if (projection['_id'] !== undefined)
+      if (projection._id !== undefined)
         return projection;
 
       return _.extend({ _id: 1 }, projection);

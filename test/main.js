@@ -1,23 +1,22 @@
 // ESLint declarations
 /* global describe */
-/* eslint max-len: [1, 100], curly: 0 */
-/* eslint one-var: 0 */
+/* eslint one-var: 0  */
 
 'use strict';
 
 // -- Node modules
 
 // -- Local modules
-var create    = require('./create.js')
-  , insert    = require('./insert.js')
-  , find      = require('./find.js')
-  , query     = require('./query.js')
-  , geo       = require('./geo.js')
-  , count     = require('./count.js')
-  , deleteDoc = require('./delete.js')
-  , update    = require('./update.js')
-  , event     = require('./event.js')
-  ;
+const create    = require('./create.js')
+    , insert    = require('./insert.js')
+    , find      = require('./find.js')
+    , query     = require('./query.js')
+    , geo       = require('./geo.js')
+    , count     = require('./count.js')
+    , deleteDoc = require('./delete.js')
+    , update    = require('./update.js')
+    , event     = require('./event.js')
+    ;
 
 // -- Local constants
 
@@ -26,7 +25,7 @@ var create    = require('./create.js')
 
 
 // -- Main
-describe('PicoDB', function() {
+describe('PicoDB', () => {
   // Test constructor:
   create();
 
