@@ -28,7 +28,7 @@ module.exports = {
     ' *',
     ' * A tiny in-memory database (MongoDB like) that stores JSON documents.',
     ' * (you can download it from npm or github repositories)',
-    ' * Copyright (c) 2017 John Doe <john@doe.com> (http://www.doe.com).',
+    ' * Copyright (c) 2017 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr).',
     ' * Released under the MIT license. You may obtain a copy of the License',
     ' * at: http://www.opensource.org/licenses/mit-license.php).',
     ' * ****************************************************************************/',

@@ -17,7 +17,7 @@ const PicoDB = require('../index.js')
 // -- Main
 module.exports = function() {
   describe('The method insertOne:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
     let doc
       ;
@@ -107,7 +107,7 @@ module.exports = function() {
   });
 
   describe('The method insertMany:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
 
     it('Expects the method to insert more than one document.', (done) => {

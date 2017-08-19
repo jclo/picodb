@@ -17,7 +17,7 @@ const PicoDB = require('../index.js')
 // -- Main
 module.exports = function() {
   describe('The method find:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
 
     const doc = [

@@ -12,10 +12,9 @@
 
   /**
    * Private functions:
-   *  . _init                initializes the database,
+   *  . _init                     initializes the database,
    *
    * Public methods:
-   *  . Create                    the constructor,
    *  . count                     counts the documents into the db that match,
    *  . deleteMany                deletes the documents into the db that match,
    *  . deleteOne                 deletes the first (the oldest) document into the db that matches,
@@ -34,7 +33,8 @@
    */
   /* eslint-disable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */
 
-  /* Private Functions ------------------------------------------------------ */
+
+  // -- Private Functions ------------------------------------------------------
 
   _init = function(_this) {
     // Attach schema:
@@ -43,17 +43,45 @@
     _this.eventQ = _event.setEventListenerList();
   };
 
-   /**
-    * PicoDB constructor (implements the factory pattern).
-    *
-    * @constructor ()
-    * @public
-    * @param {}           -,
-    * @returns {Object}   returns the database object,
-    * @since 0.0.1
-    */
-  PicoDB.Create = function() {
-    this.db;              // the database container,
+
+  // -- Public -----------------------------------------------------------------
+
+  /**
+  * Creates and returns the object PicoDB.
+  * (Prototypal Instantiation Pattern)
+  *
+  * @constructor ()
+  * @public
+  * @param {}           -,
+  * @returns {Object}   returns PicoDB object,
+  * @since 0.0.0
+  */
+  PicoDB = function() {
+    var obj = Object.create(PicoDBMethods);
+    obj.db;             // the database container,
+    return obj;
+  };
+
+  // Saves the previous value of the PicoDB variable, so that it can be
+  // restored later on, if noConflict is used.
+  previousPicoDB = root.PicoDB;
+
+  // Runs PicoDB in noConflict mode, returning the PicoDB variable to its
+  // previous owner. Returns a reference to this PicoDB object.
+  /* istanbul ignore next */
+  PicoDB.noConflict = function() {
+    root.PicoDB = previousPicoDB;
+    return this;
+  };
+
+  // Current version of the library:
+  PicoDB.VERSION = '{{lib:version}}';
+  /* eslint-enable no-param-reassign */
+
+
+  // -- Public Methods ---------------------------------------------------------
+
+  PicoDBMethods = {
 
     /**
      * Exports the reference to an internal library.
@@ -68,9 +96,9 @@
      * @returns {Object}  the reference to the library,
      * @since 0.0.1
      */
-    var _export = function(name) {
+    _export: function(name) {
       return eval(name);
-    };
+    },
 
     /**
      * Counts the documents into the db that match.
@@ -83,13 +111,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var count = function(query, options, callback) {
+    count: function(query, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 1)
         return;
       _count.count(this, query, options, callback);
-    };
+    },
 
     /**
      * Deletes the documents into the db that match.
@@ -102,13 +130,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var deleteMany = function(filter, options, callback) {
+    deleteMany: function(filter, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 1)
         return;
       _delete.delete(this, true, filter, options, callback);
-    };
+    },
 
     /**
      * Deletes the first (the oldest) document into the db that matches.
@@ -121,13 +149,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var deleteOne = function(filter, options, callback) {
+    deleteOne: function(filter, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 1)
         return;
       _delete.delete(this, false, filter, options, callback);
-    };
+    },
 
     /**
      * Inserts an array of documents into the db.
@@ -140,7 +168,7 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var insertMany = function(docs, options, callback) {
+    insertMany: function(docs, options, callback) {
       // Initialize the db if it isn't:
       if (!this.db)
         _init(this);
@@ -149,7 +177,7 @@
       if (arguments.length < 1)
         return;
       _insert.insert(this, true, docs, options, callback);
-    };
+    },
 
     /**
      * Inserts a single document into the db.
@@ -162,7 +190,7 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var insertOne = function(doc, options, callback) {
+    insertOne: function(doc, options, callback) {
       // Initialize the db if it isn't:
       if (!this.db)
         _init(this);
@@ -171,7 +199,7 @@
       if (arguments.length < 1)
         return;
       _insert.insert(this, false, doc, options, callback);
-    };
+    },
 
     /**
      * Updates many documents into the db.
@@ -185,13 +213,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var updateMany = function(query, update, options, callback) {
+    updateMany: function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 2)
         return;
       _update.update(this, true, query, update, options, callback);
-    };
+    },
 
     /**
      * Updates many documents into the db.
@@ -205,13 +233,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var updateOne = function(query, update, options, callback) {
+    updateOne: function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
       if (!this.db || arguments.length < 2)
         return;
       _update.update(this, false, query, update, options, callback);
-    };
+    },
 
     /**
      * Finds the searched documents.
@@ -223,7 +251,8 @@
      * @returns {Object}   returns this,
      * @since 0.0.1
      */
-    var find = function(query, projection) {
+    /* eslint-disable no-param-reassign */
+    find: function(query, projection) {
       query = query || {};
       projection = projection || {};
 
@@ -234,7 +263,8 @@
       // Searches documents that match the query:
       _find.find(this, query, projection);
       return this;
-    };
+    },
+    /* eslint-enable no-param-reassign */
 
     /**
      * Returns the found documents in an array.
@@ -246,13 +276,13 @@
      * @returns {}         -,
      * @since 0.0.1
      */
-    var toArray = function(callback) {
+    toArray: function(callback) {
       // Return silently if the database isn't initialized:
       if (!this.db)
         return;
 
       _find.toArray(this, callback);
-    };
+    },
 
     /**
      * Registers the specified listener on the event it's called on.
@@ -264,13 +294,13 @@
      * @returns {}        -,
      * @since 0.0.1
      */
-    var addEventListener = function(type, listener) {
+    addEventListener: function(type, listener) {
       // Initialize the db if it isn't:
       if (!this.db)
         _init(this);
 
       _event.addEventListener(this.eventQ, type, listener);
-    };
+    },
 
     /**
      * Registers the specified listener on the event it's called on for a one-time event.
@@ -282,13 +312,13 @@
      * @returns {}        -,
      * @since 0.0.1
      */
-    var addOneTimeEventListener = function(type, listener) {
+    addOneTimeEventListener: function(type, listener) {
       // Initialize the db if it isn't:
       if (!this.db)
         _init(this);
 
       _event.addOneTimeEventListener(this.eventQ, type, listener);
-    };
+    },
 
     /**
      * Removes the event listener previously registered with addEventListener.
@@ -300,32 +330,54 @@
      * @returns {}        -,
      * @since 0.0.1
      */
-    var removeEventListener = function(type, listener) {
+    removeEventListener: function(type, listener) {
       // Initialize the db if it isn't:
       if (!this.db)
         _init(this);
 
       _event.removeEventListener(this.eventQ, type, listener);
-    };
+    },
 
-    // Return the object:
-    return {
-      _export: _export,
-      count: count,
-      deleteMany: deleteMany,
-      deleteOne: deleteOne,
-      insertMany: insertMany,
-      insertOne: insertOne,
-      updateMany: updateMany,
-      updateOne: updateOne,
-      find: find,
-      toArray: toArray,
-      addEventListener: addEventListener,
-      addOneTimeEventListener: addOneTimeEventListener,
-      removeEventListener: removeEventListener,
-      on: addEventListener,
-      one: addOneTimeEventListener,
-      off: removeEventListener
-    };
+
+    /**
+     * Registers the specified listener on the event it's called on.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {String}    the type of event,
+     * @param {function}  the event listener,
+     * @returns {}        -,
+     * @since 0.0.1
+     */
+    on: function(type, listener) {
+      this.addEventListener(type, listener);
+    },
+
+    /**
+     * Registers the specified listener on the event it's called on for a one-time event.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {String}    the type of event,
+     * @param {function}  the event listener,
+     * @returns {}        -,
+     * @since 0.0.1
+     */
+    one: function(type, listener) {
+      this.addOneTimeEventListener(type, listener);
+    },
+
+    /**
+     * Removes the event listener previously registered with addEventListener.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {String}    the type of event,
+     * @param {function}  the event listener,
+     * @returns {}        -,
+     * @since 0.0.1
+     */
+    off: function(type, listener) {
+      this.removeEventListener(type, listener);
+    }
   };
-  /* eslint-disable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */

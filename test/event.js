@@ -17,7 +17,7 @@ const PicoDB = require('../index.js')
 // -- Main
 module.exports = () => {
   describe('The methods EventListener:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
 
     it('Expects the method insertOne to fire the event "insert".', (done) => {

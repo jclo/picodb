@@ -19,7 +19,7 @@ const docs = [
 ];
 
 // -- Local variables
-const db = PicoDB.Create()
+const db = PicoDB()
     ;
 
 // -- Main

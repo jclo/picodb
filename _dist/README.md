@@ -35,12 +35,12 @@ On Node.js:
 ```javascript
 var PicoDB = require('picodb');
 
-var db = PicoDB.Create();
+var db = PicoDB();
 ```
 
 In the browser:
 ```javascript
-var db = PicoDB.Create();
+var db = PicoDB();
 ```
 
 

@@ -7,7 +7,7 @@
 // -- Node modules
 
 // -- Local modules
-const create    = require('./create.js')
+const picodb    = require('./picodb.js')
     , insert    = require('./insert.js')
     , find      = require('./find.js')
     , query     = require('./query.js')
@@ -27,7 +27,7 @@ const create    = require('./create.js')
 // -- Main
 describe('PicoDB', () => {
   // Test constructor:
-  create();
+  picodb();
 
   // Test the methods insertOne & insertMany:
   insert();

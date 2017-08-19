@@ -26,7 +26,7 @@ const docs = [
 module.exports = () => {
   describe('The method updateOne:', () => {
     describe('General:', () => {
-      const db = PicoDB.Create();
+      const db = PicoDB();
 
       it('Expects the method with an undefined database not to throw any error.', () => {
         db.updateOne({});
@@ -95,7 +95,7 @@ module.exports = () => {
     });
 
     describe('No Operator:', () => {
-      const db = PicoDB.Create()
+      const db = PicoDB()
           ;
       let newdocs
         ;
@@ -124,7 +124,7 @@ module.exports = () => {
 
     describe('Field Operators:', () => {
       describe('$inc:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -161,7 +161,7 @@ module.exports = () => {
       });
 
       describe('$mul:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -198,7 +198,7 @@ module.exports = () => {
       });
 
       describe('$rename:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -258,7 +258,7 @@ module.exports = () => {
       });
 
       describe('$set:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -311,7 +311,7 @@ module.exports = () => {
       });
 
       describe('$unset:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -355,7 +355,7 @@ module.exports = () => {
       });
 
       describe('$min:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -392,7 +392,7 @@ module.exports = () => {
       });
 
       describe('$max:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -429,7 +429,7 @@ module.exports = () => {
       });
 
       describe('$currentDate:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let newdocs
           ;
@@ -460,7 +460,7 @@ module.exports = () => {
 
     describe('Array Operators:', () => {
       describe('$pop:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let doc
           ;
@@ -525,7 +525,7 @@ module.exports = () => {
       });
 
       describe('$pullAll:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let doc
           ;
@@ -578,7 +578,7 @@ module.exports = () => {
       });
 
       describe('$pull:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let doc
           ;
@@ -846,7 +846,7 @@ module.exports = () => {
       });
 
       describe('$push:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
         let doc
           ;
@@ -1031,7 +1031,7 @@ module.exports = () => {
   });
 
   describe('The method updateMany:', () => {
-    const db = PicoDB.Create();
+    const db = PicoDB();
 
     it('Expects the method with an undefined database not to throw any error.', () => {
       db.updateMany({});

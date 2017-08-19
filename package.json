@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "A tiny in-memory database (MongoDB like) that stores JSON documents",
   "main": "index.js",
   "scripts": {
@@ -43,9 +43,9 @@
   "dependencies": {
   },
   "devDependencies": {
-    "chai": "4.1.0",
+    "chai": "4.1.1",
     "coveralls": "2.13.1",
-    "cross-env": "5.0.1",
+    "cross-env": "5.0.5",
     "del": "3.0.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb-base": "11.2.0",
@@ -57,10 +57,10 @@
     "gulp-replace": "0.6.1",
     "gulp-uglify": "3.0.0",
     "husky": "0.14.3",
-    "mocha": "3.4.2",
+    "mocha": "3.5.0",
     "nyc": "10.3.0",
     "opener": "1.4.3",
     "require-dir": "0.3.2",
-    "run-sequence": "2.0.0"
+    "run-sequence": "2.1.0"
   }
 }

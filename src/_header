@@ -23,6 +23,7 @@
   'use strict';
 
   var PicoDB
+    , PicoDBMethods
     , previousPicoDB
     , _
     , _event
@@ -37,22 +38,4 @@
     , _init
     ;
 
-  // Saves the previous value of the PicoDB variable, so that it can be
-  // restored later on, if noConflict is used.
-  previousPicoDB = root.PicoDB;
-
-  // Initializes PicoDB:
-  /* istanbul ignore next */
-  PicoDB = {};
-
-  // Runs PicoDB in noConflict mode, returning the PicoDB variable to its
-  // previous owner. Returns a reference to this PicoDB object.
-  /* istanbul ignore next */
-  PicoDB.noConflict = function() {
-    root.PicoDB = previousPicoDB;
-    return this;
-  };
-
-  // Current version of the library:
-  PicoDB.VERSION = '{{lib:version}}';
   /* eslint-enable no-param-reassign */

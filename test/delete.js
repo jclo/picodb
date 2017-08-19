@@ -17,7 +17,7 @@ const PicoDB = require('../index.js')
 // -- Main
 module.exports = () => {
   describe('The method deleteOne:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
 
     const doc = [
@@ -106,7 +106,7 @@ module.exports = () => {
   });
 
   describe('The method deleteMany:', () => {
-    const db = PicoDB.Create()
+    const db = PicoDB()
         ;
 
     const doc = [

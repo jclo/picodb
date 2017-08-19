@@ -155,7 +155,7 @@ module.exports = () => {
   describe('Query Operators:', () => {
     describe('GeoSpatial Operators:', () => {
       describe('$geoWithins:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
 
         describe('$box:', () => {
@@ -244,7 +244,7 @@ module.exports = () => {
         describe('$geometry:', () => {
           describe('Type Polygon:', () => {
             describe('Geometry Point:', () => {
-              const db1 = PicoDB.Create()
+              const db1 = PicoDB()
                   ;
 
               it('Expects query on jfk, lax, sfo, san, phx for california polygon to return 3 documents.', (done) => {
@@ -276,7 +276,7 @@ module.exports = () => {
             });
 
             describe('Geometry LineString:', () => {
-              const db1 = PicoDB.Create()
+              const db1 = PicoDB()
                   ;
 
               it('Expects query on cia, c2a for california polygon to return 1 document.', (done) => {
@@ -296,7 +296,7 @@ module.exports = () => {
             });
 
             describe('Geometry MultiPoint:', () => {
-              const db1 = PicoDB.Create()
+              const db1 = PicoDB()
                   ;
 
               it('Expects query on cai, cpai for california polygon to return 1 document.', (done) => {
@@ -316,7 +316,7 @@ module.exports = () => {
             });
 
             describe('Geometry MultiLineString', () => {
-              const db1 = PicoDB.Create()
+              const db1 = PicoDB()
                   ;
 
               it('Expects query on ciaplus, c2aplus for california polygon to return 1 document.', (done) => {
@@ -336,7 +336,7 @@ module.exports = () => {
             });
 
             describe('Geometry Polygon', () => {
-              const db1 = PicoDB.Create()
+              const db1 = PicoDB()
                   ;
 
               it('Expects query on pinc, pca, pina for california polygon to return 1 document.', (done) => {
@@ -364,7 +364,7 @@ module.exports = () => {
 
           describe('Type MultiPolygon:', () => {
             describe('Geometry Point:', () => {
-              const db2 = PicoDB.Create()
+              const db2 = PicoDB()
                 ;
 
               it('Expects query on jfk, lax, sfo, san, phx for california and arizona multipolygon to return 4 documents.', (done) => {
@@ -396,7 +396,7 @@ module.exports = () => {
             });
 
             describe('Geometry LineString:', () => {
-              const db2 = PicoDB.Create()
+              const db2 = PicoDB()
                   ;
 
               it('Expects query on cia, c2a for california and arizona multipolygon to return 2 documents.', (done) => {
@@ -428,7 +428,7 @@ module.exports = () => {
             });
 
             describe('Geometry MultiPoint:', () => {
-              const db2 = PicoDB.Create()
+              const db2 = PicoDB()
                   ;
 
               it('Expects query on cai, cpai for california and arizona multipolygon to return 2 documents.', (done) => {
@@ -466,7 +466,7 @@ module.exports = () => {
             });
 
             describe('Geometry MultiLineString:', () => {
-              const db2 = PicoDB.Create()
+              const db2 = PicoDB()
                   ;
 
               it('Expects query on ciaplus, c2aplus for california and arizona multipolygon to return 1 document.', (done) => {
@@ -486,7 +486,7 @@ module.exports = () => {
             });
 
             describe('Geometry Polygon:', () => {
-              const db2 = PicoDB.Create()
+              const db2 = PicoDB()
                   ;
 
               it('Expects query on pinc, pca, pina for california and arizona multipolygon to return 3 documents.', (done) => {
@@ -521,7 +521,7 @@ module.exports = () => {
       });
 
       describe('$geoIntersects:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
             ;
 
         describe('LineString:', () => {
@@ -581,7 +581,7 @@ module.exports = () => {
       });
 
       describe('$near:', () => {
-        const db = PicoDB.Create()
+        const db = PicoDB()
           // , _geo = eval(fs.readFileSync('./src/geo.js').toString())
             , _geo = db._export('_geo')
             ;
