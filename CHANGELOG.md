@@ -3,7 +3,7 @@
 ### 0.10.0 (August 19, 2017)
 
   * Simplified the creation of the object PicoDB with the pattern Prototypal Instantiation,
-  * ...,
+  * Release.
 
 
 ### 0.9.0 (August 17, 2017)
