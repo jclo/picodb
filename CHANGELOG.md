@@ -3,7 +3,7 @@
 ### 0.10.1 (November 7, 2017)
 
   * Fixed a timeout issue on a find request when the database is not initialized,
-  * ...,
+  * Release.
 
 
 ### 0.10.0 (August 19, 2017)
