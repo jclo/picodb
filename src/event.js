@@ -1,4 +1,4 @@
- /**
+  /**
    * event.js is an embedded library that implements functions to manage
    * custom events.
    *

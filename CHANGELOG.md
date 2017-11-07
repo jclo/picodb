@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.10.1 (November 7, 2017)
+
+  * Fixed a timeout issue on a find request when the database is not initialized,
+  * ...,
+
+
 ### 0.10.0 (August 19, 2017)
 
   * Simplified the creation of the object PicoDB with the pattern Prototypal Instantiation,

@@ -1,7 +1,6 @@
 // ESLint declarations
 /* global define */
-/* eslint strict: ["error", "function"], one-var: 0, no-underscore-dangle: 0, curly: 0
-  max-len: 0*/
+/* eslint-disable one-var, no-underscore-dangle, curly, max-len, semi-style */
 /* eslint-disable no-param-reassign */
 (function(root, factory) {
   'use strict';

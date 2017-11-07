@@ -81,7 +81,6 @@
         , id
         , i
         ;
-
       // Embed a single document in an array to get a generic process.
       arr = [];
       if (!_.isArray(docs) && _.isObject(docs))
@@ -159,5 +158,5 @@
       if (_.isArray(docs) || _.isObject(docs))
         _insert._insert(db, eventQ, docs, options, callback);
     }
-      /* eslint-enable no-param-reassign */
+    /* eslint-enable no-param-reassign */
   };

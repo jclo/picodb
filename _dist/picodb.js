@@ -1,5 +1,5 @@
 /** ****************************************************************************
- * PicoDB v0.10.0
+ * PicoDB v0.10.1
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -9,8 +9,7 @@
  * ****************************************************************************/
 // ESLint declarations
 /* global define */
-/* eslint strict: ["error", "function"], one-var: 0, no-underscore-dangle: 0, curly: 0
-  max-len: 0*/
+/* eslint-disable one-var, no-underscore-dangle, curly, max-len, semi-style */
 /* eslint-disable no-param-reassign */
 (function(root, factory) {
   'use strict';
@@ -467,7 +466,7 @@
   };
   /* eslint-enable no-void, no-plusplus, no-param-reassign, no-restricted-syntax, no-prototype-builtins */
 
- /**
+  /**
    * event.js is an embedded library that implements functions to manage
    * custom events.
    *
@@ -915,7 +914,6 @@
         ;
 
       switch (source.type) {
-
         // The point is considered as inside a Multipolygon if it inside of
         // one ring of one polygon.
         case 'MultiPolygon':
@@ -1091,7 +1089,6 @@
      */
     _within: function(obj, source) {
       switch (obj.type) {
-
         case 'Point':
           return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
@@ -1216,7 +1213,6 @@
      */
     _intersects: function(obj, source) {
       switch (obj.type) {
-
         // Point can't intersect a polygon.
         /* istanbul ignore next */
         case 'Point':
@@ -1329,7 +1325,6 @@
         return false;
 
       switch (op) {
-
         case '$geometry':
           return _geo._within(obj, source.$geometry);
 
@@ -1368,7 +1363,6 @@
         return false;
 
       switch (source.$geometry.type) {
-
         case 'Polygon':
           return _geo._intersects(obj, source.$geometry);
 
@@ -1394,7 +1388,6 @@
         return false;
 
       switch (source.$geometry.type) {
-
         case 'Point':
           return _geo._geoNear(obj, source.$geometry, source.$maxDistance, source.$minDistance);
 
@@ -1543,7 +1536,7 @@
      * @returns {Object}   the excerpt of the selected document,
      * @since 0.0.1
      */
-     /* eslint-disable no-param-reassign */
+    /* eslint-disable no-param-reassign */
     _exclude: function(obj, source, data) {
       // var prop
       //   ;
@@ -1644,19 +1637,19 @@
     },
     /* eslint-enable no-restricted-syntax */
 
-   /**
-    * Adds elements of the document to doc in accordance with projection.
-    *
-    * Note: this function mutates the argument `doc`.
-    *
-    * @function (arg1, arg2, arg3)
-    * @public
-    * @param {Object}     the current list of documents already selected,
-    * @param {Object}     the current document,
-    * @param {Object}     the projection object,
-    * @returns {}         -,
-    * @since 0.0.1
-    */
+    /**
+     * Adds elements of the document to doc in accordance with projection.
+     *
+     * Note: this function mutates the argument `doc`.
+     *
+     * @function (arg1, arg2, arg3)
+     * @public
+     * @param {Object}     the current list of documents already selected,
+     * @param {Object}     the current document,
+     * @param {Object}     the projection object,
+     * @returns {}         -,
+     * @since 0.0.1
+     */
     add: function(doc, data, projection) {
       // If projection is empty means no filtering of the output!
       if (_.isEmpty(projection.value))
@@ -1791,7 +1784,6 @@
      */
     _isConditionTrue: function(obj, source, op) {
       switch (op) {
-
         // Comparison Operators:
         case '$eq':
           return obj === source;
@@ -2481,7 +2473,6 @@
         , id
         , i
         ;
-
       // Embed a single document in an array to get a generic process.
       arr = [];
       if (!_.isArray(docs) && _.isObject(docs))
@@ -2559,7 +2550,7 @@
       if (_.isArray(docs) || _.isObject(docs))
         _insert._insert(db, eventQ, docs, options, callback);
     }
-      /* eslint-enable no-param-reassign */
+    /* eslint-enable no-param-reassign */
   };
 
   /**
@@ -2663,7 +2654,6 @@
           if (_.isObject(source[prop])) {
             op = _.keys(source[prop])[0];
             switch (op) {
-
               case '$eq':
                 index = obj[prop].indexOf(source[prop]['$eq']);
                 if (index > -1)
@@ -2760,7 +2750,7 @@
           continue;
 
         subprop = _.keys(source[prop]);
-        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each')*/ !subprop[0].match(/^\$/)) {
+        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each') */ !subprop[0].match(/^\$/)) {
           if (!obj[prop])
             obj[prop] = {};
           _update._push(obj[prop], source[prop]);
@@ -2839,10 +2829,9 @@
           _update._apply(obj[prop], source[prop], op);
         } else if (hasOwnProperty.call(source, prop)) {
           // if (_.isArray(source[prop]))
-            // obj[prop] = _.clone(source[prop]);
+          // obj[prop] = _.clone(source[prop]);
           // else
           switch (op) {
-
             // Field Operators:
             case '$inc':
               if (typeof obj[prop] === 'number')
@@ -3001,7 +2990,6 @@
         return _update._replace(doc, update);
 
       switch (keys[0]) {
-
         // Field Operators:
         case '$inc':
           return _update._apply(doc, update['$inc'], '$inc');
@@ -3200,7 +3188,8 @@
   */
   PicoDB = function() {
     var obj = Object.create(PicoDBMethods);
-    obj.db;             // the database container,
+    // the database container,
+    obj.db;
     return obj;
   };
 
@@ -3217,7 +3206,7 @@
   };
 
   // Current version of the library:
-  PicoDB.VERSION = '0.10.0';
+  PicoDB.VERSION = '0.10.1';
   /* eslint-enable no-param-reassign */
 
 
@@ -3419,9 +3408,12 @@
      * @since 0.0.1
      */
     toArray: function(callback) {
-      // Return silently if the database isn't initialized:
-      if (!this.db)
-        return;
+      // Return an empty doc. if the database isn't initialized:
+      if (!this.db) {
+        if (callback) {
+          callback(null, []);
+        }
+      }
 
       _find.toArray(this, callback);
     },
@@ -3527,3 +3519,4 @@
   // Return the library name:
   return PicoDB;
 }));
+/* eslint-enable one-var, no-underscore-dangle, curly, max-len, semi-style */

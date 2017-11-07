@@ -58,7 +58,8 @@
   */
   PicoDB = function() {
     var obj = Object.create(PicoDBMethods);
-    obj.db;             // the database container,
+    // the database container,
+    obj.db;
     return obj;
   };
 
@@ -277,9 +278,12 @@
      * @since 0.0.1
      */
     toArray: function(callback) {
-      // Return silently if the database isn't initialized:
-      if (!this.db)
-        return;
+      // Return an empty doc. if the database isn't initialized:
+      if (!this.db) {
+        if (callback) {
+          callback(null, []);
+        }
+      }
 
       _find.toArray(this, callback);
     },

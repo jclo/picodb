@@ -99,7 +99,6 @@
           if (_.isObject(source[prop])) {
             op = _.keys(source[prop])[0];
             switch (op) {
-
               case '$eq':
                 index = obj[prop].indexOf(source[prop]['$eq']);
                 if (index > -1)
@@ -196,7 +195,7 @@
           continue;
 
         subprop = _.keys(source[prop]);
-        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each')*/ !subprop[0].match(/^\$/)) {
+        if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each') */ !subprop[0].match(/^\$/)) {
           if (!obj[prop])
             obj[prop] = {};
           _update._push(obj[prop], source[prop]);
@@ -275,10 +274,9 @@
           _update._apply(obj[prop], source[prop], op);
         } else if (hasOwnProperty.call(source, prop)) {
           // if (_.isArray(source[prop]))
-            // obj[prop] = _.clone(source[prop]);
+          // obj[prop] = _.clone(source[prop]);
           // else
           switch (op) {
-
             // Field Operators:
             case '$inc':
               if (typeof obj[prop] === 'number')
@@ -437,7 +435,6 @@
         return _update._replace(doc, update);
 
       switch (keys[0]) {
-
         // Field Operators:
         case '$inc':
           return _update._apply(doc, update['$inc'], '$inc');

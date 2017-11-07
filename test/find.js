@@ -32,6 +32,13 @@ module.exports = function() {
       db.find({}).toArray();
     });
 
+    it('Expects the method with an undefined database to return an empty array.', (done) => {
+      db.find({}).toArray((err, docs) => {
+        expect(docs).to.be.an('array').that.have.lengthOf(0);
+        done();
+      });
+    });
+
     it('Expects the method with query { a: 1 } to return 4 documents.', (done) => {
       db.insertMany(doc, () => {
         db.find({ a: 1 }).toArray((err, docs) => {

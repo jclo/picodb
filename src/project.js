@@ -76,7 +76,7 @@
      * @returns {Object}   the excerpt of the selected document,
      * @since 0.0.1
      */
-     /* eslint-disable no-param-reassign */
+    /* eslint-disable no-param-reassign */
     _exclude: function(obj, source, data) {
       // var prop
       //   ;
@@ -177,19 +177,19 @@
     },
     /* eslint-enable no-restricted-syntax */
 
-   /**
-    * Adds elements of the document to doc in accordance with projection.
-    *
-    * Note: this function mutates the argument `doc`.
-    *
-    * @function (arg1, arg2, arg3)
-    * @public
-    * @param {Object}     the current list of documents already selected,
-    * @param {Object}     the current document,
-    * @param {Object}     the projection object,
-    * @returns {}         -,
-    * @since 0.0.1
-    */
+    /**
+     * Adds elements of the document to doc in accordance with projection.
+     *
+     * Note: this function mutates the argument `doc`.
+     *
+     * @function (arg1, arg2, arg3)
+     * @public
+     * @param {Object}     the current list of documents already selected,
+     * @param {Object}     the current document,
+     * @param {Object}     the projection object,
+     * @returns {}         -,
+     * @since 0.0.1
+     */
     add: function(doc, data, projection) {
       // If projection is empty means no filtering of the output!
       if (_.isEmpty(projection.value))

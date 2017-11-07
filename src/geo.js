@@ -255,7 +255,6 @@
         ;
 
       switch (source.type) {
-
         // The point is considered as inside a Multipolygon if it inside of
         // one ring of one polygon.
         case 'MultiPolygon':
@@ -431,7 +430,6 @@
      */
     _within: function(obj, source) {
       switch (obj.type) {
-
         case 'Point':
           return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
 
@@ -556,7 +554,6 @@
      */
     _intersects: function(obj, source) {
       switch (obj.type) {
-
         // Point can't intersect a polygon.
         /* istanbul ignore next */
         case 'Point':
@@ -669,7 +666,6 @@
         return false;
 
       switch (op) {
-
         case '$geometry':
           return _geo._within(obj, source.$geometry);
 
@@ -708,7 +704,6 @@
         return false;
 
       switch (source.$geometry.type) {
-
         case 'Polygon':
           return _geo._intersects(obj, source.$geometry);
 
@@ -734,7 +729,6 @@
         return false;
 
       switch (source.$geometry.type) {
-
         case 'Point':
           return _geo._geoNear(obj, source.$geometry, source.$maxDistance, source.$minDistance);
 

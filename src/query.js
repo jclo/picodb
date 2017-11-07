@@ -121,7 +121,6 @@
      */
     _isConditionTrue: function(obj, source, op) {
       switch (op) {
-
         // Comparison Operators:
         case '$eq':
           return obj === source;
