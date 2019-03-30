@@ -3,7 +3,7 @@
 ### 0.11.0 (March 30, 2019)
 
   * Updated the project to comply with Gulp 4 and ESLint 5,
-  * ...,
+  * Release.
 
 
 ### 0.10.1 (November 7, 2017)
