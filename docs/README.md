@@ -1,0 +1,5 @@
+# PicoDB
+
+...
+
+[Getting started](guide/)!

@@ -26,6 +26,7 @@
     space-before-function-paren: ["error", "never"],
     no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
     "no-multi-spaces": [2, { exceptions: { "VariableDeclarator": true } }],
-    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }]
+    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }],
+    indent: ["error", 2, { "VariableDeclarator": { "const": 2 }, "SwitchCase": 1 }]
   }
 }

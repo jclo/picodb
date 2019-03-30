@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.11.0 (March 30, 2019)
+
+  * Updated the project to comply with Gulp 4 and ESLint 5,
+  * ...,
+
+
 ### 0.10.1 (November 7, 2017)
 
   * Fixed a timeout issue on a find request when the database is not initialized,

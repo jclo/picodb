@@ -1,7 +1,8 @@
+// Based on UMDLib template v0.8.3
 // ESLint declarations
 /* global define */
-/* eslint-disable one-var, no-underscore-dangle, curly, max-len, semi-style */
-/* eslint-disable no-param-reassign */
+/* eslint strict: ["error", "function"] */
+/* eslint-disable one-var, semi-style, no-underscore-dangle, curly, max-len */
 (function(root, factory) {
   'use strict';
 
@@ -16,7 +17,9 @@
     module.exports = factory(root);
   } else {
     // Browser globals.
+    /* eslint-disable no-param-reassign */
     root.PicoDB = factory(root);
+    /* eslint-enable no-param-reassign */
   }
 }({{lib:parent}}, function(root) {
   'use strict';
@@ -34,7 +37,4 @@
     , _find
     , _insert
     , _update
-    , _init
     ;
-
-  /* eslint-enable no-param-reassign */

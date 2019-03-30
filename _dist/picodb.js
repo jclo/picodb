@@ -1,16 +1,17 @@
 /** ****************************************************************************
- * PicoDB v0.10.1
+ * PicoDB v0.11.0
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
- * Copyright (c) 2017 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr).
+ * Copyright (c) 2019 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr/).
  * Released under the MIT license. You may obtain a copy of the License
  * at: http://www.opensource.org/licenses/mit-license.php).
- * ****************************************************************************/
+ * ************************************************************************** */
+// Based on UMDLib template v0.8.3
 // ESLint declarations
 /* global define */
-/* eslint-disable one-var, no-underscore-dangle, curly, max-len, semi-style */
-/* eslint-disable no-param-reassign */
+/* eslint strict: ["error", "function"] */
+/* eslint-disable one-var, semi-style, no-underscore-dangle, curly, max-len */
 (function(root, factory) {
   'use strict';
 
@@ -25,7 +26,9 @@
     module.exports = factory(root);
   } else {
     // Browser globals.
+    /* eslint-disable no-param-reassign */
     root.PicoDB = factory(root);
+    /* eslint-enable no-param-reassign */
   }
 }(this, function(root) {
   'use strict';
@@ -43,10 +46,9 @@
     , _find
     , _insert
     , _update
-    , _init
     ;
 
-  /* eslint-enable no-param-reassign */
+  /* eslint-disable one-var, semi-style */
 
   /**
    * overslash is a simple utility library intended to be embedded in other
@@ -58,7 +60,8 @@
    * @since     0.1
    * @version   '0.0.0'
    */
-  /* eslint-disable no-void, no-plusplus, no-param-reassign, no-restricted-syntax, no-prototype-builtins */
+  /* eslint-disable no-void, no-plusplus, no-param-reassign, no-restricted-syntax,
+    no-prototype-builtins */
 
   /**
    * Functions:
@@ -464,7 +467,13 @@
       return Math.random().toString(36).substr(2);
     }
   };
-  /* eslint-enable no-void, no-plusplus, no-param-reassign, no-restricted-syntax, no-prototype-builtins */
+  /* eslint-enable no-void, no-plusplus, no-param-reassign, no-restricted-syntax,
+    no-prototype-builtins */
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * event.js is an embedded library that implements functions to manage
@@ -512,8 +521,9 @@
      */
     _isValidEvent: function(event, type, listener) {
       // if (event.hasOwnProperty(type) && typeof listener === 'function')
-      if ({}.hasOwnProperty.call(event, type) && typeof listener === 'function')
+      if ({}.hasOwnProperty.call(event, type) && typeof listener === 'function') {
         return true;
+      }
       return false;
     },
 
@@ -571,16 +581,19 @@
 
       // is this event a valid one?
       /* istanbul ignore next */
-      if (!eventList[event])
+      if (!eventList[event]) {
         return;
+      }
 
       // Fire listeners:
-      for (i = 0; i < eventList[event].listeners.length; i++)
+      for (i = 0; i < eventList[event].listeners.length; i++) {
         eventList[event].listeners[i](payload);
+      }
 
       // Fire listeners once:
-      for (i = 0; i < eventList[event].listenersOnce.length; i++)
+      for (i = 0; i < eventList[event].listenersOnce.length; i++) {
         eventList[event].listenersOnce[i](payload);
+      }
       // Remove the event handlers:
       eventList[event].listenersOnce.splice(0, eventList[event].listenersOnce.length);
     },
@@ -598,8 +611,9 @@
      */
     addEventListener: function(eventList, type, listener) {
       // Is type an event and listener a function?
-      if (!_event._isValidEvent(eventList, type, listener))
+      if (!_event._isValidEvent(eventList, type, listener)) {
         return;
+      }
 
       // Save the listener:
       eventList[type].listeners.push(listener);
@@ -618,8 +632,9 @@
      */
     addOneTimeEventListener: function(eventList, type, listener) {
       // Is type an event and listener a function?
-      if (!_event._isValidEvent(eventList, type, listener))
+      if (!_event._isValidEvent(eventList, type, listener)) {
         return;
+      }
 
       // Save the listener:
       eventList[type].listenersOnce.push(listener);
@@ -641,13 +656,15 @@
         ;
 
       // Is type an event and listener a function?
-      if (!_event._isValidEvent(eventList, type, listener))
+      if (!_event._isValidEvent(eventList, type, listener)) {
         return;
+      }
 
       // Remove the listener:
       index = eventList[type].listeners.indexOf(listener);
-      if (index >= 0)
+      if (index >= 0) {
         eventList[type].listeners.splice(index, 1);
+      }
     }
 
   };
@@ -656,6 +673,11 @@
   _event.on = _event.addEventListener;
   _event.one = _event.addOneTimeEventListener;
   _event.off = _event.removeEventListener;
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * geo.js is an embedded library providing functions to make Geospatial
@@ -712,9 +734,9 @@
         , c
         ;
 
-      a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-          Math.cos(φ1) * Math.cos(φ2) *
-          Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2)
+          + Math.cos(φ1) * Math.cos(φ2)
+          * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
 
       c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -747,7 +769,8 @@
         , R  = 6371e3
         ;
 
-      return Math.acos(Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * R;
+      return Math.acos(Math.sin(φ1) * Math.sin(φ2)
+        + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * R;
     },
 
     /**
@@ -833,8 +856,9 @@
 
       // Check if the point is on a vertex:
       for (i = 0; i < polygon.length; i++) {
-        if (point[0] === polygon[i][0] && point[1] === polygon[i][1])
+        if (point[0] === polygon[i][0] && point[1] === polygon[i][1]) {
           return 'vertex';
+        }
       }
 
       // Check if the point is inside the polygon or on the boundary:
@@ -857,10 +881,13 @@
             && vertex1[1] !== vertex2[1]) {
           xinter = (point[1] - vertex1[1]) * (vertex2[0] - vertex1[0]) / (vertex2[1] - vertex1[1]) + (vertex1[0]);
           // Check if the point is on a boundary other than the horizontal one:
-          if (xinter === point[0])
+          if (xinter === point[0]) {
             return 'boundary';
-          if (vertex1[0] === vertex2[0] || point[0] <= xinter)
+          }
+
+          if (vertex1[0] === vertex2[0] || point[0] <= xinter) {
             intersections += 1;
+          }
         }
       }
       return intersections % 2 !== 0 ? 'inside' : 'outside';
@@ -927,11 +954,13 @@
                     break;
                   }
                 }
-                if (breakloop)
+                if (breakloop) {
                   break;
+                }
               }
-              if (!breakloop)
+              if (!breakloop) {
                 return false;
+              }
             }
           }
           return true;
@@ -948,8 +977,9 @@
                   break;
                 }
               }
-              if (!breakloop)
+              if (!breakloop) {
                 return false;
+              }
             }
           }
           return true;
@@ -1145,15 +1175,17 @@
             inside = true;
             breakloop = true;
             // Abort as soon as we have found one point inside and one point ouside!
-            if (inside && outside)
+            if (inside && outside) {
               return true;
+            }
             break;
           }
         }
         if (!breakloop) {
           outside = true;
-          if (inside && outside)
+          if (inside && outside) {
             return true;
+          }
         }
       }
       return false;
@@ -1186,15 +1218,17 @@
               inside = true;
               breakloop = true;
               // Abort as soon as we have found one point inside and one point ouside!
-              if (inside && outside)
+              if (inside && outside) {
                 return true;
+              }
               break;
             }
           }
           if (!breakloop) {
             outside = true;
-            if (inside && outside)
+            if (inside && outside) {
               return true;
+            }
           }
         }
       }
@@ -1269,12 +1303,14 @@
         ;
 
       // Always true is max and min are not defined!
-      if (max === undefined && min === undefined)
+      if (max === undefined && min === undefined) {
         return true;
+      }
 
       // Always false if max is lower then min!
-      if (max < min)
+      if (max < min) {
         return false;
+      }
 
       // Compute the earth distance:
       d = _geo._getDistanceOnEarth(obj, source);
@@ -1321,8 +1357,9 @@
       var op = _.keys(source)[0]
         ;
 
-      if (!_.isObject(source))
+      if (!_.isObject(source)) {
         return false;
+      }
 
       switch (op) {
         case '$geometry':
@@ -1359,8 +1396,9 @@
      */
     _geoIntersects: function(obj, source) {
       // if (!source.hasOwnProperty(('$geometry')))
-      if (!{}.hasOwnProperty.call(source, '$geometry'))
+      if (!{}.hasOwnProperty.call(source, '$geometry')) {
         return false;
+      }
 
       switch (source.$geometry.type) {
         case 'Polygon':
@@ -1384,8 +1422,9 @@
      */
     _near: function(obj, source) {
       // if (!source.hasOwnProperty(('$geometry')))
-      if (!{}.hasOwnProperty.call(source, '$geometry'))
+      if (!{}.hasOwnProperty.call(source, '$geometry')) {
         return false;
+      }
 
       switch (source.$geometry.type) {
         case 'Point':
@@ -1457,6 +1496,11 @@
 
   };
   /* eslint-enable no-mixed-operators, no-plusplus, no-unneeded-ternary */
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * project.js is an embedded library providing functions to format the output
@@ -1590,11 +1634,13 @@
      * @since 0.0.1
      */
     setProjection: function(projection, type) {
-      if (!type)
+      if (!type) {
         return projection;
+      }
 
-      if (projection._id !== undefined)
+      if (projection._id !== undefined) {
         return projection;
+      }
 
       return _.extend({ _id: 1 }, projection);
     },
@@ -1652,14 +1698,20 @@
      */
     add: function(doc, data, projection) {
       // If projection is empty means no filtering of the output!
-      if (_.isEmpty(projection.value))
+      if (_.isEmpty(projection.value)) {
         doc.push(_.clone(data));
-      else if (projection.type)
+      } else if (projection.type) {
         doc.push(_project._include(data, projection.value, {}));
-      else
+      } else {
         doc.push(_project._exclude(data, projection.value, {}));
+      }
     }
   };
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * query.js is an embedded library providing functions to query the documents
@@ -1821,8 +1873,8 @@
         case '$exists':
           return source;
 
-        // Evaluation Operators:
-        // --
+          // Evaluation Operators:
+          // --
 
         // Geospatial Operators:
         case '$geoWithin':
@@ -1837,14 +1889,14 @@
         case '$nearSphere':
           return _geo.query(obj, { $nearSphere: source });
 
-        // Array Operators:
-        // --
+          // Array Operators:
+          // --
 
-        // Bitwise Operators:
-        // --
+          // Bitwise Operators:
+          // --
 
-        // Comments Operators:
-        // --
+          // Comments Operators:
+          // --
 
 
         /* istanbul ignore next */
@@ -1870,16 +1922,18 @@
 
       // Without an Operator:
       if (!_.isArray(source) && !_.isObject(source)) {
-        if (obj === source)
+        if (obj === source) {
           return true;
+        }
 
         return false;
       }
 
       // With an Operator:
       for (prop in source) {
-        if (!_query._isConditionTrue(obj, source[prop], prop))
+        if (!_query._isConditionTrue(obj, source[prop], prop)) {
           return false;
+        }
       }
       return true;
     },
@@ -1913,7 +1967,8 @@
      * @returns {Boolean} returns true if the conditions are met,
      * @since 0.0.1
      */
-    /* eslint-disable no-shadow, no-restricted-syntax, no-continue */
+    /* eslint-disable no-shadow, no-restricted-syntax, no-continue, guard-for-in,
+      no-else-return */
     _query: function(obj, source, op) {
       var level = 0
         , rootKey
@@ -1963,7 +2018,8 @@
 
       return parse(obj, source);
     },
-    /* eslint-enable no-shadow, no-restricted-syntax, no-continue */
+    /* eslint-enable no-shadow, no-restricted-syntax, no-continue, guard-for-in,
+      no-else-return */
 
 
     /* Public Functions ----------------------------------------------------- */
@@ -1999,18 +2055,25 @@
         ;
 
       // Basic query:
-      if (!sop.or)
+      if (!sop.or) {
         return _query._query(doc, query, sop);
+      }
 
       // Or query:
-      for (i = 0; i < query['$or'].length; i++)
-        if (_query._query(doc, query['$or'][i], sop))
+      for (i = 0; i < query['$or'].length; i++) {
+        if (_query._query(doc, query['$or'][i], sop)) {
           return true;
+        }
+      }
 
       return false;
     } /* eslint-enable dot-notation */
   };
 
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
   /**
    * count.js is an embedded library providing functions to count documents
    * into the db.
@@ -2055,20 +2118,23 @@
 
       // Test is query is valid:
       if (!_.isObject(query) || _.isArray(query) || _.isFunction(query)) {
-        if (callback)
+        if (callback) {
           callback('query is not a valid object!', 0);
+        }
         return;
       }
 
       // Parse the db and count:
       count = 0;
-      for (i = 0; i < db.data.length; i++)
+      for (i = 0; i < db.data.length; i++) {
         if (_query.isMatch(db.data[i], query, sop)) {
           count += 1;
           // console.log(db.data[i]);
         }
-      if (callback)
+      }
+      if (callback) {
         callback(null, count);
+      }
     },
 
 
@@ -2103,13 +2169,19 @@
       }
 
       // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options))
+      if (_.isArray(options) || !_.isObject(options)) {
         options = {};
+      }
 
       // Try to count:
       _count._count(db, query, options, callback);
     } /* eslint-enable no-param-reassign */
   };
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * delete.js is an embedded library providing functions to delete documents
@@ -2159,8 +2231,9 @@
       // Return without doing anything if the filter isn't an object:
       // (or an object array)
       if (!_.isObject(filter) || _.isArray(filter)) {
-        if (callback)
+        if (callback) {
           callback(null, null);
+        }
         return;
       }
 
@@ -2181,8 +2254,9 @@
         // Fire an event and execute the callback:
         _event.fire(eventQ, 'change', docOut);
         _event.fire(eventQ, 'delete', docOut);
-        if (callback)
+        if (callback) {
           callback(null, removed);
+        }
         return;
       }
 
@@ -2203,17 +2277,19 @@
           // Readjust db length after one item has been removed & reposition i:
           i -= 1;
           dblength -= 1;
-          if (!options.many)
+          if (!options.many) {
             // Remove one document only!
             break;
+          }
         }
       }
 
       // Fire an event and execute the callback:
       _event.fire(eventQ, 'change', docOut);
       _event.fire(eventQ, 'delete', docOut);
-      if (callback)
+      if (callback) {
         callback(null, removed);
+      }
       // return;
     }, /* eslint-enable no-param-reassign */
 
@@ -2251,13 +2327,19 @@
       }
 
       // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options))
+      if (_.isArray(options) || !_.isObject(options)) {
         options = {};
+      }
 
       options.many = many;
       _delete._delete(db, eventQ, filter, options, callback);
     } /* eslint-enable no-param-reassign */
   };
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * find.js is an embedded library providing functions to find documents
@@ -2331,9 +2413,11 @@
 
       // Parse the database:
       docs = [];
-      for (i = 0; i < db.data.length; i++)
-        if (_query.isMatch(db.data[i], query, sop))
+      for (i = 0; i < db.data.length; i++) {
+        if (_query.isMatch(db.data[i], query, sop)) {
           _project.add(docs, db.data[i], projection);
+        }
+      }
       callback(null, docs);
     },
 
@@ -2353,8 +2437,9 @@
      */
     /* eslint-disable no-param-reassign */
     find: function(_this, query, projection) {
-      if (!_this.cursor)
+      if (!_this.cursor) {
         _this.cursor = _find._initCursor();
+      }
 
       // Save the query and the projection:
       _this.cursor.query = !_.isArray(query) && _.isObject(query)
@@ -2381,14 +2466,20 @@
      */
     toArray: function(_this, callback) {
       // If callback isn't a function, return silently:
-      if (!_.isFunction(callback))
+      if (!_.isFunction(callback)) {
         return;
+      }
 
       // Process the find query:
       _find._process(_this, callback);
     }
 
   };
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * insert.js is an embedded library providing functions to insert
@@ -2445,11 +2536,12 @@
         , i
         ;
 
-      for (i = 0; i < db.data.length; i++)
+      for (i = 0; i < db.data.length; i++) {
         if (db.data[i]._id === id) {
           status = false;
           break;
         }
+      }
 
       return status;
     },
@@ -2475,15 +2567,16 @@
         ;
       // Embed a single document in an array to get a generic process.
       arr = [];
-      if (!_.isArray(docs) && _.isObject(docs))
+      if (!_.isArray(docs) && _.isObject(docs)) {
         arr.push(docs);
-      else
+      } else {
         arr = docs;
+      }
 
       // Parse all the documents:
       docOut = [];
-      for (i = 0; i < arr.length; i++)
-        if (_.isObject(arr[i]))
+      for (i = 0; i < arr.length; i++) {
+        if (_.isObject(arr[i])) {
           if (arr[i]._id) {
             // Do not duplicate doc!
             if (_insert._isNewId(db, arr[i]._id)) {
@@ -2491,22 +2584,27 @@
               db.data.push(_.extend({}, arr[i]));
               // Do not pass references to the db. Provide a copy instead!
               docOut.push(_.extend({}, arr[i]));
-              if (!options.many)
+              if (!options.many) {
                 break;
+              }
             }
           } else {
             id = _.token();
             db.data.push(_.extend({ _id: id }, arr[i]));
             docOut.push(_.extend({ _id: id }, arr[i]));
-            if (!options.many)
+            if (!options.many) {
               break;
+            }
           }
+        }
+      }
 
       // Fire an event and execute the callback:
       _event.fire(eventQ, 'change', docOut);
       _event.fire(eventQ, 'insert', docOut);
-      if (callback)
+      if (callback) {
         callback(null, docOut);
+      }
     },
 
 
@@ -2542,16 +2640,23 @@
       }
 
       // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options))
+      if (_.isArray(options) || !_.isObject(options)) {
         options = {};
+      }
 
       // Insert if it is a valid document:
       options.many = many;
-      if (_.isArray(docs) || _.isObject(docs))
+      if (_.isArray(docs) || _.isObject(docs)) {
         _insert._insert(db, eventQ, docs, options, callback);
+      }
     }
     /* eslint-enable no-param-reassign */
   };
+
+  /* eslint-enable one-var, semi-style */
+
+
+  /* eslint-disable one-var, semi-style */
 
   /**
    * update.js is an embedded library providing functions to update documents
@@ -2615,15 +2720,17 @@
           }
         } else if (hasOwnProperty.call(source, prop)) {
           // If it doesn't exist or it isn't an array, go next:
-          if (!obj[prop] || !_.isArray(obj[prop]))
+          if (!obj[prop] || !_.isArray(obj[prop])) {
             continue;
+          }
 
           // Boolean, Number or String, remove value:
           // (source be equivalent to: orders: 'y')
           if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
             index = obj[prop].indexOf(source[prop]);
-            if (index > -1)
+            if (index > -1) {
               obj[prop].splice(index, 1);
+            }
             continue;
           }
 
@@ -2632,8 +2739,9 @@
           if (_.isObject(source[prop]) && !_.keys(source[prop])[0].match(/^\$/)) {
             // Parse objects:
             for (i = obj[prop].length - 1; i >= 0; i--) {
-              if (!_.isObject(obj[prop][i]))
+              if (!_.isObject(obj[prop][i])) {
                 break;
+              }
 
               // Do they match?
               match = true;
@@ -2643,8 +2751,9 @@
                   break;
                 }
               }
-              if (match)
+              if (match) {
                 obj[prop].splice(i, 1);
+              }
             }
             continue;
           }
@@ -2656,60 +2765,75 @@
             switch (op) {
               case '$eq':
                 index = obj[prop].indexOf(source[prop]['$eq']);
-                if (index > -1)
+                if (index > -1) {
                   obj[prop].splice(index, 1);
+                }
                 break;
 
               case '$gt':
-                for (i = obj[prop].length - 1; i >= 0; i--)
-                  if (obj[prop][i] > source[prop]['$gt'])
+                for (i = obj[prop].length - 1; i >= 0; i--) {
+                  if (obj[prop][i] > source[prop]['$gt']) {
                     obj[prop].splice(i, 1);
+                  }
+                }
                 break;
 
               case '$gte':
-                for (i = obj[prop].length - 1; i >= 0; i--)
-                  if (obj[prop][i] >= source[prop]['$gte'])
+                for (i = obj[prop].length - 1; i >= 0; i--) {
+                  if (obj[prop][i] >= source[prop]['$gte']) {
                     obj[prop].splice(i, 1);
+                  }
+                }
                 break;
 
               case '$lt':
-                for (i = obj[prop].length - 1; i >= 0; i--)
-                  if (obj[prop][i] < source[prop]['$lt'])
+                for (i = obj[prop].length - 1; i >= 0; i--) {
+                  if (obj[prop][i] < source[prop]['$lt']) {
                     obj[prop].splice(i, 1);
+                  }
+                }
                 break;
 
               case '$lte':
-                for (i = obj[prop].length - 1; i >= 0; i--)
-                  if (obj[prop][i] <= source[prop]['$lte'])
+                for (i = obj[prop].length - 1; i >= 0; i--) {
+                  if (obj[prop][i] <= source[prop]['$lte']) {
                     obj[prop].splice(i, 1);
+                  }
+                }
                 break;
 
               case '$ne':
-                for (i = obj[prop].length - 1; i >= 0; i--)
-                  if (obj[prop][i] !== source[prop]['$ne'])
+                for (i = obj[prop].length - 1; i >= 0; i--) {
+                  if (obj[prop][i] !== source[prop]['$ne']) {
                     obj[prop].splice(i, 1);
+                  }
+                }
                 break;
 
               case '$in':
-                if (!_.isArray(source[prop]['$in']))
+                if (!_.isArray(source[prop]['$in'])) {
                   break;
+                }
 
                 for (i = 0; i < source[prop]['$in'].length; i++) {
                   index = obj[prop].indexOf(source[prop]['$in'][i]);
-                  if (index > -1)
+                  if (index > -1) {
                     obj[prop].splice(index, 1);
+                  }
                 }
                 break;
 
               case '$nin':
-                if (!_.isArray(source[prop]['$nin']))
+                if (!_.isArray(source[prop]['$nin'])) {
                   break;
+                }
 
                 arr = [];
                 for (i = 0; i < source[prop]['$nin'].length; i++) {
                   index = obj[prop].indexOf(source[prop]['$nin'][i]);
-                  if (index > -1)
+                  if (index > -1) {
                     arr.push(source[prop]['$nin'][i]);
+                  }
                 }
                 obj[prop] = _.clone(arr);
                 break;
@@ -2746,17 +2870,20 @@
         ;
 
       for (prop in source) {
-        if (!{}.hasOwnProperty.call(source, prop))
+        if (!{}.hasOwnProperty.call(source, prop)) {
           continue;
+        }
 
         subprop = _.keys(source[prop]);
         if (!_.isArray(source[prop]) && _.isObject(source[prop]) && /* !_.contains(subprop, '$each') */ !subprop[0].match(/^\$/)) {
-          if (!obj[prop])
+          if (!obj[prop]) {
             obj[prop] = {};
+          }
           _update._push(obj[prop], source[prop]);
         } else if (hasOwnProperty.call(source, prop)) {
-          if (!obj[prop])
+          if (!obj[prop]) {
             obj[prop] = [];
+          }
 
           // Boolean, Number or String:
           if (typeof source[prop] === 'boolean' || typeof source[prop] === 'number' || typeof source[prop] === 'string') {
@@ -2774,25 +2901,29 @@
           if (_.isObject(source[prop]) && _.isArray(source[prop]['$each'])) {
             // Position in the array to insert elements:
             position = source[prop]['$position'];
-            if (position === undefined || typeof position !== 'number' || position < 0)
+            if (position === undefined || typeof position !== 'number' || position < 0) {
               position = obj[prop].length;
+            }
 
             // Slice:
             slice = source[prop]['$slice'];
-            if (slice === undefined || typeof position !== 'number')
+            if (slice === undefined || typeof position !== 'number') {
               slice = null;
+            }
 
             // Update the array from position:
-            for (i = source[prop]['$each'].length - 1; i >= 0; i--)
+            for (i = source[prop]['$each'].length - 1; i >= 0; i--) {
               obj[prop].splice(position, 0, source[prop]['$each'][i]);
+            }
 
             // Slice the array
-            if (slice > 0)
+            if (slice > 0) {
               obj[prop].splice(slice, obj[prop].length - slice);
-            else if (slice === 0)
+            } else if (slice === 0) {
               obj[prop].length = 0;
-            else if (slice < 0)
+            } else if (slice < 0) {
               obj[prop].splice(0, obj[prop].length + slice);
+            }
           }
         }
       }
@@ -2822,10 +2953,11 @@
 
       for (prop in source) {
         if (!_.isArray(source[prop]) && _.isObject(source[prop])) {
-          if (!obj[prop] && (op === '$rename' || op === '$unset' || op === '$pop'))
+          if (!obj[prop] && (op === '$rename' || op === '$unset' || op === '$pop')) {
             break;
-          else if (!obj[prop])
+          } else if (!obj[prop]) {
             obj[prop] = {};
+          }
           _update._apply(obj[prop], source[prop], op);
         } else if (hasOwnProperty.call(source, prop)) {
           // if (_.isArray(source[prop]))
@@ -2834,17 +2966,19 @@
           switch (op) {
             // Field Operators:
             case '$inc':
-              if (typeof obj[prop] === 'number')
+              if (typeof obj[prop] === 'number') {
                 obj[prop] += source[prop];
-              else
+              } else {
                 obj[prop] = source[prop];
+              }
               break;
 
             case '$mul':
-              if (typeof obj[prop] === 'number')
+              if (typeof obj[prop] === 'number') {
                 obj[prop] *= source[prop];
-              else
+              } else {
                 obj[prop] = 0;
+              }
               break;
 
             case '$rename':
@@ -2855,42 +2989,52 @@
               break;
 
             case '$set':
-              if (_.isArray(source[prop]))
+              if (_.isArray(source[prop])) {
                 obj[prop] = _.clone(source[prop]);
-              else
+              } else {
                 obj[prop] = source[prop];
+              }
               break;
 
             case '$unset':
-              if (obj[prop])
+              if (obj[prop]) {
                 delete obj[prop];
+              }
               break;
 
             case '$min':
-              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] < obj[prop]))
+              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] < obj[prop])) {
                 obj[prop] = source[prop];
+              }
               break;
 
             case '$max':
-              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] > obj[prop]))
+              if (!obj[prop] || (typeof obj[prop] === 'number' && source[prop] > obj[prop])) {
                 obj[prop] = source[prop];
+              }
               break;
 
             // Array Operators:
             case '$pop':
-              if (_.isArray(obj[prop]))
-                if (source[prop] === 1)
+              if (_.isArray(obj[prop])) {
+                if (source[prop] === 1) {
                   obj[prop].pop();
-                else if (source[prop] === -1)
+                } else if (source[prop] === -1) {
                   obj[prop].shift();
+                }
+              }
               break;
 
             case '$pullAll':
-              if (_.isArray(obj[prop]) && _.isArray(source[prop]))
-                for (i = 0; i < source[prop].length; i++)
-                  for (j = obj[prop].length - 1; j >= 0; j--)
-                    if (obj[prop][j] === source[prop][i])
+              if (_.isArray(obj[prop]) && _.isArray(source[prop])) {
+                for (i = 0; i < source[prop].length; i++) {
+                  for (j = obj[prop].length - 1; j >= 0; j--) {
+                    if (obj[prop][j] === source[prop][i]) {
                       obj[prop].splice(j, 1);
+                    }
+                  }
+                }
+              }
               break;
 
             /* istanbul ignore next */
@@ -2955,14 +3099,16 @@
         if ({}.hasOwnProperty.call(source, prop)) {
           subprop = _.keys(source[prop])[0];
           if (_.isObject(source[prop]) && subprop !== '$type') {
-            if (!obj[prop])
+            if (!obj[prop]) {
               obj[prop] = {};
+            }
             _update._applyTime(obj[prop], source[prop]);
           } else if (hasOwnProperty.call(source, prop)) {
-            if (source[prop][subprop] === 'timestamp')
+            if (source[prop][subprop] === 'timestamp') {
               obj[prop] = Date.now();
-            else
+            } else {
               obj[prop] = new Date().toISOString();
+            }
           }
         }
       }
@@ -2986,8 +3132,9 @@
       var keys = _.keys(update)
         ;
 
-      if (!keys[0].match(/^\$/))
+      if (!keys[0].match(/^\$/)) {
         return _update._replace(doc, update);
+      }
 
       switch (keys[0]) {
         // Field Operators:
@@ -3055,34 +3202,39 @@
 
       // Test if query seems valid:
       if (_.isArray(query) || _.isFunction(query) || !_.isObject(query)) {
-        if (callback)
+        if (callback) {
           callback('filter is not a valid object!');
+        }
         return;
       }
 
       // Test if update seems valid:
       if (_.isArray(update) || _.isFunction(update) || !_.isObject(update)) {
-        if (callback)
+        if (callback) {
           callback('update is not a valid object!');
+        }
         return;
       }
 
       // Parse the doc db:
       docOut = [];
-      for (i = 0; i < db.data.length; i++)
+      for (i = 0; i < db.data.length; i++) {
         if (_query.isMatch(db.data[i], query, sop)) {
           _update._updateThisDoc(db.data[i], update);
           // Do not copy the references. Clone the object instead!
           docOut.push(_.extend({}, db.data[i]));
-          if (!options.many)
+          if (!options.many) {
             break;
+          }
         }
+      }
 
       // Fire an event and execute callback:
       _event.fire(eventQ, 'change', docOut);
       _event.fire(eventQ, 'update', docOut);
-      if (callback)
+      if (callback) {
         callback(null, docOut);
+      }
     },
 
 
@@ -3119,14 +3271,18 @@
       }
 
       // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options))
+      if (_.isArray(options) || !_.isObject(options)) {
         options = {};
+      }
 
       // Try to update the document:
       options.many = many;
       _update._update(db, eventQ, query, update, options, callback);
     }
   }; /* eslint-enable dot-notation, no-param-reassign, no-restricted-syntax, no-continue */
+
+  /* eslint-enable one-var, semi-style */
+
 
   /**
    * picodb.js is the entry point of PicoDB. All the public methods are defined in
@@ -3142,7 +3298,7 @@
 
   /**
    * Private functions:
-   *  . _init                     initializes the database,
+   *  . -                         -,
    *
    * Public methods:
    *  . count                     counts the documents into the db that match,
@@ -3163,15 +3319,7 @@
    */
   /* eslint-disable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */
 
-
   // -- Private Functions ------------------------------------------------------
-
-  _init = function(_this) {
-    // Attach schema:
-    _this.db = _insert._schema();
-    // Attach event Queue:
-    _this.eventQ = _event.setEventListenerList();
-  };
 
 
   // -- Public -----------------------------------------------------------------
@@ -3188,8 +3336,10 @@
   */
   PicoDB = function() {
     var obj = Object.create(PicoDBMethods);
-    // the database container,
-    obj.db;
+    // Adds the database container & attaches it a schema:
+    obj.db = _insert._schema();
+    // Adds an eventQ:
+    obj.eventQ = _event.setEventListenerList();
     return obj;
   };
 
@@ -3206,7 +3356,7 @@
   };
 
   // Current version of the library:
-  PicoDB.VERSION = '0.10.1';
+  PicoDB.VERSION = '0.11.0';
   /* eslint-enable no-param-reassign */
 
 
@@ -3245,8 +3395,9 @@
     count: function(query, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
-      if (!this.db || arguments.length < 1)
+      if (!this.db || arguments.length < 1) {
         return;
+      }
       _count.count(this, query, options, callback);
     },
 
@@ -3264,8 +3415,9 @@
     deleteMany: function(filter, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
-      if (!this.db || arguments.length < 1)
+      if (!this.db || arguments.length < 1) {
         return;
+      }
       _delete.delete(this, true, filter, options, callback);
     },
 
@@ -3283,8 +3435,9 @@
     deleteOne: function(filter, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
-      if (!this.db || arguments.length < 1)
+      if (!this.db || arguments.length < 1) {
         return;
+      }
       _delete.delete(this, false, filter, options, callback);
     },
 
@@ -3300,13 +3453,10 @@
      * @since 0.0.1
      */
     insertMany: function(docs, options, callback) {
-      // Initialize the db if it isn't:
-      if (!this.db)
-        _init(this);
-
       // Return silently if they are too few arguments:
-      if (arguments.length < 1)
+      if (arguments.length < 1) {
         return;
+      }
       _insert.insert(this, true, docs, options, callback);
     },
 
@@ -3322,13 +3472,10 @@
      * @since 0.0.1
      */
     insertOne: function(doc, options, callback) {
-      // Initialize the db if it isn't:
-      if (!this.db)
-        _init(this);
-
       // Return silently if they are too few arguments:
-      if (arguments.length < 1)
+      if (arguments.length < 1) {
         return;
+      }
       _insert.insert(this, false, doc, options, callback);
     },
 
@@ -3347,8 +3494,9 @@
     updateMany: function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
-      if (!this.db || arguments.length < 2)
+      if (!this.db || arguments.length < 2) {
         return;
+      }
       _update.update(this, true, query, update, options, callback);
     },
 
@@ -3367,8 +3515,9 @@
     updateOne: function(query, update, options, callback) {
       // Return silently if the database isn't initialized or
       // if they are too few arguments:
-      if (!this.db || arguments.length < 2)
+      if (!this.db || arguments.length < 2) {
         return;
+      }
       _update.update(this, false, query, update, options, callback);
     },
 
@@ -3387,10 +3536,6 @@
       query = query || {};
       projection = projection || {};
 
-      // Return silently if the database isn't initialized:
-      if (!this.db)
-        return this;
-
       // Searches documents that match the query:
       _find.find(this, query, projection);
       return this;
@@ -3408,13 +3553,6 @@
      * @since 0.0.1
      */
     toArray: function(callback) {
-      // Return an empty doc. if the database isn't initialized:
-      if (!this.db) {
-        if (callback) {
-          callback(null, []);
-        }
-      }
-
       _find.toArray(this, callback);
     },
 
@@ -3429,10 +3567,6 @@
      * @since 0.0.1
      */
     addEventListener: function(type, listener) {
-      // Initialize the db if it isn't:
-      if (!this.db)
-        _init(this);
-
       _event.addEventListener(this.eventQ, type, listener);
     },
 
@@ -3447,10 +3581,6 @@
      * @since 0.0.1
      */
     addOneTimeEventListener: function(type, listener) {
-      // Initialize the db if it isn't:
-      if (!this.db)
-        _init(this);
-
       _event.addOneTimeEventListener(this.eventQ, type, listener);
     },
 
@@ -3465,10 +3595,6 @@
      * @since 0.0.1
      */
     removeEventListener: function(type, listener) {
-      // Initialize the db if it isn't:
-      if (!this.db)
-        _init(this);
-
       _event.removeEventListener(this.eventQ, type, listener);
     },
 
@@ -3516,7 +3642,10 @@
     }
   };
 
-  // Return the library name:
+  /* eslint-enable no-param-reassign, vars-on-top, no-unused-expressions, no-eval */
+
+
+  // Returns the library name:
   return PicoDB;
 }));
-/* eslint-enable one-var, no-underscore-dangle, curly, max-len, semi-style */
+/* eslint-enable one-var, semi-style, no-underscore-dangle, curly, max-len */

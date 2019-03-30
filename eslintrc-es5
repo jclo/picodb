@@ -21,7 +21,7 @@
   "extends": "airbnb-base/legacy",
   // Overwritten airbnb's rules:
   "rules": {
-    strict: ["error", "function"],
+    strict: ["error", "global"],
     func-names: ["error", "never"],
     space-before-function-paren: ["error", "never"],
     no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],

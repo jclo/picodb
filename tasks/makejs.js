@@ -1,46 +1,85 @@
-/* eslint  one-var: 0, prefer-arrow-callback: 0, import/no-extraneous-dependencies: 0 */
+/* eslint  one-var: 0, import/no-extraneous-dependencies: 0, semi-style: 0 */
 
 'use strict';
 
 // -- Node modules
-const del     = require('del')
-    , gulp    = require('gulp')
+const { src, dest, series } = require('gulp')
+    , del     = require('del')
     , concat  = require('gulp-concat')
-    , replace     = require('gulp-replace')
-    , runSequence = require('run-sequence')
+    , footer  = require('gulp-footer')
+    , replace = require('gulp-replace')
     ;
+
 
 // -- Local modules
-const config  = require('./config')
-    ;
+const config = require('./config')
+   ;
+
 
 // -- Local constants
-const dest = config.libdir
-    , src  = config.src
-    , lib  = config.libname
-    , parent = config.parent
+const destination  = config.libdir
+    , source       = config.src
+    , lib          = config.libname
+    , name         = lib.replace(/\s+/g, '').toLowerCase()
+    , { parent }   = config
+    , { noparent } = config
+    , head         = source[0]
+    , core         = source.slice(1, -1)
+    , foot         = source[source.length - 1]
     ;
+
 
 // -- Local variables
 
 
-// -- Gulp Tasks
+// -- Gulp Private Tasks
 
-// Remove the previous version:
-gulp.task('dellib', function() {
-  return del.sync(dest);
-});
+// Removes the previous version.
+function clean(done) {
+  del.sync(destination);
+  done();
+}
 
-// Create the library:
-gulp.task('dolib', function() {
-  return gulp.src(src)
+// Creates the indented content.
+function docore() {
+  return src(core)
+    // remove the extra 'use strict':
+    .pipe(replace(/\n'use strict';\n/, ''))
+    // indent the first line with 2 spaces:
+    .pipe(replace(/^/g, '  '))
+    // indent each other lines with 2 spaces:
+    .pipe(replace(/\n/g, '\n  '))
+    // remove the indent added to the blanck lines:
+    // (we need to add an extra line otherwise the indent isn't removed
+    // from the last line!)
+    .pipe(footer('\n'))
+    .pipe(replace(/\s\s\n/g, '\n'))
+    .pipe(concat('core.js'))
+    .pipe(dest(destination));
+}
+
+// Creates the library without 'this'.
+function dolibnoparent() {
+  return src([head, `${destination}/core.js`, foot])
     .pipe(replace('{{lib:name}}', lib))
-    .pipe(replace('{{lib:parent}}', parent))
-    .pipe(concat(`${lib.toLowerCase()}.js`))
-    .pipe(gulp.dest(dest));
-});
+    .pipe(concat(`${name}${noparent}.js`))
+    .pipe(dest(destination));
+}
 
-// -- Gulp Main Task
-gulp.task('makejs', function(callback) {
-  runSequence('dellib', 'dolib', callback);
-});
+// Creates the library.
+function dolib() {
+  return src(`${destination}/${name}${noparent}.js`)
+    .pipe(replace('{{lib:parent}}', parent))
+    .pipe(concat(`${name}.js`))
+    .pipe(dest(destination));
+}
+
+// Removes the temp file(s).
+function delcore(done) {
+  del.sync(`${destination}/core.js`);
+  done();
+}
+
+
+// -- Gulp Public Task(s)
+module.exports = series(clean, docore, dolibnoparent, dolib, delcore);

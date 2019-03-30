@@ -1,11 +1,18 @@
+/** ****************************************************************************
+ * PicoDB v0.11.0
+ *
+ * A tiny in-memory database (MongoDB like) that stores JSON documents.
+ * (you can download it from npm or github repositories)
+ * Copyright (c) 2019 jclo <jclo@mobilabs.fr> (http://www.mobilabs.fr/).
+ * Released under the MIT license. You may obtain a copy of the License
+ * at: http://www.opensource.org/licenses/mit-license.php).
+ * ************************************************************************** */
 // Based on UMDLib template v0.8.3
 // ESLint declarations
 /* global define */
 /* eslint strict: ["error", "function"] */
 /* eslint-disable one-var, semi-style, no-underscore-dangle, curly, max-len */
 (function(root, factory) {
-  'use strict';
-
   /* istanbul ignore next */
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
@@ -21,9 +28,7 @@
     root.PicoDB = factory(root);
     /* eslint-enable no-param-reassign */
   }
-}(this, function(root) {
-  'use strict';
-
+}({{lib:parent}}, function(root) {
   var PicoDB
     , PicoDBMethods
     , previousPicoDB
@@ -3347,7 +3352,7 @@
   };
 
   // Current version of the library:
-  PicoDB.VERSION = '{{lib:version}}';
+  PicoDB.VERSION = '0.11.0';
   /* eslint-enable no-param-reassign */
 
 

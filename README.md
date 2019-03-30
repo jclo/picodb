@@ -404,6 +404,6 @@ delete       | Fire when one or multiple documents are deleted from the db.
 [download-url]: https://www.npmjs.com/package/picodb
 [travis-url]: https://travis-ci.org/jclo/picodb
 [coveralls-url]: https://coveralls.io/github/jclo/picodb?branch=master
-[dependencies-url]: https://david-dm.org/jclo/picodb#info=dependencies
-[devdependencies-url]: https://david-dm.org/jclo/picodb#info=devDependencies
+[dependencies-url]: https://david-dm.org/jclo/picodb
+[devdependencies-url]: https://david-dm.org/jclo/picodb?type=dev
 [license-url]: http://opensource.org/licenses/MIT
