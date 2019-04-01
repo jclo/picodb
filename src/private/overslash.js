@@ -1,56 +1,49 @@
+/** **************************************************************************
+ *
+ * A micro subset of the Overslash library.
+ *
+ * overslash.js is just a literal object that contains a set of static methods. It
+ * can't be intantiated.
+ *
+ * Private Functions:
+ *  . none,
+ *
+ * Public Functions:
+ *  . isUndefined            is a given variable undefined?,
+ *  . isNull                 is a given value null?,
+ *  . isBoolean              is a given value a boolean?
+ *  . isString               is a given value a string?
+ *  . isNumber               is a given value a number?
+ *  . isNaN                  is a given value NaN?
+ *  . isOdd                  is a given value an odd number?
+ *  . isObject               is a given variable an object?
+ *  . isFunction             is a given variable a function?
+ *  . isArray                is a given value an array?
+ *  . isMath                 is a given value a Math object?
+ *  . isDate                 is a given value a Date?
+ *  . isEmpty                is a given array, string or object empty?
+ *  . clone                  clones a literal object or an array,
+ *  . extend                 extends a given object with all the properties in passed-in obj,
+ *  . keys                   retrieves all the names of the object's own enumerable properties,
+ *  . forPropIn              Parses all the names of the object's own enumerable properties,
+ *  . contains               returns true if the array contains the passed-in value,
+ *  . share                  returns the list of the elements the passed-in arrays have in common,
+ *  . token                  returns a unique string pattern in base 36 ([0-9a-z]),
+ *
+ *
+ * @namespace    _
+ * @dependencies none
+ * @exports      -
+ * @author       -
+ * @since        0.0.0
+ * @version      -
+ * ************************************************************************ */
 /* eslint-disable one-var, semi-style */
+/* eslint-disable no-void, no-restricted-syntax, no-prototype-builtins,
+  no-param-reassign */
 
 'use strict';
 
-/**
- * overslash is a simple utility library intended to be embedded in other
- * Javascript libraries.
- *
- * @namespace _
- * @exports   -
- * @author    jclo
- * @since     0.1
- * @version   '0.0.0'
- */
-/* eslint-disable no-void, no-plusplus, no-param-reassign, no-restricted-syntax,
-  no-prototype-builtins */
-
-/**
- * Functions:
- *
- *  Primitives types (mandatory):
- *  . isUndefined       is a given variable undefined?
- *  . isNull            is a given value null?
- *  . isBoolean         is a given value a boolean?
- *  . isString          is a given value a string?
- *  . isNumber          is a given value a number?
- *  . isNaN             is a given value NaN?
- *  . isOdd             is a given value an odd number?
- *
- * Object types (mandatory):
- *  . isObject          is a given variable an object?
- *  . isMath            is a given value a Math object?
- *  . isDate            is a given value a Date?
- *  . isArray           is a given value an array?
- *  . isFunction        is a given variable a function?
- *  . isEmpty           is a given array, string or object empty?
- *
- * Operations on Objects (optional):
- *  . clone             clones a literal object or an array,
- *  . extend            extends a given object with all the properties in passed-in object(s),
- *  . keys              retrieves all the names of the object's own enumerable properties,
- *  . forPropIn         Parses all the names of the object's own enumerable properties,
- *
- * Operations on Arrays (optional):
- *  . contains          returns true if the array contains the passed-in value,
- *  . share             returns the list of the elements the passed-in arrays have in common,
- *
- * Operations on functions (optional):
- *  . -
- *
- * Utility (optional):
- *  . token             returns a unique string pattern in base 36 ([0-9a-z]),
- */
 /* istanbul ignore next */
 _ = {
 
@@ -133,7 +126,7 @@ _ = {
    * @since 0.0.0
    */
   isNaN: function(obj) {
-    return _.isNumber(obj) && obj !== +obj;
+    return this.isNumber(obj) && obj !== +obj;
   },
 
   /**
@@ -234,7 +227,7 @@ _ = {
   isEmpty: function(obj) {
     var key;
     if (obj === null) return true;
-    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    if (this.isArray(obj) || this.isString(obj)) return obj.length === 0;
     // Check that the object has no enumerable own-properties.
     // If ECMAScript 5 support only: 'return Object.keys(obj).length === 0;'
     // Otherwise, parse all properties.
@@ -255,17 +248,17 @@ _ = {
    * @since 0.0.0
    */
   clone: function(obj) {
-    var clone = _.isArray(obj) ? [] : {}
+    var clone = this.isArray(obj) ? [] : {}
       , prop
       ;
 
-    if (!_.isObject(obj)) return void 0;
+    if (!this.isObject(obj)) return void 0;
 
     for (prop in obj) {
-      if (_.isArray(obj[prop])) {
-        clone[prop] = _.clone(obj[prop]);
-      } else if (_.isObject(obj[prop])) {
-        clone[prop] = _.extend(obj[prop]);
+      if (this.isArray(obj[prop])) {
+        clone[prop] = this.clone(obj[prop]);
+      } else if (this.isObject(obj[prop])) {
+        clone[prop] = this.extend(obj[prop]);
       } else {
         clone[prop] = obj[prop];
       }
@@ -289,16 +282,16 @@ _ = {
       , i
       ;
 
-    if (!_.isObject(obj)) return obj;
+    if (!this.isObject(obj)) return obj;
 
     for (i = 1; i < arguments.length; i++) {
       source = arguments[i];
       for (prop in source) {
-        if (!_.isArray(arguments[i][prop]) && _.isObject(arguments[i][prop])) {
+        if (!this.isArray(arguments[i][prop]) && this.isObject(arguments[i][prop])) {
           obj[prop] = obj[prop] !== undefined ? obj[prop] : {};
-          _.extend(obj[prop], arguments[i][prop]);
+          this.extend(obj[prop], arguments[i][prop]);
         } else if (hasOwnProperty.call(source, prop)) {
-          obj[prop] = _.isArray(source[prop]) ? _.clone(source[prop]) : source[prop];
+          obj[prop] = this.isArray(source[prop]) ? this.clone(source[prop]) : source[prop];
         }
       }
     }
@@ -320,7 +313,7 @@ _ = {
   },
 
   /**
-   * Parses all the names of the object's own enumerable properties
+   * Parses all the names of the object's own enumerable properties.
    * (replace for...in statement).
    * (ECMAScript 5 only).
    *
@@ -332,7 +325,7 @@ _ = {
    */
   forPropIn: function(obj, callback) {
     // var keys = _.keys(obj);
-    _.keys(obj).forEach(function(key) {
+    this.keys(obj).forEach(function(key) {
       if ({}.hasOwnProperty.call(obj, key)) {
         callback(key);
       }
@@ -376,19 +369,11 @@ _ = {
       , j
       ;
 
-    // for (i = 0; i < array.length; i++) {
-    //   item = array[i];
-    //   if (_.contains(result, item)) continue;
-    //   for (j = 1; j < arguments.length; j++) {
-    //     if (!_.contains(arguments[j], item)) break;
-    //   }
-    //   if (j === arguments.length) result.push(item);
-    // }
     for (i = 0; i < array.length; i++) {
       item = array[i];
-      if (!_.contains(result, item)) {
+      if (!this.contains(result, item)) {
         for (j = 1; j < arguments.length; j++) {
-          if (!_.contains(arguments[j], item)) {
+          if (!this.contains(arguments[j], item)) {
             break;
           }
         }
@@ -419,7 +404,8 @@ _ = {
     return Math.random().toString(36).substr(2);
   }
 };
-/* eslint-enable no-void, no-plusplus, no-param-reassign, no-restricted-syntax,
-  no-prototype-builtins */
+
+/* eslint-enable no-void, no-restricted-syntax, no-prototype-builtins,
+  no-param-reassign */
 
 /* eslint-enable one-var, semi-style */

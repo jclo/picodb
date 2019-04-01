@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.12.0 (April 1, 2019)
+
+  * Reshuffled the library,
+  * ...,
+
+
 ### 0.11.0 (March 30, 2019)
 
   * Updated the project to comply with Gulp 4 and ESLint 5,

@@ -1,14 +1,14 @@
 /* global describe, it */
-/* eslint max-len: [1, 280, 0], import/no-extraneous-dependencies: 0, no-unused-expressions: 0  */
+/* eslint one-var: 0, semi-style: 0, no-unused-expressions: 0, prefer-destructuring: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     ;
 
 // -- Local constants
@@ -265,6 +265,7 @@ module.exports = () => {
 
         it('Expects { a: 3 }, { $set: { quantity: 100, metrics: { orders: 200, ratings: { value: 300, type: "bbb", newfield: "new", newfield2: ["a", "b", "c"] }}}} to return 1 document.', (done) => {
           db.insertMany(docs, () => {
+            /* eslint-disable-next-line object-curly-newline */
             db.updateOne({ a: 3 }, { $set: { quantity: 100, metrics: { orders: 200, ratings: { value: 300, type: 'bbb', newfield: 'new', newfield2: ['a', 'b', 'c'] } } } }, (err, doc) => {
               newdocs = doc[0];
               expect(doc).to.have.lengthOf(1);
@@ -318,6 +319,7 @@ module.exports = () => {
 
         it('Expects { a: 3 }, { $unset: { quantity: true, metrics: { ratings: { value: false, type: true }}}} to return 1 document.', (done) => {
           db.insertMany(docs, () => {
+            /* eslint-disable-next-line max-len */
             db.updateOne({ a: 3 }, { $unset: { quantity: true, metrics: { ratings: { type: true } } } }, (err, doc) => {
               newdocs = doc[0];
               expect(doc).to.have.lengthOf(1);
@@ -347,6 +349,7 @@ module.exports = () => {
         });
 
         it('Expects deleting a non existing field not to throw any error.', (done) => {
+          /* eslint-disable-next-line max-len */
           db.updateOne({ a: 3 }, { $unset: { metrics: { ratings: { values: true, othervalues: { others: true } } } } }, () => {
             expect(true).to.be.true;
             done();
@@ -467,6 +470,7 @@ module.exports = () => {
 
         it('Expects { a: 3} { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 }}}} to return 1 document.', (done) => {
           db.insertOne({ a: 3, quantity: ['a', 'b', 'c'], metrics: { orders: ['x', 'y'], ratings: { values: ['ab', 'cd', 'ef'], type: 'aaa', newfield: [0] } } }, () => {
+            /* eslint-disable-next-line max-len */
             db.updateOne({ a: 3 }, { $pop: { quantity: 1, metrics: { orders: 1, ratings: { values: -1, type: 2, newfield: 3 } } } }, (err, docu) => {
               doc = docu[0];
               expect(docu).to.have.lengthOf(1);
@@ -644,6 +648,7 @@ module.exports = () => {
 
         it('Expects { a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 }}}}} to return 1 document.', (done) => {
           db.insertOne({ a: 2, quantity: [{ a: 1, b: 2, c: 3 }, { a: 1, b: 3 }], metrics: { orders: 3, ratings: { values: [{ a: 1, b: 2 }, { a: 1, b: 1 }], type: [{ a: 2 }, 'aaa'] } } }, () => {
+            /* eslint-disable-next-line max-len */
             db.updateOne({ a: 2 }, { $pull: { quantity: { a: 1, b: 2 }, metrics: { orders: { a: 1 }, ratings: { values: { a: 1, b: 1 }, type: { a: 1, b: 2 } } } } }, (err, docu) => {
               doc = docu[0];
               expect(docu).to.have.lengthOf(1);

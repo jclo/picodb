@@ -1,4 +1,3 @@
   // Returns the library name:
   return PicoDB;
 }));
-/* eslint-enable one-var, semi-style, no-underscore-dangle, curly, max-len */

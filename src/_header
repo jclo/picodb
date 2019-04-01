@@ -2,7 +2,7 @@
 // ESLint declarations
 /* global define */
 /* eslint strict: ["error", "function"] */
-/* eslint-disable one-var, semi-style, no-underscore-dangle, curly, max-len */
+/* eslint-disable one-var, semi-style */
 (function(root, factory) {
   'use strict';
 
@@ -24,17 +24,15 @@
 }({{lib:parent}}, function(root) {
   'use strict';
 
+  // These are the global variables accessible everywhere inside this module.
+  // 'PicoDB' is the variable that defines this library and it is the only
+  // variable accessible outside this module.
+  // '_' is an object that gives access to an embedded small utility library.
+  // And, 'P' is an object that exports public methods from the IIFE module
+  // in which they are defined.
   var PicoDB
-    , PicoDBMethods
-    , previousPicoDB
+    , P = {}
     , _
-    , _event
-    , _geo
-    , _project
-    , _query
-    , _count
-    , _delete
-    , _find
-    , _insert
-    , _update
     ;
+
+  /* eslint-enable one-var, semi-style */

@@ -1,30 +1,70 @@
-/* eslint-disable one-var, semi-style */
+/** **************************************************************************
+ *
+ * An embedded library providing functions to make Geospatial queries.
+ *
+ * geo.js is just a literal object that contains a set of static methods. It
+ * can't be intantiated.
+ *
+ * Private Functions:
+ *  . _lawOfHaversines            returns the distance between two points on earth,
+ *  . _lawOfCosines               returns the distance between two points on earth,
+ *  . _equirectangularProjection  returns the distance between two points on earth,
+ *  . _getDistanceOnEarth         returns the distance between two points on earth
+ *  . _isPointInPolygon2          checks if the point is inside the polygon,
+ *  . _isPointInPolygon           checks if the point is inside the polygon,
+ *  . _isGeometryInsideGeoObject  checks if the geo. is inside a Multi. or Polygon,
+ *  . _toPolygonCoordinates       embeds Point, LineString and Polygon,
+ *  . _box                        checks if the Geo matches the $geoWithin $box,
+ *  . _polygon                    checks if the Geo matches the $geoWithin $polygon,
+ *  . _center                     checks if the Geo matches the $geoWithin $center,
+ *  . _centerSphere               checks if the Geo matches the $geoWithin $centerSphere,
+ *  . _within                     checks if the Geo matches the $geoWithin $geometry,
+ *  . _interLineString            checks if the Geo Line intersects the $geoIntersects polygon,
+ *  . _interPolygon               checks if the Geo Polygon intersects the $geoIntersects polygon,
+ *  . _intersects                 checks if the Geo object intersects the $geoIntersects polygon.
+ *  . _isPointNear                checks if the Geo Point matches the condition of distance,
+ *  . _geoNear                    checks if the Geo object matches the $near query,
+ *  . _geoWithin                  checks if the Geo object matches the $geoWithin query,
+ *  . _geoIntersects              checks if the Geo object matches the $geoIntersects query,
+ *  . _near                       checks if the Geo object matches the $near query.
+ *  . _query                      decodes the GeoSpatial query.
+ *
+ *
+ * Public Static Methods:
+ *  . lawOfHaversines             returns the distance between two points on Earth,
+ *  . lawOfCosines                returns the distance between two points on Earth,
+ *  . equirectangularProjection   returns the distance between two points on Earth,
+ *  . query                       processes the GeoSpatial query,
+ *
+ *
+ * @namespace    P.Geo
+ * @dependencies none
+ * @exports      -
+ * @author       -
+ * @since        0.0.0
+ * @version      -
+ * ************************************************************************ */
+/* global P, _ */
+/* eslint-disable one-var, semi-style, no-underscore-dangle */
 
 'use strict';
 
-/**
- * geo.js is an embedded library providing functions to make Geospatial
- * queries.
- *
- * @namespace _geo
- * @functions -
- * @exports   -
- * @author    -
- * @since     0.0.1
- * @version   -
- */
-/* eslint-disable no-mixed-operators, no-plusplus, no-unneeded-ternary */
+(function() {
+  // IIFE
 
-/**
- * Private functions:
- *   . _
- *
- * Public functions:
- *  . -
- */
-_geo = {
+  // -- Module path
 
-  /* Private Functions ---------------------------------------------------- */
+
+  // -- Local modules
+
+
+  // -- Local constants
+
+
+  // -- Local variables
+
+
+  // -- Private Functions ----------------------------------------------------
 
   /**
    * Returns the distance between two points on Earth using the law of haversines.
@@ -40,12 +80,12 @@ _geo = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination point,
-   * @param {Object}     the source point,
-   * @returns {Boolean}  returns the distance between the two points in meters,
-   * @since 0.0.1
+   * @param {Object}      the destination point,
+   * @param {Object}      the source point,
+   * @returns {Boolean}   returns the distance between the two points in meters,
+   * @since 0.0.0
    */
-  _lawOfHaversines: function(obj, source) {
+  function _lawOfHaversines(obj, source) {
     var λ1 = source.coordinates[0]
       , λ2 = obj.coordinates[0]
       , Δλ = (λ2 - λ1) * (Math.PI / 180)
@@ -64,7 +104,7 @@ _geo = {
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
-  },
+  }
 
   /**
    * Returns the distance between two points on Earth using the law of cosines.
@@ -78,12 +118,12 @@ _geo = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination point,
-   * @param {Object}     the source point,
-   * @returns {Boolean}  returns the distance between the two points in meters,
-   * @since 0.0.1
+   * @param {Object}      the destination point,
+   * @param {Object}      the source point,
+   * @returns {Boolean}   returns the distance between the two points in meters,
+   * @since 0.0.0
    */
-  _lawOfCosines: function(obj, source) {
+  function _lawOfCosines(obj, source) {
     var λ1 = source.coordinates[0]
       , λ2 = obj.coordinates[0]
       , Δλ = (λ2 - λ1) * (Math.PI / 180)
@@ -94,7 +134,7 @@ _geo = {
 
     return Math.acos(Math.sin(φ1) * Math.sin(φ2)
       + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * R;
-  },
+  }
 
   /**
    * Returns the distance between two points on Earth using the Equirectangular projection.
@@ -109,12 +149,12 @@ _geo = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination point,
-   * @param {Object}     the source point,
-   * @returns {Boolean}  returns the distance between the two points in meters,
-   * @since 0.0.1
+   * @param {Object}      the destination point,
+   * @param {Object}      the source point,
+   * @returns {Boolean}   returns the distance between the two points in meters,
+   * @since 0.0.0
    */
-  _equirectangularProjection: function(obj, source) {
+  function _equirectangularProjection(obj, source) {
     var λ1 = source.coordinates[0] * (Math.PI / 180)
       , λ2 = obj.coordinates[0] * (Math.PI / 180)
       , φ1 = source.coordinates[1] * (Math.PI / 180)
@@ -127,7 +167,7 @@ _geo = {
     x = (λ2 - λ1) * Math.cos((φ1 + φ2) / 2);
     y = φ2 - φ1;
     return Math.sqrt(x * x + y * y) * R;
-  },
+  }
 
   /**
    * Returns the distance between two points on Earth.
@@ -142,14 +182,14 @@ _geo = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination point,
-   * @param {Object}     the source point,
-   * @returns {Boolean}  returns the distance between the two points in meters,
-   * @since 0.0.1
+   * @param {Object}      the destination point,
+   * @param {Object}      the source point,
+   * @returns {Boolean}   returns the distance between the two points in meters,
+   * @since 0.0.0
    */
-  _getDistanceOnEarth: function(obj, source) {
-    return _geo._lawOfCosines(obj, source);
-  },
+  function _getDistanceOnEarth(obj, source) {
+    return _lawOfCosines(obj, source);
+  }
 
   /**
    * Checks if the point is inside the polygon.
@@ -164,12 +204,13 @@ _geo = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the coordinates of the point,
-   * @param {Object}     the coordinates of the polygon,
-   * @returns {Boolean}  returns true if the point is inside the polygon, false otherwise,
+   * @param {Object}      the coordinates of the point,
+   * @param {Object}      the coordinates of the polygon,
+   * @returns {Boolean}   returns true if the point is inside the polygon, false otherwise,
    * @since 0.0.1
    */
-  _isPointInPolygon2: /* istanbul ignore next */ function(point, polygon) {
+  /* eslint-disable-next-line */
+  /* istanbul ignore next */ function _isPointInPolygon2(point, polygon) {
     var intersections
       , vertex1
       , vertex2
@@ -202,6 +243,7 @@ _geo = {
           && point[1] <= Math.max(vertex1[1], vertex2[1])
           && point[0] <= Math.max(vertex1[0], vertex2[0])
           && vertex1[1] !== vertex2[1]) {
+        /* eslint-disable-next-line */
         xinter = (point[1] - vertex1[1]) * (vertex2[0] - vertex1[0]) / (vertex2[1] - vertex1[1]) + (vertex1[0]);
         // Check if the point is on a boundary other than the horizontal one:
         if (xinter === point[0]) {
@@ -214,19 +256,19 @@ _geo = {
       }
     }
     return intersections % 2 !== 0 ? 'inside' : 'outside';
-  },
+  }
 
   /**
    * Checks if the point is inside the polygon.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the coordinates of the point,
-   * @param {Object}     the coordinates of the polygon,
-   * @returns {Boolean}  returns true if the point is inside the polygon, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the coordinates of the point,
+   * @param {Object}      the coordinates of the polygon,
+   * @returns {Boolean}   returns true if the point is inside the polygon, false otherwise,
+   * @since 0.0.0
    */
-  _isPointInPolygon: function(point, polygon) {
+  function _isPointInPolygon(point, polygon) {
     var cn = 0
       , vt
       , i
@@ -238,24 +280,26 @@ _geo = {
         // compute  the actual edge-ray intersect x-coordinate:
         vt = (point[1] - polygon[i][1]) / (polygon[i + 1][1] - polygon[i][1]);
         if (point[0] < polygon[i][0] + vt * (polygon[i + 1][0] - polygon[i][0])) {
-          cn++;
+          cn += 1;
         }
       }
     }
-    return cn % 2 !== 0 ? true : false;
-  },
+    return cn % 2 !== 0;
+  }
 
   /**
    * Checks if the GeoJSON geometry is inside a Multipolygon or Polygon.
+   *
    * @function (arg1, arg2)
    * @private
-   * @param {Array}      the GeoJSON geometry,
-   * @param {Object}     the GeoSpatial $geoWithin/$geometry query,
-   * @returns {Boolean}  returns true if the point is inside the Multipolygon/polygon, false otherwise,
-   @ @throws {Object}    throws an error if the type isn't 'Multipolygon' or 'Polygon',
-   * @since 0.0.1
+   * @param {Array}       the GeoJSON geometry,
+   * @param {Object}      the GeoSpatial $geoWithin/$geometry query,
+   * @returns {Boolean}   returns true if the point is inside the Multipolygon/polygon,
+   *                      false otherwise,
+   @ @throws {Object}     throws an error if the type isn't 'Multipolygon' or 'Polygon',
+   * @since 0.0.0
    */
-  _isGeometryInsideGeoObject: function(obj, source) {
+  function _isGeometryInsideGeoObject(obj, source) {
     var breakloop
       , i
       , j
@@ -272,7 +316,7 @@ _geo = {
             for (k = 0; k < source.coordinates.length; k++) {
               breakloop = false;
               for (l = 0; l < source.coordinates[k].length; l++) {
-                if (_geo._isPointInPolygon(obj[i][j], source.coordinates[k][l])) {
+                if (_isPointInPolygon(obj[i][j], source.coordinates[k][l])) {
                   breakloop = true;
                   break;
                 }
@@ -295,7 +339,7 @@ _geo = {
           for (j = 0; j < obj[i].length; j++) {
             breakloop = false;
             for (k = 0; k < source.coordinates.length; k++) {
-              if (_geo._isPointInPolygon(obj[i][j], source.coordinates[k])) {
+              if (_isPointInPolygon(obj[i][j], source.coordinates[k])) {
                 breakloop = true;
                 break;
               }
@@ -309,20 +353,20 @@ _geo = {
 
       /* istanbul ignore next */
       default:
-        throw new Error('_geo._within: the GeoSpatial $geoWihin operator with a $geometry.type "' + source.type + '" is unknown!');
+        throw new Error('Geo._within: the GeoSpatial $geoWihin operator with a $geometry.type "' + source.type + '" is unknown!');
     }
-  },
+  }
 
   /**
    * Embeds Point, LineString and Polygon coordinates inside a 'Polygon' like coordinate array.
    *
    * @function (arg1)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @returns {Array}    returns the embbedded coordinates,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @returns {Array}     returns the embbedded coordinates,
+   * @since 0.0.0
    */
-  _toPolygonCoordinates: function(obj) {
+  function _toPolygonCoordinates(obj) {
     switch (obj.type) {
       case 'Point':
         return [[obj.coordinates]];
@@ -337,21 +381,21 @@ _geo = {
 
       /* istanbul ignore next */
       default:
-        throw new Error('_geo._toPolygonCoordinates: the GeoJSON type "' + obj.type + '" is not supported!');
+        throw new Error('Geo._toPolygonCoordinates: the GeoJSON type "' + obj.type + '" is not supported!');
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin $box query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin/$box query,
-   * @returns {Boolean}  returns true if the point is inside the box, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin/$box query,
+   * @returns {Boolean}   returns true if the point is inside the box, false otherwise,
+   * @since 0.0.0
    */
-  _box: function(obj, box) {
+  function _box(obj, box) {
     var c
       , p
       ;
@@ -368,20 +412,20 @@ _geo = {
       coordinates: c
     };
 
-    return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), p);
-  },
+    return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), p);
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin $polygon query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin/$polygon query,
-   * @returns {Boolean}  returns true if the point is inside the polygon, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin/$polygon query,
+   * @returns {Boolean}   returns true if the point is inside the polygon, false otherwise,
+   * @since 0.0.0
    */
-  _polygon: function(obj, polygon) {
+  function _polygon(obj, polygon) {
     var p
       ;
 
@@ -391,71 +435,73 @@ _geo = {
       coordinates: [polygon, [polygon[0][0], polygon[0][1]]]
     };
 
-    return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), p);
-  },
+    return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), p);
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin $center query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin/$geometry query,
-   * @returns {Boolean}  returns true if the point is inside the circle, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin/$geometry query,
+   * @returns {Boolean}   returns true if the point is inside the circle, false otherwise,
+   * @since 0.0.0
    */
-  _center: function(obj, center) {
+  function _center(obj, center) {
     var d
       ;
 
+    /* eslint-disable-next-line */
     d = Math.sqrt(Math.pow((center[0][0] - obj.coordinates[0]), 2) + Math.pow((center[0][1] - obj.coordinates[1]), 2));
-    return d < center[1] ? true : false;
-  },
+    return d < center[1];
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin $centerSphere query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin/$geometry query,
-   * @returns {Boolean}  returns true if the point is inside the sphere, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin/$geometry query,
+   * @returns {Boolean}   returns true if the point is inside the sphere, false otherwise,
+   * @since 0.0.0
    */
-  _centerSphere: function(obj, centerSphere) {
+  function _centerSphere(obj, centerSphere) {
     var d
       ;
 
+    /* eslint-disable-next-line */
     d = Math.sqrt(Math.pow((centerSphere[0][0] - obj.coordinates[0]), 2) + Math.pow((centerSphere[0][1] - obj.coordinates[1]), 2));
-    return d < (centerSphere[1] / Math.PI * 180) ? true : false;
-  },
+    return d < (centerSphere[1] / Math.PI * 180);
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin $geometry query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin/$geometry query,
-   * @returns {Boolean}  returns true if the point is inside the polygon, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin/$geometry query,
+   * @returns {Boolean}   returns true if the point is inside the polygon, false otherwise,
+   * @since 0.0.0
    */
-  _within: function(obj, source) {
+  function _within(obj, source) {
     switch (obj.type) {
       case 'Point':
-        return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
+        return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), source);
 
       case 'LineString':
-        return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
+        return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), source);
 
       case 'Polygon':
-        return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
+        return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), source);
 
       case 'MultiPoint':
-        return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
+        return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), source);
 
       case 'MultiLineString':
-        return _geo._isGeometryInsideGeoObject(_geo._toPolygonCoordinates(obj), source);
+        return _isGeometryInsideGeoObject(_toPolygonCoordinates(obj), source);
 
       /* istanbul ignore next */
       case 'MultiPolygon':
@@ -469,19 +515,19 @@ _geo = {
       default:
         return false;
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON type LineString intersects the $geoIntersects polygon.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @since 0.0.0
    */
-  _interLineString: function(obj, source) {
+  function _interLineString(obj, source) {
     var inside
       , outside
       , breakloop
@@ -494,7 +540,7 @@ _geo = {
     for (i = 0; i < obj.coordinates.length; i++) {
       for (j = 0; j < source.coordinates.length; j++) {
         breakloop = false;
-        if (_geo._isPointInPolygon(obj.coordinates[i], source.coordinates[j])) {
+        if (_isPointInPolygon(obj.coordinates[i], source.coordinates[j])) {
           inside = true;
           breakloop = true;
           // Abort as soon as we have found one point inside and one point ouside!
@@ -512,19 +558,19 @@ _geo = {
       }
     }
     return false;
-  },
+  }
 
   /**
    * Checks if the GeoJSON type Polygon intersects the $geoIntersects polygon.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
    * @since 0.0.1
    */
-  _interPolygon: function(obj, source) {
+  function _interPolygon(obj, source) {
     var inside
       , outside
       , breakloop
@@ -537,7 +583,7 @@ _geo = {
       for (j = 0; j < obj.coordinates[i].length; j++) {
         for (k = 0; k < source.coordinates.length; k++) {
           breakloop = false;
-          if (_geo._isPointInPolygon(obj.coordinates[i][j], source.coordinates[k])) {
+          if (_isPointInPolygon(obj.coordinates[i][j], source.coordinates[k])) {
             inside = true;
             breakloop = true;
             // Abort as soon as we have found one point inside and one point ouside!
@@ -556,19 +602,19 @@ _geo = {
       }
     }
     return false;
-  },
+  }
 
   /**
    * Checks if the GeoJSON object intersects the $geoIntersects polygon.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @since 0.0.0
    */
-  _intersects: function(obj, source) {
+  function _intersects(obj, source) {
     switch (obj.type) {
       // Point can't intersect a polygon.
       /* istanbul ignore next */
@@ -577,11 +623,11 @@ _geo = {
 
       // LineString could intersect a polygon.
       case 'LineString':
-        return _geo._interLineString(obj, source);
+        return _interLineString(obj, source);
 
       // Polygon could intersect a polygon.
       case 'Polygon':
-        return _geo._interPolygon(obj, source);
+        return _interPolygon(obj, source);
 
       // MultiPoint can't intersect a polygon.
       /* istanbul ignore next */
@@ -607,21 +653,21 @@ _geo = {
       default:
         return false;
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON Point matches the condition of distance from the central point.
    *
    * @function (arg1, arg2, arg3, arg4)
    * @private
-   * @param {Object}     the GeoJSON Point,
-   * @param {Object}     the GeoSpatial $near query,
-   * @param {Number}     the minimal distance from the central point in meters,
-   * @param {Number}     the maximal distance from the central point in meters,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON Point,
+   * @param {Object}      the GeoSpatial $near query,
+   * @param {Number}      the minimal distance from the central point in meters,
+   * @param {Number}      the maximal distance from the central point in meters,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @since 0.0.0
    */
-  _isPointNear: function(obj, source, max, min) {
+  function _isPointNear(obj, source, max, min) {
     var d
       ;
 
@@ -636,114 +682,116 @@ _geo = {
     }
 
     // Compute the earth distance:
-    d = _geo._getDistanceOnEarth(obj, source);
+    d = _getDistanceOnEarth(obj, source);
 
     // Return true if min <= d <= max (if min or max is undefined, the
     // associated condition is true).
+    /* eslint-disable-next-line */
     return (!min || d >= min ? true : false) && (!max || d <= max ? true : false) ? true : false;
-  },
+  }
 
   /**
    * Checks if the GeoJSON object matches the $near query.
    *
    * @function (arg1, arg2, arg3, arg4)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $near query,
-   * @param {Number}     the minimal distance from the central point in meters,
-   * @param {Number}     the maximal distance from the central point in meters,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $near query,
+   * @param {Number}      the minimal distance from the central point in meters,
+   * @param {Number}      the maximal distance from the central point in meters,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @since 0.0.0
    */
-  _geoNear: function(obj, source, max, min) {
+  function _geoNear(obj, source, max, min) {
     switch (obj.type) {
       case 'Point':
-        return _geo._isPointNear(obj, source, max, min);
+        return _isPointNear(obj, source, max, min);
 
       default:
         return false;
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoWithin query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial $geoWithin query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @throws {Object}    throws an error if the GeoSpatial operator isn't recognized,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial $geoWithin query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @throws {Object}     throws an error if the GeoSpatial operator isn't recognized,
+   * @since 0.0.0
    */
-  _geoWithin: function(obj, source) {
+  function _geoWithin(obj, source) {
     var op = _.keys(source)[0]
       ;
 
+    /* istanbul ignore next */
     if (!_.isObject(source)) {
       return false;
     }
 
     switch (op) {
       case '$geometry':
-        return _geo._within(obj, source.$geometry);
+        return _within(obj, source.$geometry);
 
       case '$box':
-        return _geo._box(obj, source.$box);
+        return _box(obj, source.$box);
 
       case '$polygon':
-        return _geo._polygon(obj, source.$polygon);
+        return _polygon(obj, source.$polygon);
 
       case '$center':
-        return _geo._center(obj, source.$center);
+        return _center(obj, source.$center);
 
       case '$centerSphere':
-        return _geo._centerSphere(obj, source.$centerSphere);
+        return _centerSphere(obj, source.$centerSphere);
 
       /* istanbul ignore next */
       default:
-        throw new Error('_geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
+        throw new Error('Geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON object matches the $geoIntersects query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @throws {Object}    throws an error if the GeoSpatial operator isn't recognized,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @throws {Object}     throws an error if the GeoSpatial operator isn't recognized,
+   * @since 0.0.0
    */
-  _geoIntersects: function(obj, source) {
-    // if (!source.hasOwnProperty(('$geometry')))
+  function _geoIntersects(obj, source) {
+    /* istanbul ignore next */
     if (!{}.hasOwnProperty.call(source, '$geometry')) {
       return false;
     }
 
     switch (source.$geometry.type) {
       case 'Polygon':
-        return _geo._intersects(obj, source.$geometry);
+        return _intersects(obj, source.$geometry);
 
       /* istanbul ignore next */
       default:
-        throw new Error('_geo._geoIntersects: the GeoSpatial $geoIntersects type "' + source.$geometry.type + '" is not supported!');
+        throw new Error('Geo._geoIntersects: the GeoSpatial $geoIntersects type "' + source.$geometry.type + '" is not supported!');
     }
-  },
+  }
 
   /**
    * Checks if the GeoJSON object matches the $near query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @since 0.0.0
    */
-  _near: function(obj, source) {
+  function _near(obj, source) {
     // if (!source.hasOwnProperty(('$geometry')))
     if (!{}.hasOwnProperty.call(source, '$geometry')) {
       return false;
@@ -751,40 +799,40 @@ _geo = {
 
     switch (source.$geometry.type) {
       case 'Point':
-        return _geo._geoNear(obj, source.$geometry, source.$maxDistance, source.$minDistance);
+        return _geoNear(obj, source.$geometry, source.$maxDistance, source.$minDistance);
 
       default:
         return false;
     }
-  },
+  }
 
   /**
    * Decodes the GeoSpatial query.
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @throws {Object}    throws an error if the GeoSpatial operator isn't recognized,
-   * @since 0.0.1
+   * @param {Object}      the GeoJSON object,
+   * @param {Object}      the GeoSpatial query,
+   * @returns {Boolean}   returns true if the query is successful, false otherwise,
+   * @throws {Object}     throws an error if the GeoSpatial operator isn't recognized,
+   * @since 0.0.0
    */
-  _query: function(obj, source) {
+  function _query(obj, source) {
     var status
       ;
 
     _.forPropIn(source, function(prop) {
       switch (prop) {
         case '$geoWithin':
-          status = _geo._geoWithin(obj, source[prop]);
+          status = _geoWithin(obj, source[prop]);
           break;
 
         case '$geoIntersects':
-          status = _geo._geoIntersects(obj, source[prop]);
+          status = _geoIntersects(obj, source[prop]);
           break;
 
         case '$near':
-          status = _geo._near(obj, source[prop]);
+          status = _near(obj, source[prop]);
           break;
 
         /* istanbul ignore next */
@@ -794,30 +842,72 @@ _geo = {
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._query: the Geo Operator "' + prop + '" is unknown!');
+          throw new Error('Geo._query: the Geo Operator "' + prop + '" is unknown!');
       }
     });
     return status;
-  },
-
-
-  /* Public Functions ----------------------------------------------------- */
-
-  /**
-   * Processes the GeoSpatial query.
-   *
-   * @function (arg1, arg2)
-   * @private
-   * @param {Object}     the GeoJSON object,
-   * @param {Object}     the GeoSpatial query,
-   * @returns {Boolean}  returns true if the query is successful, false otherwise,
-   * @since 0.0.1
-   */
-  query: function(obj, source) {
-    return _geo._query(obj, source);
   }
 
-};
-/* eslint-enable no-mixed-operators, no-plusplus, no-unneeded-ternary */
 
-/* eslint-enable one-var, semi-style */
+  // -- Public Static Methods ------------------------------------------------
+
+  P.Geo = {
+
+    /**
+     * Returns the distance between two points on Earth using the law of haversines.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {Object}      the destination point,
+     * @param {Object}      the source point,
+     * @returns {Boolean}   returns the distance between the two points in meters,
+     * @since 0.0.0
+     */
+    lawOfHaversines: function(obj, source) {
+      return _lawOfHaversines(obj, source);
+    },
+
+    /**
+     * Returns the distance between two points on Earth using the law of cosines.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {Object}      the destination point,
+     * @param {Object}      the source point,
+     * @returns {Boolean}   returns the distance between the two points in meters,
+     * @since 0.0.0
+     */
+    lawOfCosines: function(obj, source) {
+      return _lawOfCosines(obj, source);
+    },
+
+    /**
+     * Returns the distance between two points on Earth using the Equirectangular projection.
+     *
+     * @method (arg1, arg2)
+     * @public
+     * @param {Object}      the destination point,
+     * @param {Object}      the source point,
+     * @returns {Boolean}   returns the distance between the two points in meters,
+     * @since 0.0.0
+     */
+    equirectangularProjection: function(obj, source) {
+      return _equirectangularProjection(obj, source);
+    },
+
+    /**
+     * Processes the GeoSpatial query.
+     *
+     * @function (arg1, arg2)
+     * @private
+     * @param {Object}     the GeoJSON object,
+     * @param {Object}     the GeoSpatial query,
+     * @returns {Boolean}  returns true if the query is successful, false otherwise,
+     * @since 0.0.1
+     */
+    query: function(obj, source) {
+      return _query(obj, source);
+    }
+  };
+}());
+/* eslint-enable one-var, semi-style, no-underscore-dangle */

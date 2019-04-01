@@ -1,21 +1,21 @@
 // ESLint declarations
 /* global describe */
-/* eslint one-var: 0  */
+/* eslint one-var: 0, semi-style: 0 */
 
 'use strict';
 
 // -- Node modules
 
 // -- Local modules
-const picodb    = require('./picodb.js')
-    , insert    = require('./insert.js')
-    , find      = require('./find.js')
-    , query     = require('./query.js')
-    , geo       = require('./geo.js')
-    , count     = require('./count.js')
-    , deleteDoc = require('./delete.js')
-    , update    = require('./update.js')
-    , event     = require('./event.js')
+const picodb    = require('./sub/picodb.js')
+    , insert    = require('./sub/insert.js')
+    , find      = require('./sub/find.js')
+    , query     = require('./sub/query.js')
+    , geo       = require('./sub/geo.js')
+    , count     = require('./sub/count.js')
+    , deleteDoc = require('./sub/delete.js')
+    , update    = require('./sub/update.js')
+    , event     = require('./sub/event.js')
     ;
 
 // -- Local constants

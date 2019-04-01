@@ -1,47 +1,67 @@
-/* eslint-disable one-var, semi-style */
+/** **************************************************************************
+ *
+ * An embedded library providing functions to query the documents into the db.
+ *
+ * query.js is just a literal object that contains a set of static methods. It
+ * can't be intantiated.
+ *
+ * Private Functions:
+ *  . _isHavingNotOperator        returns object keys of the not operators if any,
+ *  . _isHavingOrOperator         returns the query array if $or operator,
+ *  . _isHavingSpecialOperator    returns special operators or false,
+ *  . _isConditionTrue            checks if the document meets the condition,
+ *  . _areConditionsTrue          checks if the document meets all the conditions,
+ *  . _query                      checks if the document matches the query,
+ *
+ *
+ * Public Static Methods:
+ *  . isHavingSpecialOperator     returns an object if any special operators,
+ *  . isMatch                     checks if the document matches,
+ *
+ *
+ * @namespace    P.Query
+ * @dependencies none
+ * @exports      -
+ * @author       -
+ * @since        0.0.0
+ * @version      -
+ * ************************************************************************ */
+/* global P, _ */
+/* eslint-disable one-var, semi-style, no-underscore-dangle */
 
 'use strict';
 
-/**
- * query.js is an embedded library providing functions to query the documents
- * into the db.
- *
- * @namespace _query
- * @functions -
- * @exports   -
- * @author    -
- * @since     0.0.1
- * @version   -
- */
+(function() {
+  // IIFE
 
-/**
- * Private functions:
- *  . _isHavingNotOperator      returns object keys of the not ($ne, $nin) operators if any,
- *  . _isHavingOrOperator       returns the query array if $or operator,
- *  . _isHavingSpecialOperator  returns special operators or false,
- *  . _isConditionTrue          checks if the document meets the condition,
- *  . _areConditionsTrue        checks if the document meets all the conditions,
- *
- * Public functions:
- *  . isHavingSpecialOperator   returns special operators or false,
- *  . isMatch                   checks if the document matches,
- */
-_query = {
+  // -- Module path
 
-  /* Private Functions ---------------------------------------------------- */
+
+  // -- Local modules
+  var Geo = P.Geo
+    ;
+
+
+  // -- Local constants
+
+
+  // -- Local variables
+
+
+  // -- Private Functions ----------------------------------------------------
 
   /**
    * Returns object keys of the not ($ne, $nin) operators if any.
    *
    * @function (arg1)
-   * @public
-   * @param {Object}     the query object,
-   * @returns {Array}    returns the list of objects keys for not operators or
-   *                     false,
-   * @since 0.0.1
+   * @private
+   * @param {Object}      the query object,
+   * @returns {Array}     returns the list of objects keys for not operators or
+   *                      false,
+   * @since 0.0.0
    */
   /* eslint-disable no-loop-func, dot-notation */
-  _isHavingNotOperator: function(query) {
+  function _isHavingNotOperator(query) {
     var op = ['$ne', '$nin', '$not']
       , qar
       , not
@@ -77,7 +97,7 @@ _query = {
       });
     }
     return not.length !== 0 ? not : false;
-  },
+  }
   /* eslint-enable no-loop-func, dot-notation */
 
   /**
@@ -85,31 +105,32 @@ _query = {
    * (query: { $or: [ { a: { $eq: 1}}, { b: { $eq: 2 }}] })
    *
    * @function (arg1)
-   * @public
-   * @param {Object}     the query object,
-   * @returns {Array}    returns the query array or false,
-   * @since 0.0.1
+   * @private
+   * @param {Object}      the query object,
+   * @returns {Array}     returns the query array or false,
+   * @since 0.0.0
    */
   /* eslint-disable dot-notation */
-  _isHavingOrOperator: function(query) {
+  function _isHavingOrOperator(query) {
     return (!query['$or'] || !_.isArray(query['$or'])) ? false : query['$or'];
-  }, /* eslint-enable dot-notation */
+  }
+  /* eslint-enable dot-notation */
 
   /**
    * Returns special operators or false.
    *
    * @function (arg1)
-   * @public
-   * @param {Object}     the query object,
-   * @returns {Object}   returns the special operators.
-   * @since 0.0.1
+   * @private
+   * @param {Object}      the query object,
+   * @returns {Object}    returns the special operators.
+   * @since 0.0.0
    */
-  _isHavingSpecialOperator: function(query) {
+  function _isHavingSpecialOperator(query) {
     return {
-      not: _query._isHavingNotOperator(query),
-      or: _query._isHavingOrOperator(query)
+      not: _isHavingNotOperator(query),
+      or: _isHavingOrOperator(query)
     };
-  },
+  }
 
   /**
    * Checks if the document meets the condition.
@@ -121,9 +142,9 @@ _query = {
    * @param {String}          the query operator,
    * @returns {Boolean}       returns true if it matches, false otherwise,
    * @throws {Object}         throws an error if the condition operator isn't recognized,
-   * @since 0.0.1
+   * @since 0.0.0
    */
-  _isConditionTrue: function(obj, source, op) {
+  function _isConditionTrue(obj, source, op) {
     switch (op) {
       // Comparison Operators:
       case '$eq':
@@ -156,7 +177,8 @@ _query = {
 
       // Logical Operators:
       case '$not':
-        return !_query._areConditionsTrue(obj, source);
+        /* eslint-disable-next-line no-use-before-define */
+        return !_areConditionsTrue(obj, source);
 
       // Element Operators:
       case '$exists':
@@ -167,16 +189,17 @@ _query = {
 
       // Geospatial Operators:
       case '$geoWithin':
-        return _geo.query(obj, { $geoWithin: source });
+        return Geo.query(obj, { $geoWithin: source });
 
       case '$geoIntersects':
-        return _geo.query(obj, { $geoIntersects: source });
+        return Geo.query(obj, { $geoIntersects: source });
 
       case '$near':
-        return _geo.query(obj, { $near: source });
+        return Geo.query(obj, { $near: source });
 
+      /* istanbul ignore next */
       case '$nearSphere':
-        return _geo.query(obj, { $nearSphere: source });
+        return Geo.query(obj, { $nearSphere: source });
 
         // Array Operators:
         // --
@@ -190,9 +213,9 @@ _query = {
 
       /* istanbul ignore next */
       default:
-        throw new Error('_query._isConditionTrue: the operator "' + op + '" is unknown!');
+        throw new Error('Query._isConditionTrue: the operator "' + op + '" is unknown!');
     }
-  },
+  }
 
   /**
    * Checks if the document meets all the conditions.
@@ -202,10 +225,10 @@ _query = {
    * @param {String/Number}   the document value,
    * @param {Object}          the conditions,
    * @returns {Boolean}       returns true if it matches, false otherwise,
-   * @since 0.0.1
+   * @since 0.0.0
    */
   /* eslint-disable no-restricted-syntax */
-  _areConditionsTrue: function(obj, source) {
+  function _areConditionsTrue(obj, source) {
     var prop
       ;
 
@@ -214,18 +237,17 @@ _query = {
       if (obj === source) {
         return true;
       }
-
       return false;
     }
 
     // With an Operator:
     for (prop in source) {
-      if (!_query._isConditionTrue(obj, source[prop], prop)) {
+      if (!_isConditionTrue(obj, source[prop], prop)) {
         return false;
       }
     }
     return true;
-  },
+  }
   /* eslint-enable no-restricted-syntax */
 
   /**
@@ -250,15 +272,15 @@ _query = {
    *
    * @function (arg1, arg2, arg3)
    * @private
-   * @param {Object}    the document,
-   * @param {Object}    the query,
-   * @param {Object}    the special operator object,
-   * @returns {Boolean} returns true if the conditions are met,
-   * @since 0.0.1
+   * @param {Object}      the document,
+   * @param {Object}      the query,
+   * @param {Object}      the special operator object,
+   * @returns {Boolean}   returns true if the conditions are met,
+   * @since 0.0.0
    */
   /* eslint-disable no-shadow, no-restricted-syntax, no-continue, guard-for-in,
     no-else-return */
-  _query: function(obj, source, op) {
+  function _query(obj, source, op) {
     var level = 0
       , rootKey
       ;
@@ -294,7 +316,7 @@ _query = {
           } else if (op.or) {
             return true;
           }
-        } else if (!_query._areConditionsTrue(obj[prop], source[prop])) {
+        } else if (!_areConditionsTrue(obj[prop], source[prop])) {
           if (!op.or) {
             return false;
           }
@@ -306,57 +328,57 @@ _query = {
     }
 
     return parse(obj, source);
-  },
-  /* eslint-enable no-shadow, no-restricted-syntax, no-continue, guard-for-in,
-    no-else-return */
+  }
 
 
-  /* Public Functions ----------------------------------------------------- */
+  // -- Public Static Methods ------------------------------------------------
 
-  /**
-   * Returns an object if any special operators.
-   *
-   * @function (arg1)
-   * @public
-   * @param {Object}     the query object,
-   * @returns {Array}    returns the list of objects keys for not operators or
-   *                     false,
-   * @since 0.0.1
-   */
-  isHavingSpecialOperator: function(query) {
-    return _query._isHavingSpecialOperator(query);
-  },
+  P.Query = {
 
-  /**
-   * Checks if the document matches.
-   *
-   * @function (arg1, arg2, arg3)
-   * @public
-   * @param {Object}     the document,
-   * @param {Object}     the query object,
-   * @param {Object}     special operator object,
-   * @returns {Boolean}  returns true if the object matches, false otherwise,
-   * @since 0.0.1
-   */
-  /* eslint-disable dot-notation */
-  isMatch: function(doc, query, sop) {
-    var i
-      ;
+    /**
+     * Returns an object if any special operators.
+     *
+     * @method (arg1)
+     * @public
+     * @param {Object}    the query object,
+     * @returns {Array}   returns the list of objects keys for not operators or
+     *                    false,
+     * @since 0.0.0
+     */
+    isHavingSpecialOperator: function(query) {
+      return _isHavingSpecialOperator(query);
+    },
 
-    // Basic query:
-    if (!sop.or) {
-      return _query._query(doc, query, sop);
-    }
+    /**
+     * Checks if the document matches.
+     *
+     * @method (arg1, arg2, arg3)
+     * @public
+     * @param {Object}    the document,
+     * @param {Object}    the query object,
+     * @param {Object}    special operator object,
+     * @returns {Boolean} returns true if the object matches, false otherwise,
+     * @since 0.0.1
+     */
+    /* eslint-disable dot-notation */
+    isMatch: function(doc, query, sop) {
+      var i
+        ;
 
-    // Or query:
-    for (i = 0; i < query['$or'].length; i++) {
-      if (_query._query(doc, query['$or'][i], sop)) {
-        return true;
+      // Basic query:
+      if (!sop.or) {
+        return _query(doc, query, sop);
       }
+
+      // Or query:
+      for (i = 0; i < query['$or'].length; i++) {
+        if (_query(doc, query['$or'][i], sop)) {
+          return true;
+        }
+      }
+      return false;
     }
-
-    return false;
-  } /* eslint-enable dot-notation */
-};
-
-/* eslint-enable one-var, semi-style */
+    /* eslint-enable dot-notation */
+  };
+}());
+/* eslint-enable one-var, semi-style, no-underscore-dangle */

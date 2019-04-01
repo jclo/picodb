@@ -1,14 +1,14 @@
 /* global describe, it */
-/* eslint import/no-extraneous-dependencies: 0, no-unused-expressions: 0  */
+/* eslint one-var: 0, semi-style: 0, no-unused-expressions: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     ;
 
 // -- Local constants
@@ -25,13 +25,13 @@ module.exports = function() {
     it('Expects the method to return null for the error.', (done) => {
       db.insertOne({ a: 1 }, (err, payload) => {
         doc = payload;
-        expect(err).to.be.null;
+        expect(err).to.be.a('null');
         done();
       });
     });
 
     it('Expects the method to return a payload.', () => {
-      expect(doc).not.to.be.undefined;
+      expect(doc).not.to.be.a('undefined');
     });
 
     it('Expects the payload to be an array.', () => {

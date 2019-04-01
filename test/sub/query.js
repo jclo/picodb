@@ -1,20 +1,21 @@
 /* global describe, it */
-/* eslint max-len: [1, 120, 0], import/no-extraneous-dependencies: 0  */
+/* eslint one-var: 0, semi-style: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     ;
 
 // -- Local constants
 const docs = [
   { a: 1 },
   { a: 1, b: 'bbb', c: 5 },
+  /* eslint-disable-next-line object-curly-newline */
   { a: 2, b: 'bbb', c: ['a', 'b', 'c'], d: { e: { f: 'f' } } },
 ];
 
@@ -327,6 +328,7 @@ module.exports = function() {
         });
 
         it('Expects query { b: { $exists: true }, d: { e: { f: { $exists: true }}} } to return 1 document.', () => {
+          /* eslint-disable-next-line max-len */
           db.find({ b: { $exists: true }, d: { e: { f: { $exists: true } } } }).toArray((err, doc) => {
             expect(doc).to.have.lengthOf(1);
           });

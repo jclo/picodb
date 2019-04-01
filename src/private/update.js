@@ -1,37 +1,52 @@
-/* eslint-disable one-var, semi-style */
+/** **************************************************************************
+ *
+ * An embedded library providing functions to update documents into the db.
+ *
+ * update.js is just a literal object that contains a set of static methods. It
+ * can't be intantiated.
+ *
+ * Private Functions:
+ *  . _pull                       processes the $pull operator,
+ *  . _push                       processes the $push operator,
+ *  . _apply                      applies the requested update to the document,
+ *  . _replace                    replaces the document content,
+ *  . _applyTime                  updates or adds the time fields to the document,
+ *  . _updateThisDoc              updates this document,
+ *  . _update                     updates one or several documents,
+ *
+ *
+ * Public Static Methods:
+ *  . update                      updates one or several documents,
+ *
+ *
+ * @namespace    P.Update
+ * @dependencies none
+ * @exports      -
+ * @author       -
+ * @since        0.0.0
+ * @version      -
+ * ************************************************************************ */
+/* global P, _ */
+/* eslint-disable one-var, semi-style, no-underscore-dangle */
 
 'use strict';
 
-/**
- * update.js is an embedded library providing functions to update documents
- * into the db.
- *
- * @namespace _update
- * @functions -
- * @exports   -
- * @author    -
- * @since     0.0.1
- * @version   -
- */
+(function() {
+  // IIFE
 
-/**
- * Private functions:
- *  . _pull                processes the $pull operator,
- *  . _push                processes the $push operator,
- *  . _apply               applies the requested update to the document,
- *  . _replace             replaces the document content,
- *  . _applyTime           updates or adds the time fields to the document,
- *  . _updateThisDoc       updates this document,
- *  . _update              updates one or several documents,
- *
- * Public functions:
- *  . update               updates one or several documents,
- */
-/* eslint-disable dot-notation, no-param-reassign, no-restricted-syntax, no-continue */
-_update = {
+  // -- Module path
 
 
-  /* Private Functions ---------------------------------------------------- */
+  // -- Local modules
+
+
+  // -- Local constants
+
+
+  // -- Local variables
+
+
+  // -- Private Functions ----------------------------------------------------
 
   /**
    * Processes the $pull operator.
@@ -41,12 +56,13 @@ _update = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @returns {Object}   the modified document,
-   * @since 0.0.1
+   * @param {Object}      the destination document,
+   * @param {Object}      the source document,
+   * @returns {Object}    the modified document,
+   * @since 0.0.0
    */
-  _pull: function(obj, source) {
+  /* eslint-disable no-restricted-syntax, no-param-reassign, dot-notation, no-continue */
+  function _pull(obj, source) {
     var prop
       , key
       , match
@@ -60,7 +76,7 @@ _update = {
       // subprop = _.keys(source[prop]);
       if (_.isObject(source[prop]) && !_.isArray(obj[prop])) {
         if (obj[prop]) {
-          _update._pull(obj[prop], source[prop]);
+          _pull(obj[prop], source[prop]);
         }
       } else if (hasOwnProperty.call(source, prop)) {
         // If it doesn't exist or it isn't an array, go next:
@@ -184,14 +200,15 @@ _update = {
 
             /* istanbul ignore next */
             default:
-              throw new Error('_update._pull: the operator "' + op + '" is not supported!');
+              throw new Error('Update._pull: the operator "' + op + '" is not supported!');
           }
           continue;
         }
       }
     }
     return obj;
-  },
+  }
+  /* eslint-enable no-restricted-syntax, no-param-reassign, dot-notation, no-continue */
 
   /**
    * Processes the $push operator.
@@ -200,12 +217,13 @@ _update = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @returns {Object}   the modified document,
-   * @since 0.0.1
+   * @param {Object}      the destination document,
+   * @param {Object}      the source document,
+   * @returns {Object}    the modified document,
+   * @since 0.0.0
    */
-  _push: function(obj, source) {
+  /* eslint-disable no-restricted-syntax, no-param-reassign, dot-notation, no-continue */
+  function _push(obj, source) {
     var prop
       , subprop
       , position
@@ -223,7 +241,7 @@ _update = {
         if (!obj[prop]) {
           obj[prop] = {};
         }
-        _update._push(obj[prop], source[prop]);
+        _push(obj[prop], source[prop]);
       } else if (hasOwnProperty.call(source, prop)) {
         if (!obj[prop]) {
           obj[prop] = [];
@@ -272,7 +290,8 @@ _update = {
       }
     }
     return obj;
-  },
+  }
+  /* eslint-enable no-restricted-syntax, no-param-reassign, dot-notation, no-continue */
 
   /**
    * Applies the requested update to the document.
@@ -281,15 +300,15 @@ _update = {
    *
    * @function (arg1, arg2, arg3)
    * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @param {String}     the Update Operator,
-   * @returns {Object}   the modified document,
-   * @throws {Object}    throws an error if the operator is unknown,
-   * @since 0.0.1
+   * @param {Object}      the destination document,
+   * @param {Object}      the source document,
+   * @param {String}      the Update Operator,
+   * @returns {Object}    the modified document,
+   * @throws {Object}     throws an error if the operator is unknown,
+   * @since 0.0.0
    */
-
-  _apply: function(obj, source, op) {
+  /* eslint-disable no-restricted-syntax, no-param-reassign, dot-notation */
+  function _apply(obj, source, op) {
     var prop
       , i
       , j
@@ -302,7 +321,7 @@ _update = {
         } else if (!obj[prop]) {
           obj[prop] = {};
         }
-        _update._apply(obj[prop], source[prop], op);
+        _apply(obj[prop], source[prop], op);
       } else if (hasOwnProperty.call(source, prop)) {
         // if (_.isArray(source[prop]))
         // obj[prop] = _.clone(source[prop]);
@@ -383,12 +402,13 @@ _update = {
 
           /* istanbul ignore next */
           default:
-            throw new Error('_update._apply: the operator "' + op + '" is unknown!');
+            throw new Error('Update._apply: the operator "' + op + '" is unknown!');
         }
       }
     }
     return obj;
-  },
+  }
+  /* eslint-enable no-restricted-syntax, no-param-reassign, dot-notation */
 
   /**
    * Replaces the document content.
@@ -397,12 +417,13 @@ _update = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @returns {Object}   the modified document,
-   * @since 0.0.1
+   * @param {Object}      the destination document,
+   * @param {Object}      the source document,
+   * @returns {Object}    the modified document,
+   * @since 0.0.0
    */
-  _replace: function(obj, source) {
+  /* eslint-disable no-param-reassign */
+  function _replace(obj, source) {
     var keys = _.keys(obj)
       , i
       ;
@@ -416,7 +437,8 @@ _update = {
 
     // Update 'obj' with the properties of 'source':
     return _.extend(obj, source);
-  },
+  }
+  /* eslint-enable no-param-reassign */
 
   /**
    * Updates or adds the time fields to the document.
@@ -429,12 +451,13 @@ _update = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the destination document,
-   * @param {Object}     the source document,
-   * @returns {Object}   the modified document,
-   * @since 0.0.1
+   * @param {Object}      the destination document,
+   * @param {Object}      the source document,
+   * @returns {Object}    the modified document,
+   * @since 0.0.0
    */
-  _applyTime: function(obj, source) {
+  /* eslint-disable no-restricted-syntax, no-param-reassign */
+  function _applyTime(obj, source) {
     var prop
       , subprop
       ;
@@ -446,7 +469,7 @@ _update = {
           if (!obj[prop]) {
             obj[prop] = {};
           }
-          _update._applyTime(obj[prop], source[prop]);
+          _applyTime(obj[prop], source[prop]);
         } else if (hasOwnProperty.call(source, prop)) {
           if (source[prop][subprop] === 'timestamp') {
             obj[prop] = Date.now();
@@ -457,7 +480,8 @@ _update = {
       }
     }
     return obj;
-  },
+  }
+  /* eslint-enable no-restricted-syntax, no-param-reassign */
 
   /**
    * Updates this document.
@@ -466,80 +490,82 @@ _update = {
    *
    * @function (arg1, arg2)
    * @private
-   * @param {Object}     the document to update,
-   * @param {Object}     the 'fields' to be updated and their new values,
-   * @returns {Object}   the modified document,
-   * @throws {Object}    throws an error if the operator is unknown or not supported,
-   * @since 0.0.1
+   * @param {Object}      the document to update,
+   * @param {Object}      the 'fields' to be updated and their new values,
+   * @returns {Object}    the modified document,
+   * @throws {Object}     throws an error if the operator is unknown or not supported,
+   * @since 0.0.0
    */
-  _updateThisDoc: function(doc, update) {
+  /* eslint-disable dot-notation */
+  function _updateThisDoc(doc, update) {
     var keys = _.keys(update)
       ;
 
     if (!keys[0].match(/^\$/)) {
-      return _update._replace(doc, update);
+      return _replace(doc, update);
     }
 
     switch (keys[0]) {
       // Field Operators:
       case '$inc':
-        return _update._apply(doc, update['$inc'], '$inc');
+        return _apply(doc, update['$inc'], '$inc');
 
       case '$mul':
-        return _update._apply(doc, update['$mul'], '$mul');
+        return _apply(doc, update['$mul'], '$mul');
 
       case '$rename':
-        return _update._apply(doc, update['$rename'], '$rename');
+        return _apply(doc, update['$rename'], '$rename');
 
       case '$set':
-        return _update._apply(doc, update['$set'], '$set');
+        return _apply(doc, update['$set'], '$set');
 
       case '$unset':
-        return _update._apply(doc, update['$unset'], '$unset');
+        return _apply(doc, update['$unset'], '$unset');
 
       case '$min':
-        return _update._apply(doc, update['$min'], '$min');
+        return _apply(doc, update['$min'], '$min');
 
       case '$max':
-        return _update._apply(doc, update['$max'], '$max');
+        return _apply(doc, update['$max'], '$max');
 
       case '$currentDate':
-        return _update._applyTime(doc, update['$currentDate']);
+        return _applyTime(doc, update['$currentDate']);
 
       // Array Operators:
       case '$pop':
-        return _update._apply(doc, update['$pop'], '$pop');
+        return _apply(doc, update['$pop'], '$pop');
 
       case '$pullAll':
-        return _update._apply(doc, update['$pullAll'], '$pullAll');
+        return _apply(doc, update['$pullAll'], '$pullAll');
 
       case '$pull':
-        return _update._pull(doc, update['$pull'], '$pull');
+        return _pull(doc, update['$pull'], '$pull');
 
       case '$push':
-        return _update._push(doc, update['$push'], '$push');
+        return _push(doc, update['$push'], '$push');
 
       /* istanbul ignore next */
       default:
         throw new Error('The Update Operator "' + keys[0] + '" isn\'t supported!');
     }
-  },
+  }
+  /* eslint-enable dot-notation */
 
   /**
    * Updates one or several documents.
    *
    * @function (arg1, arg2, arg3, arg4, arg5, arg6)
    * @private
-   * @param {Object}     the database object,
-   * @param {Object}     the query object,
-   * @param {Object}     the 'fields' to be updated,
-   * @param {Options}    the settings,
-   * @param {Function}   the function to call at completion,
-   * @returns {}         -,
-   * @since 0.0.1
+   * @param {Object}      the database object,
+   * @param {Object}      the query object,
+   * @param {Object}      the 'fields' to be updated,
+   * @param {Options}     the settings,
+   * @param {Function}    the function to call at completion,
+   * @returns {}          -,
+   * @since 0.0.0
    */
-  _update: function(db, eventQ, query, update, options, callback) {
-    var sop = _query.isHavingSpecialOperator(query)
+  function _update(db, eventQ, query, update, options, callback) {
+    var sop = P.Query.isHavingSpecialOperator(query)
       , docOut
       , i
       ;
@@ -563,8 +589,8 @@ _update = {
     // Parse the doc db:
     docOut = [];
     for (i = 0; i < db.data.length; i++) {
-      if (_query.isMatch(db.data[i], query, sop)) {
-        _update._updateThisDoc(db.data[i], update);
+      if (P.Query.isMatch(db.data[i], query, sop)) {
+        _updateThisDoc(db.data[i], update);
         // Do not copy the references. Clone the object instead!
         docOut.push(_.extend({}, db.data[i]));
         if (!options.many) {
@@ -574,55 +600,59 @@ _update = {
     }
 
     // Fire an event and execute callback:
-    _event.fire(eventQ, 'change', docOut);
-    _event.fire(eventQ, 'update', docOut);
+    P.Event.fire(eventQ, 'change', docOut);
+    P.Event.fire(eventQ, 'update', docOut);
     if (callback) {
       callback(null, docOut);
     }
-  },
-
-
-  /* Public Functions ----------------------------------------------------- */
-
-  /**
-   * Updates one or several documents.
-   *
-   * @function (arg1, arg2, arg3, arg4, arg5, arg6)
-   * @public
-   * @param {Object}     the context object,
-   * @param {Boolean}    true if all the matching documents should be updated,
-   *                     false if only the first matching document should be,
-   * @param {Object}     the query object,
-   * @param {Object}     the 'fields' to be updated,
-   * @param {Options}    the optional settings,
-   * @param {Function}   the function to call at completion,
-   * @returns {}         -,
-   * @since 0.0.1
-   */
-  update: function(_this, many, query, update, options, callback) {
-    var db = _this.db
-      , eventQ = _this.eventQ
-      ;
-
-    // Check if there is a callback function:
-    if (callback && !_.isFunction(callback)) {
-      callback = undefined;
-    } else if (!callback && !_.isFunction(options)) {
-      callback = undefined;
-    } else if (!callback && _.isFunction(options)) {
-      callback = options;
-      options = {};
-    }
-
-    // Check if options is an object:
-    if (_.isArray(options) || !_.isObject(options)) {
-      options = {};
-    }
-
-    // Try to update the document:
-    options.many = many;
-    _update._update(db, eventQ, query, update, options, callback);
   }
-}; /* eslint-enable dot-notation, no-param-reassign, no-restricted-syntax, no-continue */
 
-/* eslint-enable one-var, semi-style */
+
+  // -- Public Static Methods ------------------------------------------------
+
+  P.Update = {
+
+    /**
+     * Updates one or several documents.
+     *
+     * @function (arg1, arg2, arg3, arg4, arg5, arg6)
+     * @public
+     * @param {Object}    the context object,
+     * @param {Boolean}   true if all the matching documents should be updated,
+     *                    false if only the first matching document should be,
+     * @param {Object}    the query object,
+     * @param {Object}    the 'fields' to be updated,
+     * @param {Options}   the optional settings,
+     * @param {Function}  the function to call at completion,
+     * @returns {}        -,
+     * @since 0.0.0
+     */
+    /* eslint-disable no-param-reassign */
+    update: function(_this, many, query, update, options, callback) {
+      var db = _this.db
+        , eventQ = _this.eventQ
+        ;
+
+      // Check if there is a callback function:
+      if (callback && !_.isFunction(callback)) {
+        callback = undefined;
+      } else if (!callback && !_.isFunction(options)) {
+        callback = undefined;
+      } else if (!callback && _.isFunction(options)) {
+        callback = options;
+        options = {};
+      }
+
+      // Check if options is an object:
+      if (_.isArray(options) || !_.isObject(options)) {
+        options = {};
+      }
+
+      // Try to update the document:
+      options.many = many;
+      _update(db, eventQ, query, update, options, callback);
+    }
+    /* eslint-enable no-param-reassign */
+  };
+}());
+/* eslint-enable one-var, semi-style, no-underscore-dangle */

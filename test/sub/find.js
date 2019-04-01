@@ -1,14 +1,14 @@
 /* global describe, it */
-/* eslint one-var: 0, import/no-extraneous-dependencies: 0, no-unused-expressions: 0  */
+/* eslint one-var: 0, semi-style: 0, no-unused-expressions: 0, prefer-destructuring: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     ;
 
 // -- Local constants
@@ -156,7 +156,9 @@ module.exports = function() {
         });
 
         it('Expects the projection { _id: 0, a: 1, b: 1, c: { e: 1 }} to return 5 documents.', () => {
-          db.find({}, { _id: 0, a: 1, b: 1, c: { d: 0, e: 1 } }).toArray((err, docs) => {
+          db.find({}, {
+            _id: 0, a: 1, b: 1, c: { d: 0, e: 1 },
+          }).toArray((err, docs) => {
             doc444 = docs[3];
             expect(doc).to.have.lengthOf(5);
           });

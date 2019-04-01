@@ -1,14 +1,14 @@
 /* global describe, it */
-/* eslint import/no-extraneous-dependencies: 0, no-unused-expressions: 0  */
+/* eslint one-var: 0, semi-style: 0, no-unused-expressions: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     ;
 
 // -- Local constants
@@ -35,7 +35,7 @@ module.exports = () => {
     it('Expects the method with the filter { a: 2 } not to return any error.', (done) => {
       db.insertMany(doc, () => {
         db.deleteOne({ a: 2 }, (err) => {
-          expect(err).to.be.null;
+          expect(err).to.be.a('null');
           done();
         });
       });
@@ -69,7 +69,7 @@ module.exports = () => {
 
     it('Expects the method with a wrong filter ([]) to return null.', (done) => {
       db.deleteOne([], (err, deleted) => {
-        expect(deleted).to.be.null;
+        expect(deleted).to.be.a('null');
         done();
       });
     });

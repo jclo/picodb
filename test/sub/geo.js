@@ -1,15 +1,14 @@
 /* global describe, it */
-/* eslint one-var: 0, max-len: [1, 250, 0], import/no-extraneous-dependencies: 0,
-  camelcase: 0, no-underscore-dangle: 0  */
+/* eslint one-var: 0, semi-style: 0, max-len: 0, camelcase: 0 */
 
 'use strict';
 
 // -- Node modules
-const expect = require('chai').expect
+const { expect } = require('chai')
     ;
 
 // -- Local modules
-const PicoDB = require('../index.js')
+const PicoDB = require('../../index.js')
     , us     = require('./usa.js')
     ;
 
@@ -582,26 +581,27 @@ module.exports = () => {
 
       describe('$near:', () => {
         const db = PicoDB()
-          // , _geo = eval(fs.readFileSync('./src/geo.js').toString())
-            , _geo = db._export('_geo')
+            // , _geo = eval(fs.readFileSync('./src/geo.js').toString())
+            /* eslint-disable-next-line */
+            , Geo = db._export('P.Geo')
             ;
 
         describe('Test of private functions:', () => {
           describe('law of haversines:', () => {
             it('Expects the distance between the airports of SF and LA to be below 600 km.', () => {
-              expect(_geo._lawOfHaversines(sfo.loc, lax.loc)).to.be.below(600000);
+              expect(Geo.lawOfHaversines(sfo.loc, lax.loc)).to.be.below(600000);
             });
           });
 
           describe('law of cosines:', () => {
             it('Expects the distance between the airports of SF and LA to be below 600 km.', () => {
-              expect(_geo._lawOfCosines(sfo.loc, lax.loc)).to.be.below(600000);
+              expect(Geo.lawOfCosines(sfo.loc, lax.loc)).to.be.below(600000);
             });
           });
 
           describe('equirectangular projection:', () => {
             it('Expects the distance between the airports of SF and LA to be below 600 km.', () => {
-              expect(_geo._equirectangularProjection(sfo.loc, lax.loc)).to.be.below(600000);
+              expect(Geo.equirectangularProjection(sfo.loc, lax.loc)).to.be.below(600000);
             });
           });
         });
