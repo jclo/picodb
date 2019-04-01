@@ -5,7 +5,7 @@
   * Reshuffled the library,
   * Closed issue #2 as we intend to keep PicoDB free of dependencies,
   * Closed issue #3 as implicit $and is already implemented,
-  * ...,
+  * Release.
 
 
 ### 0.11.0 (March 30, 2019)
