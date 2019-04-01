@@ -4,6 +4,7 @@
 
   * Reshuffled the library,
   * Closed issue #2 as we intend to keep PicoDB free of dependencies,
+  * Closed issue #3 as implicit $and is already implemented,
   * ...,
 
 
