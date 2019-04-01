@@ -3,6 +3,7 @@
 ### 0.12.0 (April 1, 2019)
 
   * Reshuffled the library,
+  * Closed issue #2 as we intend to keep PicoDB free of dependencies,
   * ...,
 
 

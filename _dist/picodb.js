@@ -474,9 +474,6 @@
    *  . addEventListener            adds an Event Listener,
    *  . addOneTimeEventListener     adds an Event Listener that could be fired once,
    *  . removeEventListener         removes an Event Listener from the event list,
-   *  . on                          alias on addEventListener,
-   *  . one                         alias on addOneTimeEventListener,
-   *  . off                         alias on removeEventListener,
    *
    *
    * @namespace    P.Event
@@ -663,19 +660,6 @@
         if (index >= 0) {
           eventList[type].listeners.splice(index, 1);
         }
-      },
-
-      // Aliases
-      on: function(eventList, type, listener) {
-        return this.addEventListener(eventList, type, listener);
-      },
-
-      one: function(eventList, type, listener) {
-        return this.addOneTimeEventListener(eventList, type, listener);
-      },
-
-      off: function(eventList, type, listener) {
-        return this.removeEventListener(eventList, type, listener);
       }
     };
   }());
@@ -891,9 +875,8 @@
      * @returns {Boolean}   returns true if the point is inside the polygon, false otherwise,
      * @since 0.0.1
      */
-    /* istanbul ingnore next */
     /* eslint-disable-next-line */
-    function _isPointInPolygon2(point, polygon) {
+    /* istanbul ignore next */ function _isPointInPolygon2(point, polygon) {
       var intersections
         , vertex1
         , vertex2
@@ -1036,7 +1019,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._within: the GeoSpatial $geoWihin operator with a $geometry.type "' + source.type + '" is unknown!');
+          throw new Error('Geo._within: the GeoSpatial $geoWihin operator with a $geometry.type "' + source.type + '" is unknown!');
       }
     }
 
@@ -1064,7 +1047,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._toPolygonCoordinates: the GeoJSON type "' + obj.type + '" is not supported!');
+          throw new Error('Geo._toPolygonCoordinates: the GeoJSON type "' + obj.type + '" is not supported!');
       }
     }
 
@@ -1410,6 +1393,7 @@
       var op = _.keys(source)[0]
         ;
 
+      /* istanbul ignore next */
       if (!_.isObject(source)) {
         return false;
       }
@@ -1432,7 +1416,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
+          throw new Error('Geo._geoWithin: the GeoSpatial $geoWihin operator "' + op + '" is unknown!');
       }
     }
 
@@ -1448,7 +1432,7 @@
      * @since 0.0.0
      */
     function _geoIntersects(obj, source) {
-      // if (!source.hasOwnProperty(('$geometry')))
+      /* istanbul ignore next */
       if (!{}.hasOwnProperty.call(source, '$geometry')) {
         return false;
       }
@@ -1459,7 +1443,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_geo._geoIntersects: the GeoSpatial $geoIntersects type "' + source.$geometry.type + '" is not supported!');
+          throw new Error('Geo._geoIntersects: the GeoSpatial $geoIntersects type "' + source.$geometry.type + '" is not supported!');
       }
     }
 
@@ -1524,7 +1508,7 @@
 
           /* istanbul ignore next */
           default:
-            throw new Error('_geo._query: the Geo Operator "' + prop + '" is unknown!');
+            throw new Error('Geo._query: the Geo Operator "' + prop + '" is unknown!');
         }
       });
       return status;
@@ -2002,6 +1986,7 @@
         case '$near':
           return Geo.query(obj, { $near: source });
 
+        /* istanbul ignore next */
         case '$nearSphere':
           return Geo.query(obj, { $nearSphere: source });
 
@@ -2017,7 +2002,7 @@
 
         /* istanbul ignore next */
         default:
-          throw new Error('_query._isConditionTrue: the operator "' + op + '" is unknown!');
+          throw new Error('Query._isConditionTrue: the operator "' + op + '" is unknown!');
       }
     }
 
@@ -3077,7 +3062,7 @@
 
               /* istanbul ignore next */
               default:
-                throw new Error('_pull: the operator "' + op + '" is not supported!');
+                throw new Error('Update._pull: the operator "' + op + '" is not supported!');
             }
             continue;
           }
@@ -3279,7 +3264,7 @@
 
             /* istanbul ignore next */
             default:
-              throw new Error('_apply: the operator "' + op + '" is unknown!');
+              throw new Error('Update._apply: the operator "' + op + '" is unknown!');
           }
         }
       }
