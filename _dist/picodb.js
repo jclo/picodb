@@ -1,5 +1,5 @@
 /** ****************************************************************************
- * PicoDB v0.12.0
+ * PicoDB v0.12.1
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -3626,7 +3626,7 @@
     };
 
     // Current version of the library:
-    PicoDB.VERSION = '0.12.0';
+    PicoDB.VERSION = '0.12.1';
 
 
     // -- Public Methods -------------------------------------------------------

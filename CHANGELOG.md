@@ -1,5 +1,11 @@
 ### HEAD
 
+### 0.12.1 (December 16, 2019)
+
+  * Updated the dependencies,
+  * ...,
+
+
 ### 0.12.0 (April 1, 2019)
 
   * Reshuffled the library,

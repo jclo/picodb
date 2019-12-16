@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "A tiny in-memory database (MongoDB like) that stores JSON documents",
   "main": "index.js",
   "bin": {},
@@ -13,7 +13,7 @@
     "display-coverage": "opener ./coverage/lcov-report/index.html",
     "report-coverage": "nyc report --reporter=text-lcov | coveralls",
     "report": "nyc report",
-    "doc": "vuepress dev docs"
+    "doc": ""
   },
   "repository": {
     "type": "git",
@@ -38,26 +38,24 @@
     "url": "https://github.com/jclo/picodb/issues"
   },
   "homepage": "https://github.com/jclo/picodb",
-  "dependencies": {
-    "vuepress": "0.14.10"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "4.2.0",
-    "coveralls": "3.0.3",
-    "cross-env": "5.2.0",
-    "del": "4.0.0",
-    "eslint": "5.15.3",
-    "eslint-config-airbnb-base": "13.1.0",
-    "eslint-plugin-import": "2.16.0",
-    "gulp": "4.0.0",
+    "coveralls": "3.0.9",
+    "cross-env": "6.0.3",
+    "del": "5.1.0",
+    "eslint": "6.7.2",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.19.1",
+    "gulp": "4.0.2",
     "gulp-concat": "2.6.1",
     "gulp-footer": "2.0.2",
-    "gulp-header": "2.0.7",
+    "gulp-header": "2.0.9",
     "gulp-replace": "1.0.0",
     "gulp-uglify": "3.0.2",
-    "husky": "1.3.1",
-    "mocha": "6.0.2",
-    "nyc": "13.3.0",
+    "husky": "3.1.0",
+    "mocha": "6.2.2",
+    "nyc": "14.1.1",
     "opener": "1.5.1"
   },
   "private": false,
