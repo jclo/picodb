@@ -1,5 +1,7 @@
 .DS_Store
 __trash
+_old_*
+
 _docs
 node_modules
 coverage

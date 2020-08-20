@@ -3,6 +3,7 @@
 ### 0.12.2 (August 20, 2020)
 
   * Updated the project dependencies,
+  * Fixed and closed issue #8,
   * ...,
 
 

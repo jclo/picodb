@@ -101,6 +101,16 @@ module.exports = function() {
       expect(true).to.be.a.true;
     });
 
+    it('Expects the method with query { b: null } to return 1 document.', (done) => {
+      const db1 = PicoDB();
+      db1.insertMany([{ a: 1, b: null }, { a: 2, b: 2 }], () => {
+        db1.find({ b: null }).toArray((err, docs) => {
+          expect(docs).to.have.lengthOf(1);
+          done();
+        });
+      });
+    });
+
     describe('projection:', () => {
       describe('include:', () => {
         let doc4

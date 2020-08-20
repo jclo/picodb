@@ -2083,7 +2083,8 @@
             rootKey = prop;
           }
 
-          if (!obj[prop]) {
+          // if (!obj[prop]) {
+          if (obj[prop] === undefined) {
             if (!op.not || !_.contains(op.not, rootKey)) {
               return false;
             } else if (op.or) {
