@@ -473,6 +473,7 @@
 
     /* eslint-disable-next-line */
     d = Math.sqrt(Math.pow((centerSphere[0][0] - obj.coordinates[0]), 2) + Math.pow((centerSphere[0][1] - obj.coordinates[1]), 2));
+    /* eslint-disable-next-line */
     return d < (centerSphere[1] / Math.PI * 180);
   }
 

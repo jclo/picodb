@@ -43,7 +43,8 @@ function clean(done) {
 // Creates the indented content.
 function docore() {
   return src(core)
-    // remove the extra 'use strict':
+    // remove extra global and 'use strict':
+    .pipe(replace(/\/\* global[\w$_\s,]+\*\//g, '/* - */'))
     .pipe(replace(/\n'use strict';\n/, ''))
     // indent the first line with 2 spaces:
     .pipe(replace(/^/g, '  '))

@@ -1,5 +1,5 @@
 /** ****************************************************************************
- * PicoDB v0.12.1
+ * PicoDB v0.12.2
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -483,7 +483,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -712,7 +712,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -1139,6 +1139,7 @@
 
       /* eslint-disable-next-line */
       d = Math.sqrt(Math.pow((centerSphere[0][0] - obj.coordinates[0]), 2) + Math.pow((centerSphere[0][1] - obj.coordinates[1]), 2));
+      /* eslint-disable-next-line */
       return d < (centerSphere[1] / Math.PI * 180);
     }
 
@@ -1605,7 +1606,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -1817,7 +1818,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -2195,7 +2196,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -2325,7 +2326,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -2510,7 +2511,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -2675,7 +2676,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -2890,7 +2891,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P, _ */
+  /* - */
   /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
   (function() {
@@ -3563,7 +3564,7 @@
    * @since        0.0.0
    * @version      -
    * ************************************************************************ */
-  /* global P */
+  /* - */
   /* eslint-disable one-var, semi-style */
 
   (function() {
@@ -3626,7 +3627,7 @@
     };
 
     // Current version of the library:
-    PicoDB.VERSION = '0.12.1';
+    PicoDB.VERSION = '0.12.2';
 
 
     // -- Public Methods -------------------------------------------------------

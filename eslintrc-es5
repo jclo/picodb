@@ -26,6 +26,7 @@
     space-before-function-paren: ["error", "never"],
     no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
     "no-multi-spaces": [2, { exceptions: { "VariableDeclarator": true } }],
-    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }]
+    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }],
+    no-multiple-empty-lines: ["error", { "max": 2, "maxEOF": 0 }]
   }
 }
