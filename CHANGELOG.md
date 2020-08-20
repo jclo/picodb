@@ -4,7 +4,7 @@
 
   * Updated the project dependencies,
   * Fixed and closed issue #8,
-  * ...,
+  * Release.
 
 
 ### 0.12.1 (December 16, 2019)
