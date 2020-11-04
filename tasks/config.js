@@ -1,38 +1,51 @@
-/* eslint */
+/* eslint one-var: 0, semi-style: 0 */
 
-'use strict';
+
+// -- Vendor Modules
+
+
+// -- Local Modules
+const pack = require('../package.json');
+
+
+// -- Local Constants
+const libname = 'PicoDB'
+    , name    = libname.replace(/\s+/g, '').toLowerCase()
+    , source  = './src/picodb.js'
+    ;
+
+
+// -- Local Variables
+
+
+// -- Main
 
 module.exports = {
+  ES6GLOB: '$__ES6GLOB',
   dist: './_dist',
   libdir: './lib',
-  libname: 'PicoDB',
-  parent: 'this',
-  noparent: '-noparent',
+  libname,
+  name,
+
+  // This is the entry javascript file of your library. Choose one
+  // pattern among these ones. The files 'basic.js', 'functional.js',
+  // 'functional-shared.js', 'prototypal.js', 'pseudoclassical.js' and
+  // 'pseudoclassical-auto.js' are mutually exclusives.
+  source,
   index: './index.js',
-  // These are the Javascript files required to build the library.
-  src: [
-    './src/_header',
-    './src/private/overslash.js',
-    './src/private/event.js',
-    './src/private/geo.js',
-    './src/private/project.js',
-    './src/private/query.js',
-    './src/private/count.js',
-    './src/private/delete.js',
-    './src/private/find.js',
-    './src/private/insert.js',
-    './src/private/update.js',
-    './src/picodb.js',
-    './src/_footer',
-  ],
-  license: ['/** ****************************************************************************',
-    ' * {{lib:name}} v{{lib:version}}',
-    ' *',
-    ' * {{lib:description}}.',
-    ' * (you can download it from npm or github repositories)',
-    ' * Copyright (c) 2019 {{lib:author}} <{{lib:email}}> ({{lib:url}}).',
-    ' * Released under the MIT license. You may obtain a copy of the License',
-    ' * at: http://www.opensource.org/licenses/mit-license.php).',
-    ' * ************************************************************************** */',
-    ''].join('\n'),
+  distlink: `./_dist/lib/${name}.js`,
+
+  get license() {
+    return ['/*! ****************************************************************************',
+      ` * ${libname} v${pack.version}`,
+      ' *',
+      ` * ${pack.description}.`,
+      ' * (you can download it from npm or github repositories)',
+      ` * Copyright (c) ${(new Date()).getFullYear()} ${pack.author.name} <${pack.author.email}> (${pack.author.url}).`,
+      ' * Released under the MIT license. You may obtain a copy of the License',
+      ' * at: http://www.opensource.org/licenses/mit-license.php).',
+      ' * Built from ES6Kadoo v1.0.5.',
+      ' * ************************************************************************** */',
+      ''].join('\n');
+  },
 };

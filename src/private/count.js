@@ -1,130 +1,175 @@
-/** **************************************************************************
+/** ************************************************************************
  *
- * An embedded library providing functions to count documents into the db.
+ * Counts the number of documents into the db w.r.t. the filter.
  *
- * count.js is just a literal object that contains a set of static methods. It
- * can't be intantiated.
+ * count.js is just a literal object that contains a set of functions.
+ * It can't be instantiated.
  *
  * Private Functions:
- *  . _count                      counts the number of documents,
+ *  . _getArgs                    returns the filtered arguments,
+ *  . _count                      counts the number of the documents in the db,
  *
  *
  * Public Static Methods:
- *  . count                       counts the number of documents,
+ *  . _count                      counts the number of the documents in the db,
  *
  *
- * @namespace    P.Count
+ *
+ * @namespace    -
  * @dependencies none
  * @exports      -
  * @author       -
  * @since        0.0.0
  * @version      -
- * ************************************************************************ */
-/* global P, _ */
+ * ********************************************************************** */
+/* global */
 /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
-'use strict';
 
-(function() {
-  // IIFE
-
-  // -- Module path
+// -- Vendor Modules
 
 
-  // -- Local modules
-  var Query = P.Query
-    ;
+// -- Local Modules
+import _ from '../lib/_';
+import Q from './query';
 
 
-  // -- Local constants
+// -- Local Constants
 
 
-  // -- Local variables
+// -- Local Variables
 
 
-  // -- Private Functions ----------------------------------------------------
+// -- Private Functions ----------------------------------------------------
 
-  /**
-   * Counts the number of documents.
-   *
-   * @function (arg1, arg2, arg3, arg4)
-   * @private
-   * @param {Object}      the database object,
-   * @param {Object}      the query object,
-   * @param {Options}     the optional settings,
-   * @param {Function}    the function to call at completion,
-   * @returns {}          -,
-   * @since 0.0.0
-   */
-  function _count(db, query, options, callback) {
-    var sop = Query.isHavingSpecialOperator(query)
-      , count
-      , i
-      ;
-
-    // Test is query is valid:
-    if (!_.isObject(query) || _.isArray(query) || _.isFunction(query)) {
-      if (callback) {
-        callback('query is not a valid object!', 0);
+/**
+ * Returns the filtered arguments.
+ *
+ * @function (arg1, [arg2], [arg3])
+ * @private
+ * @param {object}          the query filter,
+ * @param {object}          the passed-in options,
+ * @param {Function}        the function to call at the completion,
+ * @returns {Array}         returns an array with the filtered arguments,
+ * @since 0.0.0
+ */
+function _getArgs(...args) {
+  // query, options, callback
+  switch (args.length) {
+    case 1:
+      // must be query
+      if (_.isLiteralObject(args[0])) {
+        return [args[0], {}, null];
       }
-      return;
-    }
-
-    // Parse the db and count:
-    count = 0;
-    for (i = 0; i < db.data.length; i++) {
-      if (Query.isMatch(db.data[i], query, sop)) {
-        count += 1;
-        // console.log(db.data[i]);
+      if (_.isFunction(args[0])) {
+        return [null, {}, args[0]];
       }
-    }
-    if (callback) {
-      callback(null, count);
-    }
+      return [null, {}, args[0]];
+
+    case 2:
+      // must be query, options or query, callback
+      if (_.isLiteralObject(args[0])) {
+        if (_.isLiteralObject(args[1])) {
+          return [args[0], args[1], null];
+        }
+        if (_.isFunction(args[1])) {
+          return [args[0], {}, args[1]];
+        }
+        return [args[0], {}, null];
+      }
+      if (_.isFunction(args[1])) {
+        return [null, {}, args[1]];
+      }
+      return [null, {}, null];
+
+    case 3:
+      // must be query, options, callback
+      if (_.isLiteralObject(args[0])) {
+        if (_.isLiteralObject(args[1])) {
+          if (_.isFunction(args[2])) {
+            return [args[0], args[1], args[2]];
+          }
+          return [args[0], args[1], null];
+        }
+        if (_.isFunction(args[2])) {
+          return [args[0], {}, args[2]];
+        }
+        return [args[0], {}, null];
+      }
+      if (_.isFunction(args[2])) {
+        return [null, {}, args[2]];
+      }
+      return [null, {}, args[2]];
+
+    default:
+      return [null, {}, null];
+  }
+}
+
+/**
+ * Counts the number of the documents contained in the db.
+ *
+ * @function (arg1, arg2, arg3, arg4)
+ * @private
+ * @param {Object}          the db,
+ * @param {Object}          the query filter,
+ * @param {Object}          the options,
+ * @param {Function}        the function to call at the completion,
+ * @returns {}              -,
+ * @since 0.0.0
+ */
+function _count(db, query, options, callback) {
+  if (!query) {
+    callback(null, 0);
+    return;
   }
 
-
-  // -- Public Static Methods ------------------------------------------------
-
-  P.Count = {
-
-    /**
-     * Counts the number of documents.
-     *
-     * @method (arg1, arg2, arg3, arg4)
-     * @public
-     * @param {Object}    the context object,
-     * @param {Object}    the query object,
-     * @param {Options}   the optional settings,
-     * @param {Function}  the function to call at completion,
-     * @returns {}        -,
-     * @since 0.0.1
-     */
-    /* eslint-disable no-param-reassign */
-    count: function(_this, query, options, callback) {
-      var db = _this.db
-        ;
-
-      // Check if there is a callback function:
-      if (callback && !_.isFunction(callback)) {
-        callback = undefined;
-      } else if (!callback && !_.isFunction(options)) {
-        callback = undefined;
-      } else if (!callback && _.isFunction(options)) {
-        callback = options;
-        options = {};
-      }
-
-      // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options)) {
-        options = {};
-      }
-
-      // Try to count:
-      _count(db, query, options, callback);
+  const sop = Q.isHavingSpecialOperator(query);
+  let count = 0;
+  for (let i = 0; i < db.data.length; i++) {
+    if (Q.isMatch(db.data[i], query, sop)) {
+      count += 1;
     }
-    /* eslint-enable no-param-reassign */
+  }
+  callback(null, count);
+}
 
-  };
-}());
+
+// -- Public Static Methods ------------------------------------------------
+
+const Count = {
+
+  /**
+   * Counts the number of the documents contained in the db
+   *
+   * @method (arg1, arg2, arg3, [arg4])
+   * @public
+   * @param {Object}        the database object,
+   * @param {Object}        the query filter object,
+   * @param {Object}        the optional settings,
+   * @param {Function}      the function to call at the completion,
+   * @returns {Object}      returns a promise,
+   * @since 0.0.0
+   */
+  count(db, ...args) {
+    const [query, options, callback] = _getArgs(...args);
+
+    return new Promise((resolve, reject) => {
+      _count(db, query, options, (err, resp) => {
+        if (err) {
+          reject(err);
+          if (callback) callback(err);
+        } else {
+          resolve(resp);
+          if (callback) callback(null, resp);
+        }
+      });
+    });
+  },
+};
+
+
+// -- Export
+export default Count;
+
 /* eslint-enable one-var, semi-style, no-underscore-dangle */

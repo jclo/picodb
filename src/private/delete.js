@@ -1,183 +1,210 @@
-/** **************************************************************************
+/** ************************************************************************
  *
- * An embedded library providing functions to delete documents into the db.
+ * Deletes the requested documents from the database.
  *
- * delete.js is just a literal object that contains a set of static methods. It
- * can't be intantiated.
+ * delete.js is just a literal object that contains a set of functions.
+ * It can't be instantiated.
  *
  * Private Functions:
- *  . _delete                     deletes the doc(s) into the db,
+ *  . _getArgs                    returns the filtered arguments,
+ *  . _delete                     deletes the requested documents from the db,
  *
  *
  * Public Static Methods:
- *  . delete                      deletes the doc(s) into the db,
+ *  . _delete                     deletes the requested documents from the db,
  *
  *
- * @namespace    P.Delete
+ *
+ * @namespace    -
  * @dependencies none
  * @exports      -
  * @author       -
  * @since        0.0.0
  * @version      -
- * ************************************************************************ */
-/* global P, _ */
+ * ********************************************************************** */
+/* global */
 /* eslint-disable one-var, semi-style, no-underscore-dangle */
 
-'use strict';
 
-(function() {
-  // IIFE
-
-  // -- Module path
+// -- Vendor Modules
 
 
-  // -- Local modules
-  var Event = P.Event
-    , Query = P.Query
+// -- Local Modules
+import _ from '../lib/_';
+import Q from './query';
+
+
+// -- Local Constants
+
+
+// -- Local Variables
+
+
+// -- Private Functions ----------------------------------------------------
+
+/**
+ * Returns the filtered arguments.
+ *
+ * @function (arg1, [arg2], [arg3])
+ * @private
+ * @param {object}          the query filter,
+ * @param {object}          the passed-in options,
+ * @param {Function}        the function to call at the completion,
+ * @returns {Array}         returns an array with the filtered arguments,
+ * @since 0.0.0
+ */
+function _getArgs(...args) {
+  // filter, options, callback
+  switch (args.length) {
+    case 1:
+      // must be filter or callback
+      if (_.isLiteralObject(args[0])) {
+        return [args[0], {}, null];
+      }
+      if (_.isFunction(args[0])) {
+        return [null, {}, args[0]];
+      }
+      return [null, {}, null];
+
+    case 2:
+      // must be filter, options or filter, callback
+      if (_.isLiteralObject(args[0])) {
+        if (_.isLiteralObject(args[1])) {
+          return [args[0], args[1], null];
+        }
+        if (_.isFunction(args[1])) {
+          return [args[0], {}, args[1]];
+        }
+        return [args[0], {}, null];
+      }
+      if (_.isFunction(args[1])) {
+        return [null, null, args[1]];
+      }
+      return [null, null, null];
+
+    case 3:
+      // must be filter, options, callback
+      if (_.isLiteralObject(args[0])) {
+        if (_.isLiteralObject(args[1])) {
+          if (_.isFunction(args[2])) {
+            return [args[0], args[1], args[2]];
+          }
+          return [args[0], args[1], null];
+        }
+        if (_.isFunction(args[2])) {
+          return [args[0], {}, args[2]];
+        }
+        return [args[0], {}, null];
+      }
+      if (_.isFunction(args[2])) {
+        return [null, null, args[2]];
+      }
+      return [null, null, null];
+
+    default:
+      return [null, null, null];
+  }
+}
+
+/**
+ * Deletes the requested documents from the db.
+ *
+ * @function (arg1, arg2, arg3, arg4, arg5, arg6)
+ * @private
+ * @param {object}          the db object,
+ * @param {object}          the messenger object,
+ * @param {Boolean}         deletes one or many,
+ * @param {Object}          the query filter,
+ * @param {object}          the passed-in options,
+ * @param {Function}        the function to call at the completion,
+ * @returns {}              -,
+ * @since 0.0.0
+ */
+function _delete(db, mess, many, filter, options, callback) {
+  if (!filter) {
+    callback(null, 0);
+    return;
+  }
+
+  let docOut = []
+    , removed
+    , dblength
     ;
 
+  // Parse the documents into the db one by one and check if the keys match:
+  // (each time a document is deleted, the counter and the length size must
+  // be reajusted. It could have been easier to parse the db from the last
+  // to the first but in case of deleteOne it deletes the most recent
+  // instead of the oldest)
+  const sop = Q.isHavingSpecialOperator(filter);
+  docOut = [];
+  removed = 0;
+  dblength = db.data.length;
+  // for (i = db.data.length - 1; i >= 0; i--) {
+  for (let i = 0; i < dblength; i++) {
+    if (Q.isMatch(db.data[i], filter, sop)) {
+      // Remove the document that matches:
+      docOut.push(db.data.splice(i, 1)[0]);
+      removed += 1;
+      // Readjust db length after one item has been removed & reposition i:
+      i -= 1;
+      dblength -= 1;
+      if (!many) {
+        // Remove one document only!
+        break;
+      }
+    }
+  }
 
-  // -- Local constants
+  // Fire an event and execute the callback:
+  if (mess) {
+    mess.publish('delete', docOut);
+    mess.publish('change', docOut);
+  } else if (!db._silent) {
+    /* eslint-disable-next-line no-console */
+    console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
+  }
+  callback(null, removed);
+}
 
 
-  // -- Local variables
+// -- Public Static Methods ------------------------------------------------
 
-
-  // -- Private Functions ----------------------------------------------------
+const Delete = {
 
   /**
-   * Deletes the document(s) into the database that contain the filter object.
+   * Deletes the requested documents from the db.
    *
-   * @function(arg1, arg2, arg3, arg4, arg5)
-   * @private
-   * @param {Object}      the document database,
-   * @param {Object}      the event object,
-   * @param {Object}      the object to find into the document(s),
-   * @param {Object}      the settings,
-   * @param {Function}    the function to call at completion,
-   * @return {}           -,
+   * @method (arg1, arg2, arg3, arg4, arg5, arg6)
+   * @public
+   * @param {object}          the db object,
+   * @param {object}          the messenger object,
+   * @param {Boolean}         deletes one or many,
+   * @param {Object}          the query filter,
+   * @param {object}          the passed-in options,
+   * @param {Function}        the function to call at the completion,
+   * @returns {Object}        returns a promise,
    * @since 0.0.0
    */
-  /* eslint-disable no-param-reassign */
-  function _delete(db, eventQ, filter, options, callback) {
-    var sop = Query.isHavingSpecialOperator(filter)
-      , removed
-      , dblength
-      , docOut
-      , i
-      ;
+  delete(db, mess, many, ...args) {
+    const [filter, options, callback] = _getArgs(...args);
 
-    // Return without doing anything if the filter isn't an object:
-    // (or an object array)
-    if (!_.isObject(filter) || _.isArray(filter)) {
-      if (callback) {
-        callback(null, null);
-      }
-      return;
-    }
-
-    // Is an empty object?
-    if (_.isEmpty(filter)) {
-      docOut = [];
-      if (!options.many) {
-        // Remove the first document only!
-        removed = 1;
-        docOut = db.data.splice(0, 1);
-      } else {
-        // Remove all the documents!
-        removed = db.data.length;
-        docOut = _.clone(db.data);
-        db.data.length = 0;
-      }
-
-      // Fire an event and execute the callback:
-      Event.fire(eventQ, 'change', docOut);
-      Event.fire(eventQ, 'delete', docOut);
-      if (callback) {
-        callback(null, removed);
-      }
-      return;
-    }
-
-    // Parse the documents into the db one by one and check if the keys match:
-    // (each time a document is deleted, the counter and the length size must
-    // be reajusted. It could have been easier to parse the db from the last
-    // to the first but in case of deleteOne it deletes the most recent
-    // instead of the oldest)
-    removed = 0;
-    docOut = [];
-    dblength = db.data.length;
-    // for (i = db.data.length - 1; i >= 0; i--) {
-    for (i = 0; i < dblength; i++) {
-      if (Query.isMatch(db.data[i], filter, sop)) {
-        // Remove the document that matches:
-        docOut.push(db.data.splice(i, 1));
-        removed += 1;
-        // Readjust db length after one item has been removed & reposition i:
-        i -= 1;
-        dblength -= 1;
-        if (!options.many) {
-          // Remove one document only!
-          break;
+    return new Promise((resolve, reject) => {
+      _delete(db, mess, many, filter, options, (err, resp) => {
+        if (err) {
+          reject(err);
+          if (callback) callback(err);
+        } else {
+          resolve(resp);
+          if (callback) callback(null, resp);
         }
-      }
-    }
-
-    // Fire an event and execute the callback:
-    Event.fire(eventQ, 'change', docOut);
-    Event.fire(eventQ, 'delete', docOut);
-    if (callback) {
-      callback(null, removed);
-    }
-    // return;
-  }
-  /* eslint-enable no-param-reassign */
+      });
+    });
+  },
+};
 
 
-  // -- Public Static Methods ------------------------------------------------
+// -- Export
+export default Delete;
 
-  P.Delete = {
-
-    /**
-     * Deletes the document(s) into the database that contain the filter object.
-     *
-     * @method(arg1, arg2, arg3, arg4, arg5)
-     * @public
-     * @param {Object}    the context,
-     * @param {Boolean}   true if the whole docs must be parsed, false if it
-     *                    should stop after the first match,
-     * @param {Object}    the document database,
-     * @param {Object}    the object to find into the document(s),
-     * @param {Function}  the function to call at completion,
-     * @return {}         -,
-     * @since 0.0.1
-     */
-    /* eslint-disable no-param-reassign */
-    delete: function(_this, many, filter, options, callback) {
-      var db = _this.db
-        , eventQ = _this.eventQ
-        ;
-
-      // Check if there is a callback function:
-      if (callback && !_.isFunction(callback)) {
-        callback = undefined;
-      } else if (!callback && !_.isFunction(options)) {
-        callback = undefined;
-      } else if (!callback && _.isFunction(options)) {
-        callback = options;
-        options = {};
-      }
-
-      // Check if options is an object:
-      if (_.isArray(options) || !_.isObject(options)) {
-        options = {};
-      }
-
-      options.many = many;
-      _delete(db, eventQ, filter, options, callback);
-    }
-    /* eslint-enable no-param-reassign */
-
-  };
-}());
 /* eslint-enable one-var, semi-style, no-underscore-dangle */

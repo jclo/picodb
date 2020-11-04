@@ -1,18 +1,23 @@
 {
   "name": "picodb",
-  "version": "0.12.2",
+  "version": "1.0.0-alpha.1",
   "description": "A tiny in-memory database (MongoDB like) that stores JSON documents",
-  "main": "index.js",
+  "main": "_dist/lib/picodb.js",
+  "minified": "_dist/lib/picodb.min.js",
+  "unpkg": "_dist/lib/picodb.mjs",
+  "module": "_dist/lib/picodb.min.mjs",
   "bin": {},
   "scripts": {
     "build": "gulp build",
     "watch": "gulp watch",
-    "makedist": "gulp makedist",
-    "test": "cross-env NODE_ENV=test nyc --reporter=lcov mocha ./test/main.js",
-    "check-coverage": "nyc check-coverage --statements 99 --branches 97 --functions 100 --lines 99",
+    "dev": "gulp rundev",
+    "test": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --require esm ./test/main.js",
     "display-coverage": "opener ./coverage/lcov-report/index.html",
+    "check-coverage": "nyc check-coverage --statements 95 --branches 95 --functions 100 --lines 95",
     "report-coverage": "nyc report --reporter=text-lcov | coveralls",
     "report": "nyc report",
+    "makedist": "gulp makedist",
+    "app": "gulp runapp",
     "doc": ""
   },
   "repository": {
@@ -29,9 +34,9 @@
     "json"
   ],
   "author": {
-    "name": "jclo",
-    "email": "jclo@mobilabs.fr",
-    "url": "http://www.mobilabs.fr/"
+    "name": "Mobilabs",
+    "email": "contact@mobilabs.fr",
+    "url": "http://www.mobilabs.fr"
   },
   "license": "MIT",
   "bugs": {
@@ -40,23 +45,31 @@
   "homepage": "https://github.com/jclo/picodb",
   "dependencies": {},
   "devDependencies": {
-    "chai": "4.2.0",
-    "coveralls": "3.1.0",
-    "cross-env": "7.0.2",
-    "del": "5.1.0",
-    "eslint": "7.7.0",
-    "eslint-config-airbnb-base": "14.2.0",
-    "eslint-plugin-import": "2.22.0",
-    "gulp": "4.0.2",
-    "gulp-concat": "2.6.1",
-    "gulp-footer": "2.0.2",
-    "gulp-header": "2.0.9",
-    "gulp-replace": "1.0.0",
-    "gulp-uglify": "3.0.2",
-    "husky": "4.2.5",
-    "mocha": "8.1.1",
-    "nyc": "15.1.0",
-    "opener": "1.5.1"
+    "@mobilabs/messenger": "^1.0.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.1.0",
+    "cross-env": "^7.0.2",
+    "del": "^6.0.0",
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "esm": "^3.2.25",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.7.0",
+    "gulp-header": "^2.0.9",
+    "gulp-replace": "^1.0.0",
+    "gulp-uglify-es": "^2.0.0",
+    "husky": "^4.3.0",
+    "kadoo": "^1.0.1",
+    "mocha": "^8.2.0",
+    "nyc": "^15.1.0",
+    "open": "^7.3.0",
+    "opener": "^1.5.2",
+    "@mobilabs/es6kadoo": "1.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "private": false,
   "husky": {

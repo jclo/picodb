@@ -3,6 +3,6 @@ __trash
 _old_*
 
 _docs
-node_modules
-coverage
 .nyc_output
+coverage
+node_modules

@@ -1,5 +1,14 @@
 ### HEAD
 
+### 1.0.0 (November 4, 2020)
+
+  * Reshuffled the project from ES6Kadoo boilerplate,
+  * Updated the code to comply with ES6 standard,
+  * Added promises,
+  * Added the logical operator $and,
+  * ...,
+
+
 ### 0.12.2 (August 20, 2020)
 
   * Updated the project dependencies,

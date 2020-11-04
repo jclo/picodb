@@ -9,6 +9,7 @@
 [![npm bundle size][npm-bundle-size-image]][npm-bundle-size-url]
 [![License][license-image]](LICENSE.md)
 
+
 PicoDB is an in-memory database that stores JSON like documents. It runs both on Node.js and in the browser.
 
 PicoDB manages the documents that are similar to a MongoDB's collection. It provides a flexible API (MongoDB like) to insert, update, delete and find documents.
