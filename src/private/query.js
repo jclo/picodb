@@ -391,7 +391,7 @@ const Query = {
    * @since 0.0.0
    */
   isMatch(doc, query, sop) {
-    return _isMatch(doc, query, sop);
+    return _isMatch(doc, _.normalize(query), sop);
   },
 };
 

@@ -1,16 +1,12 @@
 /** ************************************************************************
  *
- * A micro subset of the Overslash library.
+ * A micro subset of the Overslash library plus some extras.
  *
  * _.js is just a literal object that contains a set of functions.
  * It can't be instantiated.
  *
  * Private Functions:
- *  . none,
- *
- *
- * Private Static Methods:
- *  . none,
+ *  . _normalize                  normalizes from { 'a.b': 1 } to { a: { b: 1 }},
  *
  *
  * Public Static Methods:
@@ -38,6 +34,8 @@
  *
  *  . token                       returns a unique string pattern in base 36,
  *
+ *  . normalize                   normalizes from { 'a.b': 1 } to { a: { b: 1 }},
+ *
  *
  * @namespace    -
  * @dependencies none
@@ -63,7 +61,40 @@
 
 
 // -- Private Functions ----------------------------------------------------
-// none,
+
+/**
+ * Normalizes an object from { 'a.b': 1 } to { a: { b: 1 }}.
+ *
+ * @function (arg1)
+ * @private
+ * @param {Object}          the object,
+ * @returns {Object}        returns the normalized object,
+ * @since 0.0.0
+ */
+function _normalize(obj) {
+  const nobj = {};
+  Object.keys(obj).forEach((prop) => {
+    if (prop.includes('.')) {
+      const props = prop.split('.');
+      let iobj = nobj;
+      for (let i = 0; i < props.length; i++) {
+        if (i < (props.length - 1)) {
+          iobj[props[i]] = {};
+          iobj = iobj[props[i]];
+        } else if (Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+          iobj[props[i]] = _normalize(obj[prop]);
+        } else {
+          iobj[props[i]] = obj[prop];
+        }
+      }
+    } else if (Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+      nobj[prop] = _normalize(obj[prop]);
+    } else {
+      nobj[prop] = obj[prop];
+    }
+  });
+  return nobj;
+}
 
 
 // -- Public Static Methods ------------------------------------------------
@@ -423,6 +454,22 @@ const _ = {
    */
   token() {
     return Math.random().toString(36).substr(2);
+  },
+
+
+  // -- Extra --------------------------------------------------------------
+
+  /**
+   * Normalizes an object from { 'a.b': 1 } to { a: { b: 1 }}.
+   *
+   * @method (arg1)
+   * @public
+   * @param {Object}        the object,
+   * @returns {Object}      returns the normalized object,
+   * @since 0.0.0
+   */
+  normalize(obj) {
+    return _normalize(obj);
   },
 };
 

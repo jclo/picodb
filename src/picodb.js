@@ -61,6 +61,7 @@
 
 
 // -- Local Modules
+import _ from './lib/_';
 import C from './private/count';
 import D from './private/delete';
 import F from './private/find';
@@ -131,7 +132,7 @@ PicoDB.VERSION = '{{lib:version}}';
  * @since 0.0.0
  */
 PicoDB._setTestMode = function() {
-  return [G, P];
+  return [G, P, _];
 };
 
 

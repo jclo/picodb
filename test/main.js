@@ -1,6 +1,6 @@
 // ESLint declarations:
 /* global describe */
-/* eslint one-var: 0, semi-style: 0 */
+/* eslint one-var: 0, semi-style: 0, no-underscore-dangle: 0 */
 
 
 // -- Vendor Modules
@@ -12,6 +12,7 @@ const // PicoDB = require('../index')
     PicoDB    = require('../src/picodb').default
     // , pack    = require('../package.json')
     , testlib = require('./int/lib')
+    , test_   = require('./int/private/_')
     , plugin  = require('./int/private/plugin')
     , insert  = require('./int/private/insert')
     , find    = require('./int/private/find')
@@ -49,6 +50,8 @@ describe('Test PicoDB:', () => {
   // Test the plugin:
   plugin(PicoDB, Messenger);
 
+  // Test _.js lib:
+  test_(PicoDB);
 
   // Test the methods insertOne & insertMany:
   insert(PicoDB);

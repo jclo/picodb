@@ -57,5 +57,10 @@ module.exports = function(PicoDB) {
       const resp = await db.find({ b: null }).toArray();
       expect(resp).to.be.an('array').that.has.lengthOf(1);
     });
+
+    it('Expects db.find({ "a.b.c.d.e": 1 }).toArray() to return 1 document.', async () => {
+      const resp = await db.find({ 'a.b.c.d.e': 1 }).toArray();
+      expect(resp).to.be.an('array').that.has.lengthOf(1);
+    });
   });
 };

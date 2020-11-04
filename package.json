@@ -1,6 +1,6 @@
 {
   "name": "picodb",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "A tiny in-memory database (MongoDB like) that stores JSON documents",
   "main": "_dist/lib/picodb.js",
   "minified": "_dist/lib/picodb.min.js",

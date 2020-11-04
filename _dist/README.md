@@ -10,11 +10,14 @@
 [![License][license-image]](LICENSE.md)
 
 
-PicoDB is an in-memory database that stores JSON like documents. It runs both on Node.js and in the browser.
+PicoDB is an in-memory database that stores JSON like documents. It runs both on Node.js and in the ES6 compliant browsers.
 
-PicoDB manages the documents that are similar to a MongoDB's collection. It provides a flexible API (MongoDB like) to insert, update, delete and find documents.
+PicoDB manages the documents as MongoDB for a collection. It provides a flexible API (MongoDB like) to insert, update, delete and find documents.
 
-PicoDB is useful when you have a small set of documents to store and you don't want to setup a database server.
+PicoDB is useful when you want to manage documents directly inside your Web App.
+
+Nota:
+From PicoDB 1.x IE browsers aren't supported. PicoDB 0.12 is the latest version that is IE compliant.
 
 
 ## Quick Startup
@@ -33,47 +36,79 @@ When a document is inserted into the database, it gets an unique id that is a st
 
 On Node.js:
 ```javascript
-var PicoDB = require('picodb');
+const PicoDB = require('picodb');
 
-var db = PicoDB();
+const db = PicoDB();
 ```
 
 In the browser:
 ```javascript
-var db = PicoDB();
+const db = PicoDB();
 ```
+
+### Listen for a Response
+
+There is now three ways to listen a response from a `PicoDB` instance:
+
+  * Via Callback:
+  ```javascript
+  db.find({}).toArray((err, resp) => {
+      // your code
+  });
+  ```
+
+  * Via then/catch
+  ```javascript
+  db.find({}).toArray()
+      .then((resp) => {
+        // your code
+      })
+      .catch((err) => {
+        // your code
+      });
+  ```
+
+  * Via async/await
+  ```Javascript
+  async function aaa() {
+      ...
+      const resp = await db.find({}).toArray();
+      ...
+  }
+  ```
+
 
 
 ### Insert documents
 
-PicoDB provides two methods for inserting documents. A method for inserting one document:
+PicoDB provides two methods for inserting documents.
+
+A method for inserting one document:
 ```javascript
-db.insertOne({ a: 1 }, function(err, doc){
-  // doc contains the inserted document with its unique id.
-});
+const doc = await db.insertOne({ a: 1 });
+// doc contains the inserted document with its unique id.
 ```
 
 And a method for inserting a set of documents:
 ```javascript
-db.insertMany([{ a: 1 }, { a: 2, b: 2 }], function(err, docs) {
-  // docs contains the inserted documents with their unique id.
-});
+const docs = await db.insertMany([{ a: 1 }, { a: 2, b: 2 }]);
+// docs contains the inserted documents with their unique id.
 ```
 
 ### Update documents
 
-PicoDB provides two methods for updating documents. A method for updating the first document that matches the query:
+PicoDB provides two methods for updating documents.
+
+A method for updating the first document that matches the query:
 ```javascript
-db.updateOne({ a: 1 }, { c: 'aaa' }, function(err, doc) {
-  // doc contains the updated document.
-});
+const doc = await db.updateOne({ a: 1 }, { c: 'aaa' });
+// doc contains the updated document.
 ```
 
 And a method for updating all the documents that match the query:
 ```javascript
-db.updateMany({ a: 1 }, { c: 'aaa' }, function(err, docs) {
-  // docs contains the updated documents.
-});
+const docs = await db.updateMany({ a: 1 }, { c: 'aaa' });
+// docs contains the updated documents.
 ```
 
 The first method replaces the first document (the oldest one) into the database that contains the key-value pair `{ a: 1 }` by the new document ` { c: 'aaa' }` while the second method replaces all the documents that contain this key-value pair by the new document.
@@ -84,44 +119,39 @@ The update methods provide the two operators `$set` and `$unset` for a finest up
 
 The following operation:
 ```javascript
-db.updateOne({ a: 1 }, { $set: { c: 'new' }}, function(err, docs) {
-  //
-});
+const docs = await db.updateOne({ a: 1 }, { $set: { c: 'new' }});
 ```
 selects the first document into the database that contains the field `a = 1` (or the key-value pair `a = 1`) and replaces the value of the field `c` by `new` or adds the field if it doesn't exist.
 
 while the following operation:
 ```javascript
-db.updateOne({ a: 1 }, { $unset: { c: 'aaa' }}, function(err, docs) {
-  //
-});
+const docs = await db.updateOne({ a: 1 }, { $unset: { c: 'aaa' }});
 ```
 removes the field `c = 'aaa'`.
 
 
 ### Delete documents
 
-PicoDB provides two methods for deleting documents. A method for deleting the first document that matches the query:
+PicoDB provides two methods for deleting documents.
+
+A method for deleting the first document that matches the query:
 ```javascript
-db.deleteOne({ a: 1 }, function(err, num) {
-  // num contains the number of deleted documents (here 0 or 1).
-});
+const num = await db.deleteOne({ a: 1 });
+// num contains the number of deleted documents (here 0 or 1).
 ```
 
 And a method for deleting all the documents that match the query:
 ```javascript
-db.deleteMany({ a: 1 }, function(err, num) {
-  // num contains the number of deleted documents.
-});
+const num = await db.deleteMany({ a: 1 });
+// num contains the number of deleted documents.
 ```
 
 ### Count documents
 
 PicoDB provides one method to count the number of the documents into the database that match the query.
 ```javascript
-db.count({ a: 1 }, function(err, num) {
-  // num contains the number of documents that match the query.
-});
+const count = await db.count({ a: 1 });
+// num contains the number of documents that match the query.
 ```
 
 ### Find documents
@@ -130,17 +160,14 @@ PicoDB provides one method to dump the documents that match the query.
 
 The following instruction:
 ```javascript
-db.find({}).toArray(function(err, docs) {
-  // docs is an array of documents that match the query.
-});
+const docs = await db.find({}).toArray();
 ```
 dumps all the documents into the database as the query `{}` does not filter anything.
 
 While the instruction:
 ```javascript
-db.find({ a: 1 }).toArray(function(err, docs) {
-  // docs is an array of documents that match the query.
-});
+const docs = await db.find({ a: 1 }).toArray();
+// docs is an array of documents that match the query.
 ```
 dumps the documents that contain the field `a` with the value `1`.
 
@@ -151,23 +178,19 @@ PicoDB allows selecting the fields to extract from the database.
 
 The following instruction:
 ```javascript
-db.find({}, {c: 1, d: 1}).toArray(function(err, docs) {
-  // docs is an array of documents that match the query.
-});
+const docs = await db.find({}, { c: 1, d: 1 }).toArray();
 ```
 
 dumps all the documents but extracts only the fields `_id`, `c` and `d`. The field `_id` is extracted by default. You can reject it by adding `_id: 0` to the expression:
 ```javascript
-db.find({}, {_id: 0, c: 1, d: 1}).toArray(function(err, docs) {
-  // docs is an array of documents that match the query.
-});
+const docs = await db.find({}, { _id: 0, c: 1, d: 1 }).toArray();
+// docs is an array of documents that match the query.
 ```
 
 Instead of defining the fields to extract, you can set the fields to exclude. This instruction:
 ```javascript
-db.find({}, {c: 0, d: 0}).toArray(function(err, docs) {
-  // docs is an array of documents that match the query.
-});
+const docs = await db.find({}, { c: 0, d: 0 }).toArray();
+// docs is an array of documents that match the query.
 ```
 
 dumps all the documents with all the fields except `c` and `d`.
@@ -181,27 +204,50 @@ These operators allow more sophisticated queries.
 
 The following instruction:
 ```javascript
-db.find({ a: { $gt: 1 }, b: { $lt : 6 }}).toArray(function(err, docs) {
-  //
-});
+const docs = await db.find({ a: { $gt: 1 }, b: { $lt : 6 }}).toArray();
 ```
 dumps all the documents with the field `a` having a value `greater than` `1` AND the field `b` having a value `lower than` `6`.
 
 
 ### Listen
 
-PicoDB provides the following custom events `change`, `insert`, `update` and `delete` that are fired when a document into the database is modified.
+PicoDB provides, through a plugin, the following custom events `change`, `insert`, `update` and `delete` that are fired when a document into the database is modified.
 
 The following instruction:
 ```javascript
-db.on('change', function(docs) {
-  // docs contains the altered documents.
-});
+const docs = db.on('change');
 ```
 is executed when documents are inserted, updated or deleted.
 
+This option uses the NPM package `@mobilabs/messenger`. You need to install it before instantiating `PicoDB` like that:
+
+```javascript
+import Messenger from 'path/to/@mobilabs/messenger';
+
+PicoDB.plugin({ messenger: Messenger });
+const db = PicoDB();
+```
 
 ## API
+
+### Constructor
+
+```
+Constructor   | Description
+```
+```
+PicoDB        | Creates the PicoDB object (without the operator new).
+```
+
+### Static Methods
+
+```
+Static methods | Description
+```
+```
+plugin         | Adds and external library.
+```
+
 
 ### Methods
 
@@ -263,6 +309,7 @@ $exists  | Matches documents that have the specified field.
 Operator | Description
 ```
 ```
+$and     | Joins query clauses with a logical AND returns all documents that match the conditions of either clause.
 $or      | Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
 $not     | Inverts the effect of a query expression and returns documents that do not match the query expression.
 ```
@@ -369,7 +416,7 @@ $nin         | Matches none of the values specified in an array.
 ```
 
 
-### Events
+### Events (optional)
 
 ```
 Event type   | Description

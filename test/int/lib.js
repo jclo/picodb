@@ -18,7 +18,7 @@ const { expect } = require('chai')
 const LIBPROPS = 1
     , OWNPROPS = 3
     , INHPROPS = 15
-    , TESTMODE = 2
+    , TESTMODE = 3
     ;
 
 

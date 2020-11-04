@@ -57,4 +57,29 @@ module.exports = function(PicoDB, doc) {
       expect(docu).to.own.property('b').that.is.a('number').that.is.equal(1);
     });
   });
+
+  describe('With dot notation for queries:', () => {
+    const db = PicoDB();
+    db._db._silent = true;
+
+    let _id;
+
+    // Fill the db:
+    it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
+      const resp = await db.insertMany(doc);
+      expect(resp).to.be.an('array').that.has.lengthOf(doc.length);
+    });
+
+    it('Expects db.updateOne({ "name.first": "John" }, { b: 1 }) to return one document.', async () => {
+      const docs = await db.find({ 'name.first': 'John' }).toArray();
+      _id = docs[0]._id;
+      const resp = await db.updateOne({ 'name.first': 'John' }, { b: 1 });
+      expect(resp).to.be.an('array').that.has.lengthOf(1);
+    });
+
+    it('Expects db.find({ b: 1 }).toArray() to return a document with the same _id as before updating.', async () => {
+      const resp = await db.find({ b: 1 }).toArray();
+      expect(resp[0]._id).to.be.a('string').that.is.equal(_id);
+    });
+  });
 };

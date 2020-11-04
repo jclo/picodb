@@ -5,7 +5,9 @@
   * Reshuffled the project from ES6Kadoo boilerplate,
   * Updated the code to comply with ES6 standard,
   * Added promises,
-  * Added the logical operator $and,
+  * Added the logical operator $and for explicit AND (before AND was implicit only),
+  * Updated README.md,
+  * Added MongoDB dot notation capability to query fields,
   * ...,
 
 

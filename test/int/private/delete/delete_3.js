@@ -81,4 +81,25 @@ module.exports = function(PicoDB, doc) {
       expect(resp).to.be.an('number').that.is.equal(0);
     });
   });
+
+  describe('Test DeleteMany operations using dot notation:', () => {
+    const db = PicoDB();
+    db._db._silent = true;
+
+    // Fill the db:
+    it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
+      const resp = await db.insertMany(doc);
+      expect(resp).to.be.an('array').that.has.lengthOf(doc.length);
+    });
+
+    it('Expects db.deleteMany({ "c.d": 2 }) to return 2 documents deleted.', async () => {
+      const resp = await db.deleteMany({ 'c.d': 1 });
+      expect(resp).to.be.an('number').that.is.equal(2);
+    });
+
+    it('Expects db.deleteMany({ "a.b.c.d.e": 1 }) to return 1 document deleted.', async () => {
+      const resp = await db.deleteMany({ 'a.b.c.d.e': 1 });
+      expect(resp).to.be.an('number').that.is.equal(1);
+    });
+  });
 };
