@@ -9,6 +9,7 @@
   * Updated README.md,
   * Added MongoDB dot notation capability to query fields,
   * Added the support of the query { $and: [{ $or: [...] }, { $or: [...] }]},
+  * First release candidate,
   * ...,
 
 
