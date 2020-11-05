@@ -9,19 +9,20 @@ const Messenger = require('@mobilabs/messenger');
 
 // -- Local Modules
 const // PicoDB = require('../index')
-    PicoDB    = require('../src/picodb').default
+    PicoDB     = require('../src/picodb').default
     // , pack    = require('../package.json')
-    , testlib = require('./int/lib')
-    , test_   = require('./int/private/_')
-    , plugin  = require('./int/private/plugin')
-    , insert  = require('./int/private/insert')
-    , find    = require('./int/private/find')
-    , query   = require('./int/private/query')
-    , geo     = require('./int/private/geo')
-    , count   = require('./int/private/count')
-    , deldoc  = require('./int/private/delete')
-    , update  = require('./int/private/update')
-    , event   = require('./int/private/event')
+    , testlib  = require('./int/lib')
+    , test_    = require('./int/private/_')
+    , plugin   = require('./int/private/plugin')
+    , insert   = require('./int/private/insert')
+    , find     = require('./int/private/find')
+    , query    = require('./int/private/query')
+    , geo      = require('./int/private/geo')
+    , count    = require('./int/private/count')
+    , deldoc   = require('./int/private/delete')
+    , update   = require('./int/private/update')
+    , event    = require('./int/private/event')
+    , nosilent = require('./int/private/nosilent')
     ;
 
 
@@ -72,9 +73,10 @@ describe('Test PicoDB:', () => {
   // Test the methods deleteOne & deleteMany:
   deldoc(PicoDB);
 
+  // Test insert, update, delete without the silent mode
+  nosilent(PicoDB);
+
   // Test the methods addEventListener, addOneTimeEventListener
   // and removeEventListener).
   event(PicoDB, Messenger);
-
-  //
 });

@@ -9,7 +9,9 @@
 // -- Local Modules
 const comparaison = require('./query/query_1')
     , elements    = require('./query/query_2')
-    , logical     = require('./query/query_3')
+    , logical1    = require('./query/query_3')
+    , logical2    = require('./query/query_4')
+    , logical3    = require('./query/query_5')
     ;
 
 
@@ -24,6 +26,8 @@ module.exports = function(PicoDB) {
   describe('Test the Query Operators:', () => {
     comparaison(PicoDB);
     elements(PicoDB);
-    logical(PicoDB);
+    logical1(PicoDB);
+    logical2(PicoDB);
+    logical3(PicoDB);
   });
 };

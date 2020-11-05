@@ -19,7 +19,7 @@ const { expect } = require('chai')
 
 // -- Main
 module.exports = function(PicoDB) {
-  describe('Test the Logical Operators:', () => {
+  describe('Test the Logical Operators poorly built:', () => {
     const db = PicoDB();
     db._db._silent = true;
 
@@ -35,114 +35,57 @@ module.exports = function(PicoDB) {
       expect(resp).to.be.an('array').that.has.lengthOf(doc.length);
     });
 
+    describe('$and $or', () => {
+      it('Expects db.find({ $and: 1 }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: 1 }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+
+      it('Expects db.find({ $and: {} }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: {} }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+
+      it('Expects db.find({ $and: [] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: [] }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+
+      it('Expects db.find({ $and: [1] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: [1] }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+
+      it('Expects db.find({ $and: [{ $or: [{ a: 1 }] }, { $and: [{ a: 1 }] }] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: [{ $or: [{ a: 1 }] }, { $and: [{ a: 1 }] }] }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+
+      it('Expects db.find({ $and: [{ $or: [{ a: 1 }, 2] }] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: [{ $or: [{ a: 1 }, 2] }] }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
+      });
+    });
+
+
     describe('$and', () => {
-      it('Expects db.find({ $and: [{ a: 1 }] }).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $and: [{ a: 1 }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $and: [{ a: 1 }, { b: "bbb" }] }).toArray() to return 1 document.', async () => {
-        const resp = await db.find({ $and: [{ a: 1 }, { b: 'bbb' }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(1);
-      });
-
-      it('Expects db.find({ $and: [{ a: 2 }, { d: { e: { f: "f" }} }] }).toArray() to return 1 document.', async () => {
-        const resp = await db.find({ $and: [{ a: 2 }, { d: { e: { f: 'f' } } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(1);
-      });
-
-      it('Expects db.find({ $and: [{ a: { $gte: 1 } }, { b: "bbb" }] }).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $and: [{ a: { $gte: 1 } }, { b: 'bbb' }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $and: [{ a: { $gte: 1 } }] }).toArray() to return 3 documents.', async () => {
-        const resp = await db.find({ $and: [{ a: { $gte: 1 } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(3);
-      });
-
-      it('Expects db.find({ $and: [{ a: { $gte: 1 } }, { a: { $lt: 2 }}] }).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $and: [{ a: { $gte: 1 } }, { a: { $lt: 2 } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $and: [{ a: { $gte: 1 } }, { b: { $exists: true }] }).toArray() to return 2 documents.', async () => {
-        /* eslint-disable-next-line */
-        const resp = await db.find({ $and: [{ a: { $gte: 1 } }, { b: { $exists: true } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $and: [{ a: { $gt: 1 } }, { b: { $exists: true }] }).toArray() to return 1 document.', async () => {
-        /* eslint-disable-next-line */
-        const resp = await db.find({ $and: [{ a: { $gt: 1 } }, { b: { $exists: true } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(1);
+      it('Expects db.find({ $and: [{ a: 1 }, 2] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $and: [{ a: 1 }, 2] }).toArray();
+        expect(resp).to.be.an('array').that.has.lengthOf(0);
       });
     });
 
 
     describe('$or', () => {
-      it('Expects db.find({ $or: [{ a: 1 }, { a: 2 }] }).toArray() to return 3 documents.', async () => {
-        const resp = await db.find({ $or: [{ a: 1 }, { a: 2 }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(3);
-      });
-
-      it('Expects db.find({ $or: [{ a: { $eq: 1 }}, { c: { $eq: 5 }} ] }).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $or: [{ a: { $eq: 1 } }, { c: { $eq: 5 } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $or: [{ a: { $eq: 1 }}, { b: { $in: ["bbb"] }}]}).toArray() to return 3 documents.', async () => {
-        const resp = await db.find({ $or: [{ a: { $eq: 1 } }, { b: { $in: ['bbb'] } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(3);
-      });
-
-      it('Expects db.find({ $or: [{ a: { $gt: 1 }}, { b: { $in: ["bbb"] }}]}).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $or: [{ a: { $gt: 1 } }, { b: { $in: ['bbb'] } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $or: [{ a: { $gt: 1 }}, { b: { $nin: ["bbb"] }} ]}).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ $or: [{ a: { $gt: 1 } }, { b: { $nin: ['bbb'] } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ $or: [{ a: { $gt: 3 }}, { d: { e: { f: { $eq: "f" }}} }]}).toArray() to return 1 document.', async () => {
-        const resp = await db.find({ $or: [{ a: { $gt: 3 } }, { d: { e: { f: { $eq: 'f' } } } }] }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(1);
-      });
-
-      it('Expects db.find({ $or: [{ a: 3 }, { d: { e: { f: { $eq: "g" }}}}]}).toArray() to return 0 document.', async () => {
-        const resp = await db.find({ $or: [{ a: 3 }, { d: { e: { f: { $eq: 'g' } } } }] }).toArray();
+      it('Expects db.find({ $or: [{ a: 1 }, 2] }).toArray() to return 0 document.', async () => {
+        const resp = await db.find({ $or: [{ a: 1 }, 2] }).toArray();
         expect(resp).to.be.an('array').that.has.lengthOf(0);
       });
     });
 
 
     describe('$not', () => {
-      it('Expects db.find({ a: { $not: { $eq: 1 }}).toArray() to return 1 document.', async () => {
-        const resp = await db.find({ a: { $not: { $eq: 1 } } }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(1);
-      });
-
-      it('Expects db.find({ a: { $not: { $gt: 1 }}).toArray() to return 2 documents.', async () => {
-        const resp = await db.find({ a: { $not: { $gt: 1 } } }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(2);
-      });
-
-      it('Expects db.find({ a: { $not: { $gte: 1 }}).toArray() to return 0 document.', async () => {
-        const resp = await db.find({ a: { $not: { $gte: 1 } } }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(0);
-      });
-
-      it('Expects db.find({ b: { $not: { $in: ["ccc"] }}).toArray() to return 3 documents.', async () => {
-        const resp = await db.find({ b: { $not: { $in: ['ccc'] } } }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(3);
-      });
-
-      it('Expects db.find({ b: { $not: { $nin: ["bbb"] }}).toArray() to return 3 documents.', async () => {
-        const resp = await db.find({ b: { $not: { $nin: ['bbb'] } } }).toArray();
-        expect(resp).to.be.an('array').that.has.lengthOf(3);
-      });
+      //
     });
   });
 };

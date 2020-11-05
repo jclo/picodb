@@ -1,5 +1,5 @@
 /*! ****************************************************************************
- * PicoDB v1.0.0-alpha.2
+ * PicoDB v1.0.0-alpha.3
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -149,7 +149,7 @@ const $__ES6GLOB = {};
       const obj = Object.create(methods);
       obj._library = {
         name: 'PicoDB',
-        version: '1.0.0-alpha.2',
+        version: '1.0.0-alpha.3',
       };
 
       // Creates a cursor.
@@ -166,7 +166,7 @@ const $__ES6GLOB = {};
 
     // Attaches constants to PicoDB that provide name and version of the lib.
     PicoDB.NAME = 'PicoDB';
-    PicoDB.VERSION = '1.0.0-alpha.2';
+    PicoDB.VERSION = '1.0.0-alpha.3';
 
 
     // -- Private Static Methods -----------------------------------------------
@@ -3597,7 +3597,8 @@ const $__ES6GLOB = {};
      *
      * Private Functions:
      *  . _isHavingNotOperator        returns object keys of the not,
-     *  . _isHavingAndorOrOp          returns the query array if $and or $or operator,
+     *  . _isHavingANDandOROperators  returns the query array if $and and $or operator,
+     *  . _isHavingAndorOrOperator    returns the query array if $and or $or operator,
      *  . _isHavingSpecialOperator    returns special operators or false,
      *  . _isConditionTrue            checks if the document meets the condition,
      *  . _areConditionsTrue          checks if the document meets all the conditions,
@@ -3685,9 +3686,52 @@ const $__ES6GLOB = {};
     /* eslint-enable dot-notation */
 
     /**
+     * Returns the query array if $and and $or operator.
+     *
+     * Nota:
+     * It searchs if a query is an $and with an array of $or operators
+     * like that:
+     *  . { $and : [{ $or: [{...}, {...}] }, { $or: [{...}, {...}] } }
+     *
+     * @function (arg1)
+     * @private
+     * @param {Object}          the query object,
+     * @returns {Array}         returns the query array or false,
+     * @since 0.0.0
+     */
+    function _isHavingANDandOROperators(query) {
+      if (!query.$and || !_.isArray(query.$and) || !query.$and[0] || !query.$and[0].$or) {
+        return false;
+      }
+
+      let match = true;
+      let keys;
+      for (let i = 0; i < query.$and.length; i++) {
+        keys = Object.keys(query.$and[i]);
+        if (keys.length > 1 || !query.$and[i].$or || !_.isArray(query.$and[i].$or)) {
+          match = false;
+          break;
+        }
+
+        // Check that all $or elements are objects:
+        for (let j = 0; j < query.$and[i].$or.length; j++) {
+          if (!_.isLiteralObject(query.$and[i].$or[j])) {
+            match = false;
+            break;
+          }
+        }
+        if (!match) break;
+      }
+      return match ? query.$and : false;
+    }
+
+    /**
      * Returns the query array if $and or $or operator.
-      * (query: { $and: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] })
-     * (query: { $or: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] })
+     *
+     * Nota:
+     * Must be $and or $or like that:
+     *  . { $and: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] }] }
+     *  . { or: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] }] }
      *
      * @function (arg1, arg2)
      * @private
@@ -3696,14 +3740,32 @@ const $__ES6GLOB = {};
      * @returns {Array}         returns the query array or false,
      * @since 0.0.0
      */
-    /* eslint-disable dot-notation */
-    function _isHavingAndorOrOp(query, op) {
-      return (!query[op] || !_.isArray(query[op])) ? false : query[op];
+    function _isHavingAndorOrOperator(query, op) {
+      if (!query[op] || !_.isArray(query[op]) || !query[op][0]) return false;
+
+      // Check that isn't the structure of $and: [{ $or: [{}]}]
+      if (query.$and && query.$and[0].$or) return false;
+
+      // Check that all $and or $or elements are objects:
+      let match = true;
+      for (let i = 0; i < query[op].length; i++) {
+        if (!_.isLiteralObject(query[op][i])) {
+          match = false;
+          break;
+        }
+      }
+      return match ? query[op] : false;
     }
-    /* eslint-enable dot-notation */
 
     /**
      * Returns special operators or false.
+     *
+     * Nota:
+     * query must be:
+     *  . { $and: [{ $or: [...] }, { $or: [...] }] }
+     *  . { $and: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] }] }
+     *  . { $or: [{ a: { $eq: 1}}, { b: { $eq: 2 }}] }] }
+     *  . { a: { $ne: 2 }, b: { $nin: ['A', 'B'] }, c: { $not: { $eq: 1 }}}
      *
      * @function (arg1)
      * @private
@@ -3713,9 +3775,10 @@ const $__ES6GLOB = {};
      */
     function _isHavingSpecialOperator(query) {
       return {
+        andor: _isHavingANDandOROperators(query),
+        and: _isHavingAndorOrOperator(query, '$and'),
+        or: _isHavingAndorOrOperator(query, '$or'),
         not: _isHavingNotOperator(query),
-        and: _isHavingAndorOrOp(query, '$and'),
-        or: _isHavingAndorOrOp(query, '$or'),
       };
     }
 
@@ -3929,11 +3992,12 @@ const $__ES6GLOB = {};
      * @since 0.0.0
      */
     function _isMatch(doc, query, sop) {
-      if (!sop.and && !sop.or) {
+      if (!sop.andor && !sop.and && !sop.or) {
         return _query(doc, query, sop);
       }
 
       if (sop.and) {
+        // matches if all the conditions match.
         for (let i = 0; i < query.$and.length; i++) {
           if (!_query(doc, query.$and[i], sop)) {
             return false;
@@ -3942,12 +4006,31 @@ const $__ES6GLOB = {};
         return true;
       }
 
-      // sop.or
-      for (let i = 0; i < query.$or.length; i++) {
-        if (_query(doc, query.$or[i], sop)) {
-          return true;
+      if (sop.or) {
+        // matches if at least one condition matches.
+        for (let i = 0; i < query.$or.length; i++) {
+          if (_query(doc, query.$or[i], sop)) {
+            return true;
+          }
         }
+        return false;
       }
+
+      if (sop.andor) {
+        // matches if all the $or conditions match.
+        const match = [];
+        for (let i = 0; i < query.$and.length; i++) {
+          for (let j = 0; j < query.$and[i].$or.length; j++) {
+            if (_query(doc, query.$and[i].$or[j], sop)) {
+              match.push(1);
+              break;
+            }
+          }
+        }
+        return match.length === query.$and.length;
+      }
+
+      /* istanbul ignore next */
       return false;
     }
 

@@ -1,13 +1,14 @@
 ### HEAD
 
-### 1.0.0 (November 4, 2020)
+### 1.0.0 (November 5, 2020)
 
   * Reshuffled the project from ES6Kadoo boilerplate,
-  * Updated the code to comply with ES6 standard,
+  * Updated the code to comply with ES6 standard only,
   * Added promises,
   * Added the logical operator $and for explicit AND (before AND was implicit only),
   * Updated README.md,
   * Added MongoDB dot notation capability to query fields,
+  * Added the support of the query { $and: [{ $or: [...] }, { $or: [...] }]},
   * ...,
 
 
