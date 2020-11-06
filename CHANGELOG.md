@@ -11,6 +11,7 @@
   * Added the support of the query { $and: [{ $or: [...] }, { $or: [...] }]},
   * First release candidate,
   * Removed the "_db._silent" option (testing purpose only),
+  * Second release candidate,
   * ...,
 
 
