@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB, doc) {
   describe('Test the DeleteOne method with a real filter:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // Fill the db:
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {

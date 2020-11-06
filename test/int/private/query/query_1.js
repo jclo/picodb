@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB) {
   describe('Test the Comparison Operators:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     const doc = [
       { a: 1 },

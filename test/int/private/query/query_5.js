@@ -22,7 +22,6 @@ module.exports = function(PicoDB) {
   describe('Test the Logical Operators (next):', () => {
     describe('$and $or', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       const doc = [
         { a: 1, b: 1 },

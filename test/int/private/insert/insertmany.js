@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB) {
   describe('Test the method insertMany:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // Classic:
     it('Expects db.inserMany([{...}, {...}]) to insert more than one document.', async () => {

@@ -24,7 +24,6 @@ const d  = require('./geodb')
 module.exports = function(PicoDB) {
   describe('Test $geoIntersects:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
       const doc = [

@@ -22,7 +22,6 @@ module.exports = function(PicoDB, doc) {
   describe('Field Operators:', () => {
     describe('$inc:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -61,7 +60,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$mul:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -100,7 +98,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$rename:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -160,7 +157,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$set:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -215,7 +211,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$unset:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -261,7 +256,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$min:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -300,7 +294,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$max:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:
@@ -339,7 +332,6 @@ module.exports = function(PicoDB, doc) {
 
     describe('$currentDate:', () => {
       const db = PicoDB();
-      db._db._silent = true;
       let ndoc;
 
       // Fill the db:

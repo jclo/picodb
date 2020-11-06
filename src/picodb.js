@@ -338,6 +338,9 @@ methods = {
   addEventListener(ename, listener) {
     if (this._mess) {
       this._mess.subscribe(ename, listener);
+    } else {
+      /* eslint-disable-next-line no-console */
+      console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
     }
     return this;
   },
@@ -355,6 +358,9 @@ methods = {
   addOneTimeEventListener(ename, listener) {
     if (this._mess) {
       this._mess.subscribeOnce(ename, listener);
+    } else {
+      /* eslint-disable-next-line no-console */
+      console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
     }
     return this;
   },

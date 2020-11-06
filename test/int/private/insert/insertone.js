@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB) {
   describe('Test the method insertOne:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // One argument:
     it('Expects db.insertOne({ a: 1 })" to return an array containing one document.', async () => {

@@ -24,7 +24,6 @@ const d  = require('./geodb')
 module.exports = function(PicoDB) {
   describe('Test $geoWithins:', () => {
     const db1 = PicoDB();
-    db1._db._silent = true;
 
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
       const doc = [
@@ -110,7 +109,6 @@ module.exports = function(PicoDB) {
       describe('Type Polygon:', () => {
         describe('Geometry Point:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([jfk, lax, sfo, san, phx]) to return an array with all the documents.', async () => {
             const doc = [d.jfk, d.lax, d.sfo, d.san, d.phx];
@@ -141,7 +139,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry LineString:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([cia, c2a]) to return an array with all the documents.', async () => {
             const doc = [d.cia, d.c2a];
@@ -162,7 +159,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry MultiPoint:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([cai, cpai]) to return an array with all the documents.', async () => {
             const doc = [d.cai, d.cpai];
@@ -183,7 +179,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry MultiLineString', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([ciaplus, c2aplus] to return an array with all the documents.', async () => {
             const doc = [d.ciaplus, d.c2aplus];
@@ -204,7 +199,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry Polygon', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([pinc, pca, pina]) to return an array with all the documents.', async () => {
             const doc = [d.pinc, d.pca, d.pina];
@@ -232,7 +226,6 @@ module.exports = function(PicoDB) {
       describe('Type MultiPolygon:', () => {
         describe('Geometry Point:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([jfk, lax, sfo, san, phx]) to return an array with all the documents.', async () => {
             const doc = [d.jfk, d.lax, d.sfo, d.san, d.phx];
@@ -263,7 +256,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry LineString:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([cia, c2a] to return an array with all the documents.', async () => {
             const doc = [d.cia, d.c2a];
@@ -294,7 +286,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry MultiPoint:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([cai, cpai] to return an array with all the documents.', async () => {
             const doc = [d.cai, d.cpai];
@@ -325,7 +316,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry MultiLineString:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([ciaplus, c2aplus]) to return an array with all the documents.', async () => {
             const doc = [d.ciaplus, d.c2aplus];
@@ -346,7 +336,6 @@ module.exports = function(PicoDB) {
 
         describe('Geometry Polygon:', () => {
           const db2 = PicoDB();
-          db2._db._silent = true;
 
           it('Expects db.insertMany([pinc, pca, pina] to return an array with all the documents.', async () => {
             const doc = [d.pinc, d.pca, d.pina];

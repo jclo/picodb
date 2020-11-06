@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB, doc) {
   describe('No Operator:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     let docu
       , _id
@@ -60,7 +59,6 @@ module.exports = function(PicoDB, doc) {
 
   describe('With dot notation for queries:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     let _id;
 

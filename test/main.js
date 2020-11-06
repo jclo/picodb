@@ -22,7 +22,6 @@ const // PicoDB = require('../index')
     , deldoc   = require('./int/private/delete')
     , update   = require('./int/private/update')
     , event    = require('./int/private/event')
-    , nosilent = require('./int/private/nosilent')
     ;
 
 
@@ -72,9 +71,6 @@ describe('Test PicoDB:', () => {
 
   // Test the methods deleteOne & deleteMany:
   deldoc(PicoDB);
-
-  // Test insert, update, delete without the silent mode
-  nosilent(PicoDB);
 
   // Test the methods addEventListener, addOneTimeEventListener
   // and removeEventListener).

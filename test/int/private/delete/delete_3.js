@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB, doc) {
   describe('Test DeleteOne operations:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // Fill the db:
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
@@ -47,7 +46,6 @@ module.exports = function(PicoDB, doc) {
 
   describe('Test DeleteMany operations:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // Fill the db:
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {
@@ -84,7 +82,6 @@ module.exports = function(PicoDB, doc) {
 
   describe('Test DeleteMany operations using dot notation:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     // Fill the db:
     it('Expects db.insertMany([...]) to return an array with all the documents.', async () => {

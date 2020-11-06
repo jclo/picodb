@@ -21,7 +21,6 @@ const { expect } = require('chai')
 module.exports = function(PicoDB) {
   describe('Test the count method with real arguments:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     const doc = [
       { a: 1 },

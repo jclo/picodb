@@ -45,7 +45,6 @@ module.exports = function(PicoDB) {
 
     describe('Test of proximity:', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       it('Expects db.insertMany([jfk, lax, sfo, san, phx, cai]) to return an array with all the documents.', async () => {
         const doc = [d.jfk, d.lax, d.sfo, d.san, d.phx, d.cai];

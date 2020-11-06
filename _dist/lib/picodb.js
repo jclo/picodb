@@ -387,6 +387,9 @@
       addEventListener(ename, listener) {
         if (this._mess) {
           this._mess.subscribe(ename, listener);
+        } else {
+          /* eslint-disable-next-line no-console */
+          console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
         }
         return this;
       },
@@ -404,6 +407,9 @@
       addOneTimeEventListener(ename, listener) {
         if (this._mess) {
           this._mess.subscribeOnce(ename, listener);
+        } else {
+          /* eslint-disable-next-line no-console */
+          console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
         }
         return this;
       },
@@ -1302,9 +1308,6 @@
       if (mess) {
         mess.publish('delete', docOut);
         mess.publish('change', docOut);
-      } else if (!db._silent) {
-        /* eslint-disable-next-line no-console */
-        console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
       }
       callback(null, removed);
     }
@@ -1451,6 +1454,7 @@
      * @since 0.0.0
      */
     function _toArray(db, cursor, callback) {
+      /* istanbul ignore next */
       if (!cursor.query) {
         callback('This query isn\'t a valid Cursor query object');
         return;
@@ -1680,8 +1684,6 @@
      */
     function _schema() {
       return {
-        // _silent is used for testing purpose (reserved).
-        _silent: null,
         data: [],
       };
     }
@@ -1760,9 +1762,6 @@
       if (mess) {
         mess.publish('change', docOut);
         mess.publish('insert', docOut);
-      } else if (!db._silent) {
-        /* eslint-disable-next-line no-console */
-        console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
       }
       callback(null, docOut);
     }
@@ -2524,9 +2523,6 @@
       if (mess) {
         mess.publish('update', docOut);
         mess.publish('change', docOut);
-      } else if (!db._silent) {
-        /* eslint-disable-next-line no-console */
-        console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
       }
       callback(null, docOut);
     }

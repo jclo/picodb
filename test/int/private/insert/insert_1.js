@@ -24,7 +24,6 @@ module.exports = function(PicoDB) {
 
   describe('Test the insertOne method with a variation of arguments:', () => {
     const db = PicoDB();
-    db._db._silent = true;
 
     it('Expects db.insertOne() to return a promise.', async () => {
       const resp = await db.insertOne();

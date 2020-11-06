@@ -667,9 +667,6 @@ function _update(db, mess, many, query, update, options, callback) {
   if (mess) {
     mess.publish('update', docOut);
     mess.publish('change', docOut);
-  } else if (!db._silent) {
-    /* eslint-disable-next-line no-console */
-    console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
   }
   callback(null, docOut);
 }

@@ -95,6 +95,7 @@ function _getArgs(...args) {
  * @since 0.0.0
  */
 function _toArray(db, cursor, callback) {
+  /* istanbul ignore next */
   if (!cursor.query) {
     callback('This query isn\'t a valid Cursor query object');
     return;

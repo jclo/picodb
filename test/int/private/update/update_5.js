@@ -22,7 +22,6 @@ module.exports = function(PicoDB) {
   describe('Array Operators:', () => {
     describe('$pop:', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       const docu = [{
         a: 3,
@@ -104,7 +103,6 @@ module.exports = function(PicoDB) {
 
     describe('$pullAll:', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       const docu = [{
         a: 1,
@@ -166,7 +164,6 @@ module.exports = function(PicoDB) {
 
     describe('$pull:', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       const docu1 = [{
         a: 1,
@@ -523,7 +520,6 @@ module.exports = function(PicoDB) {
 
     describe('$push:', () => {
       const db = PicoDB();
-      db._db._silent = true;
 
       const docu1 = [{
         a: 3,

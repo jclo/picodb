@@ -160,9 +160,6 @@ function _delete(db, mess, many, filter, options, callback) {
   if (mess) {
     mess.publish('delete', docOut);
     mess.publish('change', docOut);
-  } else if (!db._silent) {
-    /* eslint-disable-next-line no-console */
-    console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
   }
   callback(null, removed);
 }

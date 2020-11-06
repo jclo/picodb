@@ -120,8 +120,6 @@ function _getArgs(...args) {
  */
 function _schema() {
   return {
-    // _silent is used for testing purpose (reserved).
-    _silent: null,
     data: [],
   };
 }
@@ -200,9 +198,6 @@ function _process(db, mess, docs, options, callback) {
   if (mess) {
     mess.publish('change', docOut);
     mess.publish('insert', docOut);
-  } else if (!db._silent) {
-    /* eslint-disable-next-line no-console */
-    console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
   }
   callback(null, docOut);
 }

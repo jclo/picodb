@@ -147,11 +147,8 @@ module.exports = function(PicoDB, libname, version, type) {
           });
 
           describe('Test the owned specific custom properties:', () => {
-            it('Expects the property "_db" to own two properties.', () => {
-              expect(Object.keys(o._db)).to.be.an('array').that.has.lengthOf(2);
-            });
-            it('Expects the property "_db" to own the property "_silent" that is a null.', () => {
-              expect(o._db).to.own.property('_silent').that.is.a('null');
+            it('Expects the property "_db" to own one property.', () => {
+              expect(Object.keys(o._db)).to.be.an('array').that.has.lengthOf(1);
             });
             it('Expects the property "_db" to own the property "data" that is an empty array.', () => {
               expect(o._db).to.own.property('data').that.is.an('array').that.has.lengthOf(0);
