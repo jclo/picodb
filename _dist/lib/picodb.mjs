@@ -1,5 +1,5 @@
 /*! ****************************************************************************
- * PicoDB v1.0.0-beta.2
+ * PicoDB v1.0.0
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -149,7 +149,7 @@ const $__ES6GLOB = {};
       const obj = Object.create(methods);
       obj._library = {
         name: 'PicoDB',
-        version: '1.0.0-beta.2',
+        version: '1.0.0',
       };
 
       // Creates a cursor.
@@ -166,7 +166,7 @@ const $__ES6GLOB = {};
 
     // Attaches constants to PicoDB that provide name and version of the lib.
     PicoDB.NAME = 'PicoDB';
-    PicoDB.VERSION = '1.0.0-beta.2';
+    PicoDB.VERSION = '1.0.0';
 
 
     // -- Private Static Methods -----------------------------------------------
@@ -388,10 +388,10 @@ const $__ES6GLOB = {};
       addEventListener(ename, listener) {
         if (this._mess) {
           this._mess.subscribe(ename, listener);
-        } else {
-          /* eslint-disable-next-line no-console */
-          console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
+          return this;
         }
+        /* eslint-disable-next-line no-console */
+        console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
         return this;
       },
 
@@ -408,10 +408,10 @@ const $__ES6GLOB = {};
       addOneTimeEventListener(ename, listener) {
         if (this._mess) {
           this._mess.subscribeOnce(ename, listener);
-        } else {
-          /* eslint-disable-next-line no-console */
-          console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
+          return this;
         }
+        /* eslint-disable-next-line no-console */
+        console.log('warning: the plugin @mobilabs/messenger isn\'t installed!');
         return this;
       },
 

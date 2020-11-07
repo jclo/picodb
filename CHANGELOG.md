@@ -1,6 +1,6 @@
 ### HEAD
 
-### 1.0.0 (November 6, 2020)
+### 1.0.0 (November 7, 2020)
 
   * Reshuffled the project from ES6Kadoo boilerplate,
   * Updated the code to comply with ES6 standard only,
@@ -12,7 +12,7 @@
   * First release candidate,
   * Removed the "_db._silent" option (testing purpose only),
   * Second release candidate,
-  * ...,
+  * Release.
 
 
 ### 0.12.2 (August 20, 2020)
