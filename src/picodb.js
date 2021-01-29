@@ -72,10 +72,6 @@ import G from './private/geo';
 
 
 // -- Local Constants
-// Saves the previous value of the library variable, so that it can be
-// restored later on, if noConflict is used.
-const previousPicoDB = root.PicoDB
-    ;
 
 
 // -- Local Variables
@@ -117,6 +113,10 @@ const PicoDB = function() {
 // Attaches constants to PicoDB that provide name and version of the lib.
 PicoDB.NAME = '{{lib:name}}';
 PicoDB.VERSION = '{{lib:version}}';
+
+// Saves the previous value of the library variable, so that it can be
+// restored later on, if noConflict is used.
+const previousPicoDB = root.PicoDB;
 
 
 // -- Private Static Methods -----------------------------------------------

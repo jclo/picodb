@@ -9,9 +9,8 @@ const Messenger = require('@mobilabs/messenger');
 
 // -- Local Modules
 const // PicoDB = require('../index')
-    PicoDB     = require('../src/picodb').default
     // , pack    = require('../package.json')
-    , testlib  = require('./int/lib')
+    testlib  = require('./int/lib')
     , test_    = require('./int/private/_')
     , plugin   = require('./int/private/plugin')
     , insert   = require('./int/private/insert')
@@ -41,7 +40,10 @@ const // PicoDB = require('../index')
 // If you want to display the coverage file by file, you must choose
 // 'PicoDB = require('../src/picodb').default'. But, in this case,
 // the build isn't done, so you should pass '{{lib:name}}' as libname and
-// '{{lib:version}}' as the library version.
+// '{{lib:version}}' as the library version. And, you need to define the
+// global root object.
+global.root = {};
+const PicoDB = require('../src/picodb').default;
 
 describe('Test PicoDB:', () => {
   testlib(PicoDB, '{{lib:name}}', '{{lib:version}}', 'without new');
