@@ -5,7 +5,7 @@ dist:
 language:
   - node_js
 node_js:
-  - "14"
+  - "16"
 notifications:
   email: false
 before_install:
