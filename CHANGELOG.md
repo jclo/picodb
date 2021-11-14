@@ -3,7 +3,7 @@
 ### 1.0.3 (November 14, 2021)
 
   * Fixed a typo in the README that prevented badges to be displayed properly,
-  * ...,
+  * Release.
 
 
 ### 1.0.2 (November 13, 2021)
