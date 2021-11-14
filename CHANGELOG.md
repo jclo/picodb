@@ -1,5 +1,11 @@
 ### HEAD
 
+### 1.0.3 (November 14, 2021)
+
+  * Fixed a typo in the README that prevented badges to be displayed properly,
+  * ...,
+
+
 ### 1.0.2 (November 13, 2021)
 
   * Updated the project dependencies,

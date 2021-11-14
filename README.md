@@ -434,15 +434,15 @@ delete       | Fire when one or multiple documents are deleted from the db.
 
 <!--- URls -->
 
-[npm-image]: https://img.shields.io/npm/v/@mobilabs/picodb.svg?logo=npm&logoColor=fff&label=NPM+package
+[npm-image]: https://img.shields.io/npm/v/picodb.svg?logo=npm&logoColor=fff&label=NPM+package
 [release-image]: https://img.shields.io/github/release/jclo/picodb.svg?include_prereleases
 [commit-image]: https://img.shields.io/github/last-commit/jclo/picodb.svg?logo=github
 [travis-image]: https://img.shields.io/travis/com/jclo/picodb.svg?logo=travis-ci&logoColor=fff
 [coveralls-image]: https://img.shields.io/coveralls/jclo/picodb/master.svg?&logo=coveralls
 [dependencies-image]: https://david-dm.org/jclo/picodb/status.svg?theme=shields.io
 [devdependencies-image]: https://david-dm.org/jclo/picodb/dev-status.svg?theme=shields.io
-[npm-bundle-size-image]: https://img.shields.io/bundlephobia/minzip/@mobilabs/picodb.svg
-[license-image]: https://img.shields.io/npm/l/@mobilabs/picodb.svg
+[npm-bundle-size-image]: https://img.shields.io/bundlephobia/minzip/picodb.svg
+[license-image]: https://img.shields.io/npm/l/picodb.svg
 
 [npm-url]: https://www.npmjs.com/package/picodb
 [release-url]: https://github.com/jclo/picodb/tags
