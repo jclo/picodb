@@ -52,7 +52,7 @@ There is now three ways to listen a response from a `PicoDB` instance:
   * Via Callback:
   ```javascript
   db.find({}).toArray((err, resp) => {
-      // your code
+      // your code here
   });
   ```
 
@@ -60,10 +60,10 @@ There is now three ways to listen a response from a `PicoDB` instance:
   ```javascript
   db.find({}).toArray()
       .then((resp) => {
-        // your code
+        // your code here
       })
       .catch((err) => {
-        // your code
+        // your code here
       });
   ```
 
