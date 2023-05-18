@@ -5,7 +5,7 @@
   * Updated the project dependencies,
   * Fixed versioning,
   * Updated .travis.yml,
-  * ...,
+  * Release.
 
 
 ### 1.0.4 (January 27, 2022)

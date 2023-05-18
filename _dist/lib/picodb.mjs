@@ -1,5 +1,5 @@
 /*! ****************************************************************************
- * PicoDB v1.0.4
+ * PicoDB v1.0.5
  *
  * A tiny in-memory database (MongoDB like) that stores JSON documents.
  * (you can download it from npm or github repositories)
@@ -145,7 +145,7 @@ const $__ES6GLOB = {};
       const obj = Object.create(methods);
       obj._library = {
         name: 'PicoDB',
-        version: '1.0.4',
+        version: '1.0.5',
       };
 
       // Creates a cursor.
@@ -162,7 +162,7 @@ const $__ES6GLOB = {};
 
     // Attaches constants to PicoDB that provide name and version of the lib.
     PicoDB.NAME = 'PicoDB';
-    PicoDB.VERSION = '1.0.4';
+    PicoDB.VERSION = '1.0.5';
 
     // Saves the previous value of the library variable, so that it can be
     // restored later on, if noConflict is used.
