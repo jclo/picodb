@@ -4,6 +4,7 @@
 
   * Updated the project dependencies,
   * Fixed versioning,
+  * Updated .travis.yml,
   * ...,
 
 

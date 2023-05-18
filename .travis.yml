@@ -9,7 +9,7 @@ node_js:
 notifications:
   email: false
 before_install:
-  - npm i -g npm@^2.0.0
+  - npm i -g npm@8
 before_script:
   - npm prune
 script:
