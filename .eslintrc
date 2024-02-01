@@ -3,7 +3,7 @@
    * Set JavaScript language options
    */
   "parserOptions": {
-    "sourceType": "module",
+    "sourceType": "module"
   },
   /**
    * Set Environnement
@@ -22,13 +22,13 @@
   "extends": "airbnb-base",
   // Overwritten airbnb's rules:
   "rules": {
-    strict: ["error", "global"],
-    func-names: ["error", "never"],
-    space-before-function-paren: ["error", { "anonymous": "never", "named": "never", "asyncArrow": "always" }],
-    no-plusplus: ["error", { "allowForLoopAfterthoughts": true }],
-    "no-multi-spaces": [2, { exceptions: { "VariableDeclarator": true } }],
-    comma-style: ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }],
-    indent: ["error", 2, { "VariableDeclarator": { "const": 2 }, "SwitchCase": 1 }],
-    no-multiple-empty-lines: ["error", { "max": 2, "maxEOF": 0 }]
+    "strict": ["error", "global"],
+    "func-names": ["error", "never"],
+    "space-before-function-paren": ["error", { "anonymous": "never", "named": "never", "asyncArrow": "always" }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-multi-spaces": [2, { "exceptions": { "VariableDeclarator": true } }],
+    "comma-style": ["error", "first", { "exceptions": { "ArrayExpression": true, "ObjectExpression": true } }],
+    "indent": ["error", 2, { "VariableDeclarator": { "const": 2 }, "SwitchCase": 1 }],
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }]
   }
 }

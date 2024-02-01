@@ -35,6 +35,12 @@ module.exports = {
   // 'pseudoclassical.js' and pseudoclassical-auto.js' are mutually exclusives.
   source,
 
+  webfiles: [
+    // These are the files to copy to the root path of the web app,
+    './README.md',
+    './LICENSE.md',
+  ],
+
   get license() {
     return ['/*! ****************************************************************************',
       ` * ${libname} v${pack.version}`,
@@ -44,7 +50,7 @@ module.exports = {
       ` * Copyright (c) ${(new Date()).getFullYear()} ${pack.author.name} <${pack.author.email}> (${pack.author.url}).`,
       ' * Released under the MIT license. You may obtain a copy of the License',
       ' * at: http://www.opensource.org/licenses/mit-license.php).',
-      ' * Built from ES6Kadoo v1.0.10.',
+      ' * Built from ES6Kadoo v2.1.0.',
       ' * ************************************************************************** */',
       ''].join('\n');
   },

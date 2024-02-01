@@ -8,16 +8,42 @@
   "module": "_dist/lib/picodb.min.mjs",
   "bin": {},
   "scripts": {
-    "build": "gulp build",
-    "watch": "gulp watch",
-    "dev": "gulp rundev",
-    "test": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --require esm ./test/main.js",
-    "display-coverage": "opener ./coverage/lcov-report/index.html",
-    "check-coverage": "nyc check-coverage --statements 95 --branches 95 --functions 100 --lines 95",
-    "report-coverage": "nyc report --reporter=text-lcov | coveralls",
-    "report": "nyc report",
-    "makedist": "gulp makedist",
-    "app": "gulp runapp",
+    "general": " --- GENERAL ---",
+
+    "build:js": " --- JAVASCRIPT --- ",
+    "build:js:dev": "node scripts/build.js.dev.js $1",
+    "build:js:prod": "node scripts/build.js.prod.js $1",
+
+    "build:css": " --- CSS --- ",
+
+    "build:generic": " --- BUILD (GENERIC) --- ",
+
+    "build:development": " --- BUILD (DEVELOPMENT) --- ",
+    "build:dev": "npm run build:js:dev",
+
+    "build:production": " --- BUILD (PRODUCTION) --- ",
+    "build:skeleton:prod": "node scripts/build.skeleton.prod.js $1",
+    "prebuild:prod": "npm run build:dev && npm run build:skeleton:prod",
+    "build:prod": "npm run build:js:prod",
+
+    "testing": " --- TESTING --- ",
+    "test": "cross-env NODE_ENV=test c8 --reporter=lcov mocha --require esm ./test/main.js",
+    "display:coverage": "open -a safari ./coverage/lcov-report/index.html",
+    "check:coverage": "c8 check-coverage --statements 90 --branches 90 --functions 90 --lines 90",
+    "report": "c8 report",
+
+    "serving": " --- SERVING --- ",
+    "server:dev": "http-server --port 8080",
+    "server:prod": "http-server --port 8090",
+
+    "watch:js:css": " --- WATCHING --- ",
+    "watch:js": "nodemon --watch './src/**/*.js' --exec npm run build:dev",
+    "watch": "npm run watch:js",
+
+    "deployment": " --- DEPLOYMENT --- ",
+    "dep:prod": "rm -rf _dist-$npm_package_version && npm run build:prod && cp -r _dist _dist-$npm_package_version",
+
+    "others": " --- OTHERS ---",
     "prepare": "husky install",
     "doc": ""
   },
@@ -46,28 +72,28 @@
   "homepage": "https://github.com/jclo/picodb",
   "dependencies": {},
   "devDependencies": {
-    "@mobilabs/messenger": "^1.0.3",
-    "chai": "^4.3.7",
-    "coveralls": "^3.1.1",
+    "@mobilabs/messenger": "^1.0.4",
+    "c8": "^9.0.0",
+    "chai": "4.3.10",
     "cross-env": "^7.0.3",
-    "del": "^6.1.1",
-    "eslint": "^7.32.0",
+    "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-import": "^2.29.1",
     "esm": "^3.2.25",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-connect": "^5.7.0",
-    "gulp-header": "^2.0.9",
-    "gulp-replace": "^1.1.4",
-    "gulp-uglify-es": "^3.0.0",
+    "http-server": "^14.1.1",
     "husky": "^8.0.3",
-    "kadoo": "^1.0.7",
+    "kadoo": "^1.2.0",
     "mocha": "^8.4.0",
-    "nyc": "^15.1.0",
-    "open": "^8.4.2",
-    "opener": "^1.5.2",
-    "@mobilabs/es6kadoo": "^1.0.11"
+    "nodemon": "^3.0.2",
+    "terser": "^5.26.0",
+    "@mobilabs/es6kadoo": "2.1.0"
+  },
+  "c8": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [],
+    "all": false
   },
   "publishConfig": {
     "access": "public"

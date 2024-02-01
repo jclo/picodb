@@ -8,19 +8,18 @@ const Messenger = require('@mobilabs/messenger');
 
 
 // -- Local Modules
-const // PicoDB = require('../index')
-    // , pack    = require('../package.json')
-    testlib  = require('./int/lib')
-    , test_    = require('./int/private/_')
-    , plugin   = require('./int/private/plugin')
-    , insert   = require('./int/private/insert')
-    , find     = require('./int/private/find')
-    , query    = require('./int/private/query')
-    , geo      = require('./int/private/geo')
-    , count    = require('./int/private/count')
-    , deldoc   = require('./int/private/delete')
-    , update   = require('./int/private/update')
-    , event    = require('./int/private/event')
+const testlib = require('./int/lib')
+    // , pack   = require('../package.json')
+    , test_   = require('./int/private/_')
+    , plugin  = require('./int/private/plugin')
+    , insert  = require('./int/private/insert')
+    , find    = require('./int/private/find')
+    , query   = require('./int/private/query')
+    , geo     = require('./int/private/geo')
+    , count   = require('./int/private/count')
+    , deldoc  = require('./int/private/delete')
+    , update  = require('./int/private/update')
+    , event   = require('./int/private/event')
     ;
 
 
@@ -33,17 +32,22 @@ const // PicoDB = require('../index')
 
 // -- Main
 
-// Nota:
-// If you choose 'PicoDB = require('../index')', 'display-coverage' will
-// show the coverage of all the library in one file.
-//
-// If you want to display the coverage file by file, you must choose
-// 'PicoDB = require('../src/picodb').default'. But, in this case,
-// the build isn't done, so you should pass '{{lib:name}}' as libname and
-// '{{lib:version}}' as the library version. And, you need to define the
-// global root object.
+// This define root for Node.js:
 global.root = {};
+
+// Nota:
+// If you want that 'display-coverage' shows the coverage files by files,
+// you should set 'PicoDB' and 'testlib' like this:
+//  . const PicoDB = require('../src/<file>').default;
+//  . testlib(PicoDB, '{{lib:name}}', '{{lib:version}}', 'without new');
+//
+// But, if you want that 'display-coverage' shows the coverage in one file,
+// you should set 'PicoDB' and 'testlib' like this:
+//  . const PicoDB = require('../index');
+//  . testlib(PicoDB, libname, pack.version, 'without new');
+
 const PicoDB = require('../src/picodb').default;
+// const PicoDB = require('../index');
 
 describe('Test PicoDB:', () => {
   testlib(PicoDB, '{{lib:name}}', '{{lib:version}}', 'without new');
@@ -78,3 +82,5 @@ describe('Test PicoDB:', () => {
   // and removeEventListener).
   event(PicoDB, Messenger);
 });
+
+// - oOo --

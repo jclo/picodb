@@ -3,11 +3,10 @@
 [![NPM version][npm-image]][npm-url]
 [![GitHub last commit][commit-image]][commit-url]
 [![Travis CI][travis-image]][travis-url]
+[![Github workflow][ci-image]][ci-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![npm bundle size][npm-bundle-size-image]][npm-bundle-size-url]
 [![License][license-image]](LICENSE.md)
-<!-- [![Dependencies status][dependencies-image]][dependencies-url]
-[![Dev Dependencies status][devdependencies-image]][devdependencies-url] -->
 
 
 PicoDB is an `in-memory` database that stores JSON like documents. It runs both on Node.js and in the `ES6` compliant browsers.
@@ -437,19 +436,15 @@ delete       | Fire when one or multiple documents are deleted from the db.
 [npm-image]: https://img.shields.io/npm/v/picodb.svg?logo=npm&logoColor=fff&label=NPM+package
 [release-image]: https://img.shields.io/github/release/jclo/picodb.svg?include_prereleases
 [commit-image]: https://img.shields.io/github/last-commit/jclo/picodb.svg?logo=github
-[travis-image]: https://img.shields.io/travis/com/jclo/picodb.svg?logo=travis-ci&logoColor=fff
+[ci-image]: https://github.com/jclo/picodb/actions/workflows/ci.yml/badge.svg
 [coveralls-image]: https://img.shields.io/coveralls/jclo/picodb/master.svg?&logo=coveralls
-[dependencies-image]: https://david-dm.org/jclo/picodb/status.svg?theme=shields.io
-[devdependencies-image]: https://david-dm.org/jclo/picodb/dev-status.svg?theme=shields.io
 [npm-bundle-size-image]: https://img.shields.io/bundlephobia/minzip/picodb.svg
 [license-image]: https://img.shields.io/npm/l/picodb.svg
 
 [npm-url]: https://www.npmjs.com/package/picodb
 [release-url]: https://github.com/jclo/picodb/tags
 [commit-url]: https://github.com/jclo/picodb/commits/master
-[travis-url]: https://app.travis-ci.com/jclo/picodb?branch=main
+[ci-url]: https://github.com/jclo/picodb/actions/workflows/ci.yml
 [coveralls-url]: https://coveralls.io/github/jclo/picodb?branch=master
-[dependencies-url]: https://david-dm.org/jclo/picodb
-[devdependencies-url]: https://david-dm.org/jclo/picodb?type=dev
-[license-url]: http://opensource.org/licenses/MIT
 [npm-bundle-size-url]: https://img.shields.io/bundlephobia/minzip/picodb
+[license-url]: http://opensource.org/licenses/MIT
