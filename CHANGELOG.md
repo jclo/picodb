@@ -4,7 +4,7 @@
 ### 1.0.6 (February 1, 2024)
 
   * Updated the project with ES6Kadoo v2.1 (no Gulp, Github Actions),
-  * ...,
+  * Release.
 
 
 ### 1.0.5 (May 18, 2023)

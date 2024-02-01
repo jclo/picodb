@@ -2,7 +2,6 @@
 
 [![NPM version][npm-image]][npm-url]
 [![GitHub last commit][commit-image]][commit-url]
-[![Travis CI][travis-image]][travis-url]
 [![Github workflow][ci-image]][ci-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![npm bundle size][npm-bundle-size-image]][npm-bundle-size-url]
